@@ -11,13 +11,10 @@ config_version=5
 [application]
 
 config/name="HexArena"
-config/features=PackedStringArray("4.4", "Forward Plus")
-config/icon="res://icon.svg"
+run/main_scene="res://root.tscn"
+config/features=PackedStringArray("4.4", "C#", "Forward Plus")
+config/icon="res://Assets/icon.svg"
 
-[file_customization]
+[dotnet]
 
-folder_colors={
-"res://Art/": "teal",
-"res://Scenes/": "yellow",
-"res://Scripts/": "red"
-}
+project/assembly_name="HexArena"
