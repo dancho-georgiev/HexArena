@@ -6,16 +6,15 @@ using System.Threading.Tasks;
 
 namespace Interfaces
 {
-	public interface  IAbility
+	public interface IAbility
 	{
+	List<ITarget> Targets { get; set; }
 
-		public abstract List<ITarget> GetTargetList();
-		abstract void Use(object sender, EventArgs e);
+	void Use(object sender, EventArgs e);
 
-		public virtual void Initialize(EventHandler e) 
-		{
-			e += Use;
-		}
-
+	void Initialize(EventHandler handler)
+	{
+		handler += Use; // Only legal in newer versions with support
+	}
 	}
 }

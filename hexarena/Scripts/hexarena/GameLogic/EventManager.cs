@@ -15,7 +15,6 @@ namespace GameLogic
 		public delegate void EndTurnEventHandler();
 		public void EmitOnStartTurn()
 		{
-		
 		  EmitSignal(SignalName.StartTurn);
 		}
 	}

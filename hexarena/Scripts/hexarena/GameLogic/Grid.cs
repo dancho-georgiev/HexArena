@@ -18,5 +18,7 @@ namespace GameLogic
 		public List<IEnemy> enemies;
 
 		public List<IPlayer> players;
+		
+		
 	}
 }
