@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using Interfaces;
+<<<<<<< Updated upstream
 using System.Collections.Generic;
 
 public class Tile : ITile
@@ -30,4 +31,10 @@ public class Tile : ITile
 	}
 	
 	
+=======
+
+public partial class Tile
+{
+
+>>>>>>> Stashed changes
 }

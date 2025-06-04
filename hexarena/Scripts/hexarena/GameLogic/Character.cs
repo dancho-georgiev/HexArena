@@ -3,7 +3,7 @@ using System;
 using Interfaces;
 
 
-public class Character : ICharacter
+public class Character : Targetable, ICharacter
 {
 		public int Health { get;  set; }
 		
@@ -18,11 +18,11 @@ public class Character : ICharacter
 			this.Tile = tile;
 		}
 		
-		public virtual void TakeDamage(int damage){
+		public override void TakeDamage(int damage){
 			Health-=damage;
 		}
 	
-	public void TakeStatusEffect(IStatusEffect statusEffect){
+	public override void TakeStatusEffect(IStatusEffect statusEffect){
 		
 	}
 	
