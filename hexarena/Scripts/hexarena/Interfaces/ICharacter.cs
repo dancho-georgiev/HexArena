@@ -8,8 +8,10 @@ namespace Interfaces
 {
 	public interface ICharacter : ITargetable
 	{
-		int Health { get; protected set; }
-
-		ITile Tile { get; protected set; }
+		int Health { get;  set; }
+		
+		double StepEnergyCost { get;  set; }
+		
+		ITile Tile { get;  set; }
 	}
 }

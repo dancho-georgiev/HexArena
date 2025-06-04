@@ -14,11 +14,6 @@ namespace Interfaces
 		public Point position { get;protected set;}
 		public List<ITile> neighbours { get; protected set;}
 		public ICharacter characterOnTile { get; set;}
-
-	}
-	
-	public bool IsAvailable()
-	{
-		if characteOnTile
-	}
+		public bool isAvailable { get; set;}
+	}	
 }
