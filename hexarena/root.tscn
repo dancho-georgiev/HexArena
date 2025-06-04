@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3 uid="uid://b23sc6tmijrrd"]
+
+[ext_resource type="Script" uid="uid://ko5n1wxrr7jl" path="res://Node2d.cs" id="1_pq8q7"]
+
+[node name="Root" type="Node2D"]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="BattleField" type="Node2D" parent="."]
+
+[node name="ScriptTesting" type="Node2D" parent="."]
+script = ExtResource("1_pq8q7")
