@@ -9,16 +9,28 @@ namespace GameLogic
 {
 	public class Grid
 	{
-		public int lenght; 
-
-		public int width;
-	
-		public List<List<ITile>> tileGrid;
-
-		public List<IEnemy> enemies;
-
-		public List<IPlayer> players;
+		public int Length; 
+		public int Width;
+		public List<List<ITile>> TileGrid;
+		public List<IEnemy> Enemies;
+		public List<IPlayer> Players;
 		
+		public Grid(int length, int width){
+			this.Length = length;
+			this.Width = width;
+			TileGrid = new List<List<ITile>>(Width);
+			for(int i = 0; i < Width ; i++){
+				TileGrid.Add(new List<ITile>(Length));
+				for(int j = 0; j < Length; j++){
+					TileGrid[i].Add(new Tile(new Point(j,i)));
+				}
+			}
+			Enemies = new List<IEnemy>();
+			Players = new List<IPlayer>();
+		}
 		
+		public void AddEnemy(IEnemy enemy){
+			Enemies.Add(enemy);
+		}
 	}
 }

@@ -7,13 +7,10 @@ using System.Threading.Tasks;
 namespace Interfaces
 {
 	public interface ICharacter : ITargetable
-	{
-
-		int Health { get;  set; }
+	{	
 		double StepEnergyCost { get;  set; }
-		ITile Tile { get;  set; }
+		public int Health { get; set; }
 		public List<IStatusEffect> StatusEffects {get; protected set;}
-		
-
+		public ITile Tile { get; protected set; }
 	}
 }

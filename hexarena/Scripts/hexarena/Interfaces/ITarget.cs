@@ -1,20 +1,20 @@
 using System;
 using System.Collections.Generic;
-
+using GameLogic;
 namespace Interfaces
 {
 	public interface  ITarget
 	{
 		public abstract void InitializeList();
 
-		public List<ITargetable> TargetList { get; protected set; }
+		public List<Targetable> TargetList { get; protected set; }
 		public uint TargetCount { get; set; }
 		public void Initialize(uint targetsCount)
 		{
 			TargetCount = targetsCount;
 			InitializeList();
 		}
-		public virtual void pushTargetable(ITargetable t)
+		public virtual void pushTargetable(Targetable t)
 		{
 			TargetList.Add(t);
 		}

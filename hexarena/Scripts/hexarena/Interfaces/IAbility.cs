@@ -12,7 +12,11 @@ namespace Interfaces
 
 	void Use(object sender, EventArgs e);
 
-	void Initialize(EventHandler handler)
+	void AddTarget(ITarget target){
+		Targets.Add(target);
+	}
+
+	void Connect(EventHandler handler)
 	{
 		handler += Use; // Only legal in newer versions with support
 	}

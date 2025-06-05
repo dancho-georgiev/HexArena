@@ -3,16 +3,15 @@ using System;
 using Interfaces;
 using System.Collections.Generic;
 
-public class Enemy : IEnemy
-{
-	public int Health {get; set;}
-	public ITile Tile {get; set;}
-	public double StepEnergyCost { get;  set; }
-	public List<IStatusEffect> StatusEffects {get; set;}
-	public virtual void TakeDamage(int damage){
-		Health-=damage;
-	}
-	public virtual void TakeStatusEffect(IStatusEffect status){
-		StatusEffects.Add(status);
+
+namespace GameLogic{
+	public class Enemy : Character, IEnemy
+	{		
+		public Enemy(ITile position) : base(100, 1, position){
+			Tile = position;
+			StatusEffects = new List<IStatusEffect>();
+			position.CharacterOnTile = this; //ne e hubavo po dobre v grid
+		}
+		
 	}
 }

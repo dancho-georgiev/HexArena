@@ -3,43 +3,41 @@ using System;
 using Interfaces;
 using System.Collections.Generic;
 
-namespace GameLogic
-{
+
+namespace GameLogic{
+	
 	public class Character : Targetable, ICharacter
+{
+		public int Health { get;  set; }
+		
+		public double StepEnergyCost { get;  set; }
+		public List<IStatusEffect> StatusEffects {get; set;}
+		public ITile Tile { get;  set; }
+		
+		public Character(int health,double stepEnergyCost,ITile tile)
+		{
+			this.Health = health;
+			this.StepEnergyCost = stepEnergyCost;
+			this.Tile = tile;
+			StatusEffects = new List<IStatusEffect>();
+		}
+		
+		public override void TakeDamage(int damage){
+			Health-=damage;
+		}
+	
+	public override void TakeStatusEffect(IStatusEffect statusEffect){
+		StatusEffects.Add(statusEffect);
+	}
+	
+	public void MoveCharacter(Tile TargetPosition)
 	{
-			public int Health { get;  set; }
-			
-			public double StepEnergyCost { get;  set; }
-			
-			public ITile Tile { get;  set; }
-			
-			public List<IStatusEffect> StatusEffects {get;  set;}
-			public Character(int health,double stepEnergyCost,ITile tile)
-			{
-				this.Health = health;
-				this.StepEnergyCost = stepEnergyCost;
-				this.Tile = tile;
-			}
-			
-			public override void TakeDamage(int damage){
-				Health-=damage;
-			}
-		
-		public override void TakeStatusEffect(IStatusEffect statusEffects)
+		if(TargetPosition.IsAvailable == true)
 		{
-		StatusEffects.Add(statusEffects);
+			
 		}
-		
-		
-		 
-		public void MoveCharacter(Tile TargetPosition)
-		{
-			if(TargetPosition.isAvailable == true)
-			{
-				
-			}
-		}
-		
+	}
+
 		public List<Tile> FindShortestPath(Tile startTile, Tile endTile)
 		{
 			var cameFrom = new Dictionary<Tile,Tile>();
@@ -68,15 +66,13 @@ namespace GameLogic
 						foreach (var neighbor in current.Neighbours)
 	   					{    
 							Tile neighborTile = neighbor as Tile;
-							if (neighborTile.isAvailable && !visited.Contains(neighborTile))
+							if (neighborTile.IsAvailable && !visited.Contains(neighborTile))
 							{
 								visited.Add(neighborTile);
 								cameFrom[neighborTile] = current;
 								queue.Enqueue(neighborTile);
 							}
 						}
-					
-				
 			}
 			return null;
 		}
