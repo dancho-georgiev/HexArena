@@ -19,6 +19,7 @@ public partial class Node2d : Node2D
 		Test(Test_GridAddEnemy, "GridAddEnemy");
 		Test(Test_AllEnemiesTarget, "AllEnemiesTarget and Slash");
 		Test(Test_Pathfinding,"Test_Pathfinding");
+		Test(Test_SetupNeighbours,"Test_SetupNeighbours");
 		GD.Print($"PASSED: {passedTest}");
 		GD.Print($"FAILED: {allTest-passedTest}");
 	}
@@ -94,52 +95,35 @@ public partial class Node2d : Node2D
 		if(passed+4==passedTest)passedTest++;
 		
 	}
-	
-	private void SetupNeighbours(Grid grid) //veche sa hexove
+		private void Test_SetupNeighbours()
 	{
-	for (int y = 0; y <  grid.Width; y++)
-		{
-		for (int x = 0; x < grid.Width; x++)
-			{
-			var tile = grid.TileGrid[y][x];
-			tile.Neighbours = new List<ITile>();
+		int passed = passedTest;
 
-			bool even = y % 2 == 0; // gleda dali rowa e cheten ili ne i izpolzva razlichni posoki v zavisimost
+		Grid grid = new Grid(4, 4);
+		grid.SetupNeighbours(); 
 
-			var directions = even
-				? new (int dx, int dy)[] {
-					(+1,  0), ( 0, -1), (-1, -1), //chetni
-					(-1,  0), (-1, +1), ( 0, +1)
-				}
-				: new (int dx, int dy)[] {
-					(+1,  0), (+1, -1), ( 0, -1), //nechetni
-					(-1,  0), ( 0, +1), (+1, +1)
-				};
+		// centura trqbva da ima 6
+		ITile center = grid.TileGrid[2][2];
+		Test(() => { if (center.Neighbours.Count == 6) passedTest++; }, "center tile has 6 neighbors");
 
-			foreach (var (dx, dy) in directions)
-			{
-				int nx = x + dx;
-				int ny = y + dy;
+		// uglite trqbva da imat 2 ili 3 saseda
+		ITile corner = grid.TileGrid[0][0];
+		Test(() => { if (corner.Neighbours.Count >= 2 && corner.Neighbours.Count <= 3) passedTest++; }, "corner tile has correct neighbor count");
 
-				if (nx >= 0 && ny >= 0 && nx < grid.Width && ny < grid.Length)
-				{
-					tile.Neighbours.Add(grid.TileGrid[ny][nx]);
-				}
-			}
-			}
-		}
+		//TO DO CHECK IF A SPECIFIC tile Is a neighbour
+
+		if (passed + 3 == passedTest)
+			passedTest++;
 	}
+	
 	private void Test_Pathfinding(){ //HOLY SHIT CODA MI RABOTI
 		Grid grid = new Grid(4,4);
 		ITile start = grid.TileGrid[0][0];
 		ITile end = grid.TileGrid[3][3];
 		
-		SetupNeighbours(grid);
+		grid.SetupNeighbours();
 		
 		Character character = new Character(100, 1, start);
-		foreach (var row in grid.TileGrid)
-			foreach (var tile in row)
-				tile.IsAvailable = true;
 			
 			ITile obstacle1 = grid.TileGrid[2][0];
 			obstacle1.IsAvailable = false;

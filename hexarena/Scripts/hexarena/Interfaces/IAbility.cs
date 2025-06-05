@@ -18,7 +18,7 @@ namespace Interfaces
 
 	void Connect(EventHandler handler)
 	{
-		handler += Use; // Only legal in newer versions with support
+		handler += Use; 
 	}
 	}
 }

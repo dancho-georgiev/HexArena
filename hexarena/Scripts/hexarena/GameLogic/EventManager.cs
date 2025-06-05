@@ -13,9 +13,14 @@ namespace GameLogic
 		public  delegate void StartTurnEventHandler();
 		[Signal]
 		public delegate void EndTurnEventHandler();
-		public void EmitOnStartTurn()
-		{
-		  EmitSignal(SignalName.StartTurn);
-		}
+		[Signal]
+		public delegate void HitEventHandler();
+		[Signal]
+		public delegate void TakeDamageEventHandler();
+		
+		public void EmitOnStartTurn() => EmitSignal(SignalName.StartTurn);
+		public void EmitOnEndTurn() => EmitSignal(SignalName.EndTurn);
+		public void EmitOnHit() => EmitSignal(SignalName.Hit);
+		public void EmitOnTakeDamage() => EmitSignal(SignalName.TakeDamage);
 	}
 }
