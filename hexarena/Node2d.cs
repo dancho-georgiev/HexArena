@@ -84,7 +84,7 @@ public partial class Node2d : Node2D
 		Enemy enemy2 = new Enemy(grid.TileGrid[2][1]);
 		grid.AddEnemy(enemy1);
 		grid.AddEnemy(enemy2);
-		AllEnemiesTarget target = new AllEnemiesTarget(grid.Enemies);
+		AllEnemiesTarget target = new AllEnemiesTarget(grid);
 		Test(()=>{if(target.TargetList.Count() == 2)passedTest++;}, "targeted all enemies");
 		Test(()=>{if(target.TargetList.Any(x=>(x as Enemy).Tile.Position == new Point(1,2)))passedTest++;}, "correct enemy");
 		Slash slash = new Slash(eventManager, target);

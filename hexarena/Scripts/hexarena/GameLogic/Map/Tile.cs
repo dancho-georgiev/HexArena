@@ -10,7 +10,7 @@ namespace GameLogic{
 		
 			public Point Position { get;set;}
 			public List<ITile> Neighbours { get; set;}
-			public Character CharacterOnTile { get; set;}
+			public ICharacter CharacterOnTile { get; set;}
 			public bool IsAvailable { get; set;} = true;
 		
 		public Tile(Point position,Character character = null)
@@ -21,7 +21,7 @@ namespace GameLogic{
 		}
 		
 		public override void TakeDamage(int damage){
-			if(CharacterOnTile == null){}
+			if(CharacterOnTile == null){return;}
 			else{
 				CharacterOnTile.Health -= damage;
 			}

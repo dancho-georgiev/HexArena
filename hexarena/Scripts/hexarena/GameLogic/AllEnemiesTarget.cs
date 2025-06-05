@@ -15,14 +15,14 @@ namespace GameLogic{
 		InitializeList();
 	}
 	public AllEnemiesTarget(List<Enemy> allEnemies) {
-		TargetList = new List<Targetable>();
+		TargetList = new List<ITargetable>();
 		foreach(Enemy enemy in allEnemies){
 			TargetList.Add(enemy);
 		}
 	}
 	
 	public override void InitializeList(){
-		TargetList = new List<Targetable>();
+		TargetList = new List<ITargetable>();
 		foreach(List<ITile> col in Grid.TileGrid){
 			foreach(ITile tile in col){
 				if(tile.CharacterOnTile is Enemy){
