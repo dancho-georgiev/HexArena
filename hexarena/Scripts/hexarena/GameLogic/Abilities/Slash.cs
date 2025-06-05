@@ -4,30 +4,28 @@ using Interfaces;
 
 namespace GameLogic{
 	
-	public class Slash : Passive
+	public class MalevolentShrine : Passive
 {
 	private int damage;
-	public Slash(EventManager eventManager, AllEnemiesTarget target){
+	public MalevolentShrine(EventManager eventManager, AllEnemiesTarget target){
 		damage = 10;
-		eventManager.StartTurn += Use2;
+		Connect(eventManager);
 		AddTarget(target);
 	}
+	
+	public override void Connect(EventManager eventManager){
+		eventManager.StartTurn += Use;
+	}
+	
 	public override void AddTarget(ITarget target){
 		if(target is AllEnemiesTarget){
 			Targets.Add(target);
 		}	
-		else {} //throw nqkva greshka
+		else {throw new ArgumentException();} 
 	}
-	public void Use2(){ //temporary(4am gaming)
-		//GD.Print("slash used"); 
-		foreach(Target t in Targets){
-			foreach(Targetable targetable in t.TargetList){
-				targetable.TakeDamage(damage);
-			}
-		}
-	}
+
 	
-	public override void Use(object sender, EventArgs e){
+	public override void Use(){
 		foreach(ITarget t in Targets){
 			foreach(Enemy enemy in t.TargetList){
 				enemy.TakeDamage(damage);

@@ -87,7 +87,7 @@ public partial class Node2d : Node2D
 		AllEnemiesTarget target = new AllEnemiesTarget(grid);
 		Test(()=>{if(target.TargetList.Count() == 2)passedTest++;}, "targeted all enemies");
 		Test(()=>{if(target.TargetList.Any(x=>(x as Enemy).Tile.Position == new Point(1,2)))passedTest++;}, "correct enemy");
-		Slash slash = new Slash(eventManager, target);
+		MalevolentShrine slash = new MalevolentShrine(eventManager, target);
 		eventManager.EmitOnStartTurn();
 		Test(()=>{if(enemy1.Health<100)passedTest++;}, "dealt damage to enemy1");
 		Test(()=>{if(enemy2.Health<100)passedTest++;}, "dealt damage to enemy2");
@@ -111,7 +111,7 @@ public partial class Node2d : Node2D
 
 		//TO DO CHECK IF A SPECIFIC tile Is a neighbour
 
-		if (passed + 3 == passedTest)
+		if (passed + 2 == passedTest)
 			passedTest++;
 	}
 	

@@ -8,26 +8,29 @@ namespace GameLogic{
 	
 	public class AllEnemiesTarget : Target
 {
-	private Grid Grid;
 	
 	public AllEnemiesTarget(Grid grid) {
-		Grid = grid;
+		this.grid = grid;
 		InitializeList();
 	}
 	public AllEnemiesTarget(List<Enemy> allEnemies) {
 		TargetList = new List<ITargetable>();
 		foreach(Enemy enemy in allEnemies){
-			TargetList.Add(enemy);
+			AddTargetable(enemy);
+		}
+	}
+	
+	public override void AddTargetable(ITargetable targetable){
+		if(targetable is IEnemy){
+			TargetList.Add(targetable);
 		}
 	}
 	
 	public override void InitializeList(){
 		TargetList = new List<ITargetable>();
-		foreach(List<ITile> col in Grid.TileGrid){
+		foreach(List<ITile> col in grid.TileGrid){
 			foreach(ITile tile in col){
-				if(tile.CharacterOnTile is Enemy){
-					TargetList.Add(tile.CharacterOnTile);
-				}
+				AddTargetable(tile.CharacterOnTile);
 			}
 		}
 	}

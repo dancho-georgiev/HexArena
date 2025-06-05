@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GameLogic;
 
 namespace Interfaces
 {
@@ -10,15 +11,12 @@ namespace Interfaces
 	{
 	List<ITarget> Targets { get; set; }
 
-	void Use(object sender, EventArgs e);
+	void Use();
 
 	void AddTarget(ITarget target){
 		Targets.Add(target);
 	}
 
-	void Connect(EventHandler handler)
-	{
-		handler += Use; 
-	}
+	void Connect(EventManager eventManager);
 	}
 }

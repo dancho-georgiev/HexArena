@@ -7,11 +7,12 @@ namespace GameLogic
 {
 	
 	public abstract class Target : ITarget
-
 {
+	protected Grid grid;
 	public abstract void InitializeList();
 	public List<ITargetable> TargetList {get; set;}
 	public uint TargetCount {get; set;}
+	public abstract void AddTargetable(ITargetable targetable);
 }
 
 	

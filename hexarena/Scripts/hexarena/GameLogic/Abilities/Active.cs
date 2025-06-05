@@ -4,8 +4,9 @@ using Interfaces;
 
 namespace GameLogic{
 	
-	public abstract class Passive : Ability, IPassive
+	public abstract class Active : Ability, IActive
 {
-
+	
 }
+	
 }
