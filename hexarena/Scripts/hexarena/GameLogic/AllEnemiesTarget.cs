@@ -15,23 +15,21 @@ namespace GameLogic{
 		InitializeList();
 	}
 	public AllEnemiesTarget(List<Enemy> allEnemies) {
-		List<Enemy> targets = new List<Enemy>();
+		TargetList = new List<Targetable>();
 		foreach(Enemy enemy in allEnemies){
-			targets.Add(enemy);
+			TargetList.Add(enemy);
 		}
-		TargetList = targets;
 	}
 	
 	public override void InitializeList(){
-		List<Character> targets = new List<Character>();
+		TargetList = new List<Targetable>();
 		foreach(List<ITile> col in Grid.TileGrid){
 			foreach(ITile tile in col){
 				if(tile.CharacterOnTile is Enemy){
-					targets.Add(tile.CharacterOnTile);
+					TargetList.Add(tile.CharacterOnTile);
 				}
 			}
 		}
-		TargetList = targets;
 	}
 	
 }

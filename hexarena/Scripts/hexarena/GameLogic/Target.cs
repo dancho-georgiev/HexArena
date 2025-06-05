@@ -8,7 +8,7 @@ namespace GameLogic{
 	public abstract class Target : ITarget
 {
 	public abstract void InitializeList();
-	public IEnumerable<Targetable> TargetList {get; set;}
+	public List<Targetable> TargetList {get; set;}
 	public uint TargetCount {get; set;}
 }
 	
