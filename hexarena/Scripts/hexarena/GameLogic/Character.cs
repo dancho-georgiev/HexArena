@@ -56,13 +56,15 @@ namespace GameLogic
 				{
 					var path = new List<Tile>();
 					var tile = current;
-		   			while (tile != startTile)
-					{
-						path.Add(tile);
-						tile = cameFrom[tile];
-						 path.Add(startTile);
-						 path.Reverse();
-		   				 return path;
+			   			while (tile != startTile)
+						{
+							path.Add(tile);
+							tile = cameFrom[tile];
+						}
+						path.Add(startTile);
+						path.Reverse();
+		   				return path;
+				}
 						foreach (var neighbor in current.Neighbours)
 	   					{    
 							Tile neighborTile = neighbor as Tile;
@@ -73,8 +75,8 @@ namespace GameLogic
 								queue.Enqueue(neighborTile);
 							}
 						}
-					}
-				}
+					
+				
 			}
 			return null;
 		}
