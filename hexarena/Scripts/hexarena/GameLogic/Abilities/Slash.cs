@@ -7,9 +7,10 @@ namespace GameLogic{
 	public class Slash : Passive
 {
 	private int damage;
-	public Slash(EventManager eventManager){
+	public Slash(EventManager eventManager, AllEnemiesTarget target){
 		damage = 10;
 		eventManager.StartTurn += Use2;
+		AddTarget(target);
 	}
 	public override void AddTarget(ITarget target){
 		if(target is AllEnemiesTarget){

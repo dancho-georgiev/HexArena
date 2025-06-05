@@ -7,7 +7,7 @@ namespace Interfaces
 	{
 		public abstract void InitializeList();
 
-		public IEnumerable<Targetable> TargetList { get; protected set; }
+		public List<Targetable> TargetList { get; protected set; }
 		public uint TargetCount { get; set; }
 		public void Initialize(uint targetsCount)
 		{

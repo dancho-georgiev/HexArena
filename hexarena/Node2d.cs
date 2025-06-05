@@ -87,8 +87,7 @@ public partial class Node2d : Node2D
 		AllEnemiesTarget target = new AllEnemiesTarget(grid.Enemies);
 		Test(()=>{if(target.TargetList.Count() == 2)passedTest++;}, "targeted all enemies");
 		Test(()=>{if(target.TargetList.Any(x=>(x as Enemy).Tile.Position == new Point(1,2)))passedTest++;}, "correct enemy");
-		Slash slash = new Slash(eventManager);
-		slash.AddTarget(target);
+		Slash slash = new Slash(eventManager, target);
 		eventManager.EmitOnStartTurn();
 		Test(()=>{if(enemy1.Health<100)passedTest++;}, "dealt damage to enemy1");
 		Test(()=>{if(enemy2.Health<100)passedTest++;}, "dealt damage to enemy2");
