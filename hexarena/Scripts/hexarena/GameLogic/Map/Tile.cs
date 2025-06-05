@@ -27,6 +27,7 @@ namespace GameLogic{
 			}
 		}
 		
+		
 		public override void TakeStatusEffect(IStatusEffect statusEffect){
 			
 		}

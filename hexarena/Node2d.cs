@@ -3,6 +3,7 @@ using System;
 using GameLogic;
 using Interfaces;
 using System.Linq;
+using System.Collections.Generic;
 public partial class Node2d : Node2D
 {
 	private EventManager eventManager;
@@ -17,6 +18,7 @@ public partial class Node2d : Node2D
 		Test(Test_EnemyConstructorTile, "EnemyConstructorTile");
 		Test(Test_GridAddEnemy, "GridAddEnemy");
 		Test(Test_AllEnemiesTarget, "AllEnemiesTarget and Slash");
+		Test(Test_Pathfinding,"Test_Pathfinding");
 		GD.Print($"PASSED: {passedTest}");
 		GD.Print($"FAILED: {allTest-passedTest}");
 	}
@@ -88,5 +90,64 @@ public partial class Node2d : Node2D
 		
 	}
 	
+	private void SetupNeighbours(Grid grid) //veche sa hexove
+	{
+	for (int y = 0; y <  grid.Width; y++)
+		{
+		for (int x = 0; x < grid.Width; x++)
+			{
+			var tile = grid.TileGrid[y][x];
+			tile.Neighbours = new List<ITile>();
+
+			bool even = y % 2 == 0; // gleda dali rowa e cheten ili ne i izpolzva razlichni posoki v zavisimost
+
+			var directions = even
+				? new (int dx, int dy)[] {
+					(+1,  0), ( 0, -1), (-1, -1), //chetni
+					(-1,  0), (-1, +1), ( 0, +1)
+				}
+				: new (int dx, int dy)[] {
+					(+1,  0), (+1, -1), ( 0, -1), //nechetni
+					(-1,  0), ( 0, +1), (+1, +1)
+				};
+
+			foreach (var (dx, dy) in directions)
+			{
+				int nx = x + dx;
+				int ny = y + dy;
+
+				if (nx >= 0 && ny >= 0 && nx < grid.Width && ny < grid.Length)
+				{
+					tile.Neighbours.Add(grid.TileGrid[ny][nx]);
+				}
+			}
+			}
+		}
+	}
+	private void Test_Pathfinding(){ //HOLY SHIT CODA MI RABOTI
+		Grid grid = new Grid(4,4);
+		ITile start = grid.TileGrid[0][0];
+		ITile end = grid.TileGrid[3][3];
+		
+		SetupNeighbours(grid);
+		
+		Character character = new Character(100, 1, start);
+		foreach (var row in grid.TileGrid)
+			foreach (var tile in row)
+				tile.IsAvailable = true;
+			
+			ITile obstacle1 = grid.TileGrid[2][0];
+			obstacle1.IsAvailable = false;
+			ITile obstacle2 = grid.TileGrid[1][1];
+			obstacle2.IsAvailable = false;
+			ITile obstacle3 = grid.TileGrid[1][2];
+			obstacle3.IsAvailable = false;
+		  List<ITile> path = character.FindShortestPath(start, end);
+		Test(() => { if (path != null) passedTest++; }, "path is not null");	
+		Test(() => { if (path[0] == start) passedTest++; }, "path starts at start");
+		Test(() => { if (path[path.Count - 1] == end) passedTest++; }, "path ends at end");
+		Test(() => { if (path.Count >= 3) passedTest++; }, "path has reasonable length");
+		GD.Print($"{path.Count} path count");
+	}
 	
 }

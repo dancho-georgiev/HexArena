@@ -38,11 +38,11 @@ namespace GameLogic{
 		}
 	}
 
-		public List<Tile> FindShortestPath(Tile startTile, Tile endTile)
+		public List<ITile> FindShortestPath(ITile startTile, ITile endTile)
 		{
-			var cameFrom = new Dictionary<Tile,Tile>();
-			var visited = new List<Tile>();
-			var queue = new Queue<Tile>();
+			var cameFrom = new Dictionary<ITile,ITile>();
+			var visited = new List<ITile>();
+			var queue = new Queue<ITile>();
 			
 			 queue.Enqueue(startTile);
    			 visited.Add(startTile);
@@ -52,7 +52,7 @@ namespace GameLogic{
 				var current = queue.Dequeue();
 				if(current == endTile)
 				{
-					var path = new List<Tile>();
+					var path = new List<ITile>();
 					var tile = current;
 			   			while (tile != startTile)
 						{
@@ -65,12 +65,12 @@ namespace GameLogic{
 				}
 						foreach (var neighbor in current.Neighbours)
 	   					{    
-							Tile neighborTile = neighbor as Tile;
-							if (neighborTile.IsAvailable && !visited.Contains(neighborTile))
+							
+							if (neighbor.IsAvailable && !visited.Contains(neighbor))
 							{
-								visited.Add(neighborTile);
-								cameFrom[neighborTile] = current;
-								queue.Enqueue(neighborTile);
+								visited.Add(neighbor);
+								cameFrom[neighbor] = current;
+								queue.Enqueue(neighbor);
 							}
 						}
 			}

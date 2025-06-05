@@ -22,7 +22,7 @@ namespace Interfaces
 	public interface ITile : ITargetable
 	{
 		public Point Position { get;protected set;}
-		public List<ITile> Neighbours { get; protected set;}
+		public List<ITile> Neighbours { get;set;}
 		public Character CharacterOnTile { get; set;}
 		public bool IsAvailable { get; set;}
 	}	
