@@ -9,7 +9,8 @@ public class AllEnemiesTarget : ITarget
 	public uint TargetCount {get; set;}
 	
 	public void InitializeList(){
-		TargetList = new List<Enemy>();
+		List<Enemy> enemies = new List<Enemy>();
+		TargetList = new List<ITargetable>(enemies);
 	}
 	
 }

@@ -12,14 +12,9 @@ namespace Interfaces
 	public interface ITile : ITargetable
 	{
 		public Point position { get;protected set;}
-		public List<ITile> neighbours { get; protected set;}
+		public List<ITile> Neighbours { get; protected set;}
 		public ICharacter characterOnTile { get; set;}
-<<<<<<< Updated upstream
-		public bool isAvailable { get; set;}
-	}	
-=======
 
-	}
-	
->>>>>>> Stashed changes
+		public bool isAvailable { get; set;}
+	}		
 }

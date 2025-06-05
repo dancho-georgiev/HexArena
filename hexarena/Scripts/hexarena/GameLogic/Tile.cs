@@ -1,14 +1,13 @@
 using Godot;
 using System;
 using Interfaces;
-<<<<<<< Updated upstream
 using System.Collections.Generic;
 
 public class Tile : ITile
 {
 	
 		public Point position { get;set;}
-		public List<ITile> neighbours { get; set;}
+		public List<ITile> Neighbours { get; set;}
 		public ICharacter characterOnTile { get; set;}
 		public bool isAvailable { get; set;} = true;
 	
@@ -16,7 +15,7 @@ public class Tile : ITile
 	{
 		this.position = position;
 		this.characterOnTile = character;
-		neighbours = new List<ITile>();
+		Neighbours = new List<ITile>();
 	}
 	
 	public void TakeDamage(int damage){
@@ -31,10 +30,4 @@ public class Tile : ITile
 	}
 	
 	
-=======
-
-public partial class Tile
-{
-
->>>>>>> Stashed changes
 }
