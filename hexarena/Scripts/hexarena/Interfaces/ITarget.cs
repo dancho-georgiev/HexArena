@@ -7,20 +7,12 @@ namespace Interfaces
 	{
 		public abstract void InitializeList();
 
-		public List<Targetable> TargetList { get; protected set; }
+		public IEnumerable<Targetable> TargetList { get; protected set; }
 		public uint TargetCount { get; set; }
 		public void Initialize(uint targetsCount)
 		{
 			TargetCount = targetsCount;
 			InitializeList();
-		}
-		public virtual void pushTargetable(Targetable t)
-		{
-			TargetList.Add(t);
-		}
-		public void ClearList()
-		{
-			TargetList.Clear();
 		}
 
 

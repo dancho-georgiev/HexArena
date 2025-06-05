@@ -12,7 +12,7 @@ namespace GameLogic
 		public int Length; 
 		public int Width;
 		public List<List<ITile>> TileGrid;
-		public List<IEnemy> Enemies;
+		public List<Enemy> Enemies;
 		public List<IPlayer> Players;
 		
 		public Grid(int length, int width){
@@ -25,11 +25,11 @@ namespace GameLogic
 					TileGrid[i].Add(new Tile(new Point(j,i)));
 				}
 			}
-			Enemies = new List<IEnemy>();
+			Enemies = new List<Enemy>();
 			Players = new List<IPlayer>();
 		}
 		
-		public void AddEnemy(IEnemy enemy){
+		public void AddEnemy(Enemy enemy){
 			Enemies.Add(enemy);
 		}
 	}

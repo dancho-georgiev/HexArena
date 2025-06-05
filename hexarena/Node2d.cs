@@ -76,17 +76,22 @@ public partial class Node2d : Node2D
 		if(passed + 1 == passedTest) passedTest++;
 	}
 	private void Test_AllEnemiesTarget(){
+		int passed = passedTest;
 		EventManager eventManager = new EventManager();
 		Grid grid = new Grid(3,5);
 		Enemy enemy1 = new Enemy(grid.TileGrid[1][2]);
 		Enemy enemy2 = new Enemy(grid.TileGrid[2][1]);
-		AllEnemiesTarget target = new AllEnemiesTarget(grid);
-		Test(()=>{if(target.TargetList.Count == 2)passedTest++;}, "targeted all enemies");
+		grid.AddEnemy(enemy1);
+		grid.AddEnemy(enemy2);
+		AllEnemiesTarget target = new AllEnemiesTarget(grid.Enemies);
+		Test(()=>{if(target.TargetList.Count() == 2)passedTest++;}, "targeted all enemies");
 		Test(()=>{if(target.TargetList.Any(x=>(x as Enemy).Tile.Position == new Point(1,2)))passedTest++;}, "correct enemy");
 		Slash slash = new Slash(eventManager);
+		slash.AddTarget(target);
 		eventManager.EmitOnStartTurn();
 		Test(()=>{if(enemy1.Health<100)passedTest++;}, "dealt damage to enemy1");
 		Test(()=>{if(enemy2.Health<100)passedTest++;}, "dealt damage to enemy2");
+		if(passed+4==passedTest)passedTest++;
 		
 	}
 	

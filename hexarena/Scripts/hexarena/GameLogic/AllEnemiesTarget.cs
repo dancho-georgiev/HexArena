@@ -6,26 +6,32 @@ using System.Linq;
 
 namespace GameLogic{
 	
-	public class AllEnemiesTarget : ITarget
+	public class AllEnemiesTarget : Target
 {
-	public List<Targetable> TargetList {get; set;}
-	public uint TargetCount {get; set;}
 	private Grid Grid;
 	
 	public AllEnemiesTarget(Grid grid) {
 		Grid = grid;
 		InitializeList();
 	}
+	public AllEnemiesTarget(List<Enemy> allEnemies) {
+		List<Enemy> targets = new List<Enemy>();
+		foreach(Enemy enemy in allEnemies){
+			targets.Add(enemy);
+		}
+		TargetList = targets;
+	}
 	
-	public void InitializeList(){
-		TargetList = new List<Targetable>();
+	public override void InitializeList(){
+		List<Character> targets = new List<Character>();
 		foreach(List<ITile> col in Grid.TileGrid){
 			foreach(ITile tile in col){
 				if(tile.CharacterOnTile is Enemy){
-					TargetList.Add(tile.CharacterOnTile);
+					targets.Add(tile.CharacterOnTile);
 				}
 			}
 		}
+		TargetList = targets;
 	}
 	
 }

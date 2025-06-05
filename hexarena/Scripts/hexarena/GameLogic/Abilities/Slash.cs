@@ -18,10 +18,10 @@ namespace GameLogic{
 		else {} //throw nqkva greshka
 	}
 	public void Use2(){ //temporary(4am gaming)
-		//GD.Print("slash used"); bachka
-		foreach(ITarget t in Targets){
-			foreach(Targetable enemy in t.TargetList){
-				enemy.TakeDamage(damage);
+		//GD.Print("slash used"); 
+		foreach(Target t in Targets){
+			foreach(Targetable targetable in t.TargetList){
+				targetable.TakeDamage(damage);
 			}
 		}
 	}
