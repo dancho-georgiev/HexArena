@@ -30,6 +30,8 @@ namespace GameLogic{
 		StatusEffects.Add(statusEffect);
 	}
 	
+	//tva trqq da vleze samo na characterite koito she nqma da sa playable(na enemytata)
+	// po nqkoe vreme go premesti
 	public void MoveCharacter(ITile TargetPosition)
 	{
 		if(TargetPosition.IsAvailable == true)
