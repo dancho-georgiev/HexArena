@@ -6,7 +6,9 @@ using System.Linq;
 
 namespace GameLogic{
 	
-	public class AllEnemiesTarget : Target
+	public class AllEnemiesTarget : Target 
+	//nqma li da e po dobre da napraish target n enemies
+	//i all enemies da e 
 {
 	
 	public AllEnemiesTarget(Grid grid) {

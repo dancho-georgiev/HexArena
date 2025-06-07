@@ -30,14 +30,18 @@ namespace GameLogic{
 		StatusEffects.Add(statusEffect);
 	}
 	
-	public void MoveCharacter(Tile TargetPosition)
+	public void MoveCharacter(ITile TargetPosition)
 	{
 		if(TargetPosition.IsAvailable == true)
 		{
-			
+			List<ITile> pathTiles = FindShortestPath(this.Tile, TargetPosition);
+			foreach(ITile i in pathTiles){
+				this.Tile = i;
+				//GD.Print($"{this.Tile.Position.x}, {this.Tile.Position.y}");
+			}
 		}
 	}
-
+		//standart shortest path algo; can be improved
 		public List<ITile> FindShortestPath(ITile startTile, ITile endTile)
 		{
 			var cameFrom = new Dictionary<ITile,ITile>();

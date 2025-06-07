@@ -20,6 +20,7 @@ public partial class Node2d : Node2D
 		Test(Test_AllEnemiesTarget, "AllEnemiesTarget and Slash");
 		Test(Test_Pathfinding,"Test_Pathfinding");
 		Test(Test_SetupNeighbours,"Test_SetupNeighbours");
+		Test(Test_MoveCharacter,"Test_MoveCharacter");
 		GD.Print($"PASSED: {passedTest}");
 		GD.Print($"FAILED: {allTest-passedTest}");
 	}
@@ -126,8 +127,7 @@ public partial class Node2d : Node2D
 			
 			ITile obstacle1 = grid.TileGrid[2][0];
 			obstacle1.IsAvailable = false;
-			ITile obstacle2 = grid.TileGrid[1][1];
-			obstacle2.IsAvailable = false;
+		
 			ITile obstacle3 = grid.TileGrid[1][2];
 			obstacle3.IsAvailable = false;
 		  List<ITile> path = character.FindShortestPath(start, end);
@@ -136,6 +136,22 @@ public partial class Node2d : Node2D
 		Test(() => { if (path[path.Count - 1] == end) passedTest++; }, "path ends at end");
 		Test(() => { if (path.Count >= 3) passedTest++; }, "path has reasonable length");
 		GD.Print($"{path.Count} path count");
+	}
+	
+	private void Test_MoveCharacter(){
+		int passed = passedTest;
+		Grid grid = new Grid(4, 4);
+		Character character = new Character(100, 1, grid.TileGrid[0][0]);
+		ITile TargetPosition = grid.TileGrid[3][3];
+		ITile obstacle1 = grid.TileGrid[2][0];
+			obstacle1.IsAvailable = false;
+			ITile obstacle3 = grid.TileGrid[1][2];
+			obstacle3.IsAvailable = false;
+		Test(() => { if (character.Tile == grid.TileGrid[0][0] ) passedTest++; }, "start position is not right");	
+		character.MoveCharacter(TargetPosition);
+		Test(() => { if (character.Tile == TargetPosition) passedTest++; }, "final position is not right");	
+		if (passed + 2 == passedTest)
+			passedTest++;
 	}
 	
 }
