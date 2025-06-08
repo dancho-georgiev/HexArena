@@ -16,7 +16,7 @@ namespace GameLogic
 			this.grid = grid;
 		}
 		public override bool ValidTarget(ITargetable targetable) {return true;}
-		
+		public override bool ValidTargetType(ITargetable targetable) {return true;}
 		public override void AddTargetable(ITargetable targetable)
 		{
 			 TargetList.Add(targetable); 
@@ -24,7 +24,6 @@ namespace GameLogic
 		
 		public override void PopulateFromGrid()
 		{
-			 
 			TargetList = new List<ITargetable>();
 			foreach (List<ITile> col in grid.TileGrid)
 			{

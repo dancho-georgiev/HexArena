@@ -10,6 +10,7 @@ namespace GameLogic
 {
 	protected Grid grid;
 	public abstract void PopulateFromGrid();
+	public abstract bool ValidTargetType(ITargetable targetable);
 	public abstract bool ValidTarget(ITargetable targetable);
 	public List<ITargetable> TargetList {get; set;}
 	public uint TargetCount {get; set;}
