@@ -7,14 +7,14 @@ using System.Linq;
 namespace GameLogic{
 	
 	public class AllEnemiesTarget : Target 
-	//nqma li da e po dobre da napraish target n enemies
-	//i all enemies da e 
 {
 	
 	public AllEnemiesTarget(Grid grid) {
 		this.grid = grid;
 		InitializeList();
 	}
+	
+	
 	public AllEnemiesTarget(List<Enemy> allEnemies) {
 		TargetList = new List<ITargetable>();
 		foreach(Enemy enemy in allEnemies){

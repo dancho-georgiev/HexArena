@@ -30,8 +30,18 @@ namespace GameLogic{
 		StatusEffects.Add(statusEffect);
 	}
 	
-	//tva trqq da vleze samo na characterite koito she nqma da sa playable(na enemytata)
+	public void TeleportCharacter(ITile TargetPosition)
+	{
+		if(TargetPosition.IsAvailable == true)
+		{
+			this.Tile = TargetPosition;
+		}
+		
+	}
+	
+	//Grisho:tva trqq da vleze samo na characterite koito she nqma da sa playable(na enemytata)
 	// po nqkoe vreme go premesti
+	// Dancho: Ne tova shte vleze na vseki 
 	public void MoveCharacter(ITile TargetPosition)
 	{
 		if(TargetPosition.IsAvailable == true)
