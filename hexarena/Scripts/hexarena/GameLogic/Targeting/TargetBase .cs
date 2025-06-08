@@ -13,17 +13,18 @@ namespace GameLogic
 		public TargetBase()
 		{
 			TargetList = new List<ITargetable>();
+			this.grid = grid;
 		}
 		
-		x
+		
 		public override void AddTargetable(ITargetable targetable)
 		{
 			 TargetList.Add(targetable); 
 		}
 		
-		public void PopulateFromGrid(Grid grid)
+		public override void PopulateFromGrid()
 		{
-			 this.grid = grid;
+			 
 			TargetList = new List<ITargetable>();
 			foreach (List<ITile> col in grid.TileGrid)
 			{

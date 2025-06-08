@@ -5,16 +5,9 @@ namespace Interfaces
 {
 	public interface  ITarget
 	{
-		public abstract void InitializeList();
+		public void PopulateFromGrid();
 
 		public List<ITargetable> TargetList { get; protected set; }
 		public uint TargetCount { get; set; }
-		public void Initialize(uint targetsCount)
-		{
-			TargetCount = targetsCount;
-			InitializeList();
-		}
-
-
 	}
 }
