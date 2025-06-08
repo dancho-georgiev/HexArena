@@ -10,7 +10,6 @@ namespace GameLogic{
 		AllAlliesTarget(Grid grid){
 			this.grid = grid;
 		}
-		
 		public override void PopulateFromGrid(){
 			TargetList = new List<ITargetable>();
 			foreach (List<ITile> col in grid.TileGrid)

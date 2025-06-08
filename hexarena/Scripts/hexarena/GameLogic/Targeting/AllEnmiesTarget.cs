@@ -13,6 +13,7 @@ public class AllEnemiesTarget : EnemiesOnlyTarget
 			this.grid = grid;
 			PopulateFromGrid();
 		}
+
 		
 		public override void PopulateFromGrid()
 		{

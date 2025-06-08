@@ -6,9 +6,11 @@ namespace GameLogic{
 	
 	public abstract class AlliesOnlyTarget : Target
 {
-		public override abstract void PopulateFromGrid();
+		public override sealed bool ValidTarget(ITargetable ally){
+			return ally is IPlayer;
+		}
 		public override sealed void AddTargetable(ITargetable ally){
-			if(ally is IPlayer){
+			if(ValidTarget(ally)){
 				TargetList.Add(ally);
 			}
 		}

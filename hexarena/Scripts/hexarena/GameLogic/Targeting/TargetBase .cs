@@ -15,7 +15,7 @@ namespace GameLogic
 			TargetList = new List<ITargetable>();
 			this.grid = grid;
 		}
-		
+		public override bool ValidTarget(ITargetable targetable) {return true;}
 		
 		public override void AddTargetable(ITargetable targetable)
 		{
