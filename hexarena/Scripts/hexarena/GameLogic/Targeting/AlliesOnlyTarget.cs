@@ -9,7 +9,7 @@ namespace GameLogic{
 		public override sealed bool ValidTarget(ITargetable ally){
 			return ally is IPlayer;
 		}
-		public override sealed void AddTargetable(ITargetable ally){
+		public override void AddTargetable(ITargetable ally){
 			if(ValidTarget(ally)){
 				TargetList.Add(ally);
 			}
