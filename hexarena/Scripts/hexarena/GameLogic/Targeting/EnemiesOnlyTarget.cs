@@ -4,18 +4,13 @@ using Interfaces;
 
 namespace GameLogic{
 	
-	public abstract class EnemiesOnlyTarget : Target
+	public abstract class EnemiesOnlyTarget : Target, ITypeRestrictedTarget
 	{
-		public override sealed bool ValidTargetType(ITargetable enemy){
+		public bool ValidType(ITargetable enemy){
 			return enemy is IEnemy;
 		}
 		public override bool ValidTarget(ITargetable enemy){
-			return ValidTargetType(enemy);
-		}
-		public override void AddTargetable(ITargetable enemy){
-			if(ValidTarget(enemy)){
-				TargetList.Add(enemy);
-			}
+			return ValidType(enemy);
 		}
 	}
 

@@ -3,7 +3,7 @@ using System;
 
 namespace Interfaces{
 	
-	public interface IRangedTarget : ITarget
+	public interface IRangeRestrictedTarget : ITarget
 	{
 		Point Position {get; set;}
 		public bool TargetInRange(ITargetable targetable);
