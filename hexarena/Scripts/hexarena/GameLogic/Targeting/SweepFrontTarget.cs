@@ -2,6 +2,10 @@ using Godot;
 using System;
 using Interfaces;
 
+using System.Linq;
+using System.Collections.Generic;
+
+
 namespace GameLogic{
 	public class SweepFrontTarget : Target, IRangeRestrictedTarget, ICountRestrictedTarget  //Name should be changed to something more comprehensive
 	{
@@ -10,11 +14,11 @@ namespace GameLogic{
 		
 		public SweepFrontTarget(ITile _position, ITargetable targetable)
 		{
+			TargetList = new List<ITargetable>();
 			Position = _position;
 			TargetCount = 3;
 			if(TargetInRange(targetable))
 			{
-				TargetList = new List<ITargetable>();
 				AddTargetable(targetable);
 				PopulateFromGrid();
 			}
@@ -45,8 +49,15 @@ namespace GameLogic{
 		
 		public override void PopulateFromGrid()
 		{
-			List<ITargetable> targets = Position.Neighbours.Intersect(TargetList[0].Neighbours);
-			targets.Add(TargetList.First());
+			List<ITargetable> targets;
+			if(TargetList.First() is ITile)
+			{
+				targets = Position.Neighbours.Intersect((TargetList[0] as ITile).Neighbours).Select(x=>x as ITargetable).ToList();
+			}
+			else
+			{
+				targets = Position.Neighbours.Intersect((TargetList[0] as ICharacter).Tile.Neighbours).Select(x=>x as ITargetable).ToList();
+			}
 			foreach(ITile tile in targets)
 			{
 				AddTargetable(tile);
