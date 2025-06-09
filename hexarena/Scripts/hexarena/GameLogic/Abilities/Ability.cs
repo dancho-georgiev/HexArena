@@ -5,11 +5,11 @@ using System.Collections.Generic;
 
 namespace GameLogic{
 	
-	public abstract class AbilityBase : IAbility
+	public abstract class Ability : IAbility
 {
 	public List<ITarget> Targets { get; set; }
 	
-	public AbilityBase()
+	public Ability()
 	{
 		Targets = new List<ITarget>();
 	}
