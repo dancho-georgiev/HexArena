@@ -21,12 +21,12 @@ public partial class Node2d : Node2D
 		Test(Test_Pathfinding,"Test_Pathfinding");
 		Test(Test_SetupNeighbours,"Test_SetupNeighbours");
 		Test(Test_MoveCharacter,"Test_MoveCharacter");
+		Test(Test_SurroundSelfTarget, "Test_SurroundSelfTarget");
 		GD.Print($"PASSED: {passedTest}");
 		GD.Print($"FAILED: {allTest-passedTest}");
 	}
 	
-	private void Printer()
-	{
+	private void Printer(){
 		passedTest += 1;
 	}
 	
@@ -92,10 +92,9 @@ public partial class Node2d : Node2D
 		eventManager.EmitOnStartTurn();
 		Test(()=>{if(enemy1.Health<100)passedTest++;}, "dealt damage to enemy1");
 		Test(()=>{if(enemy2.Health<100)passedTest++;}, "dealt damage to enemy2");
-		if(passed+4==passedTest)passedTest++;
-		
+		if(passed+4==passedTest)passedTest++;	
 	}
-		private void Test_SetupNeighbours()
+	private void Test_SetupNeighbours()
 	{
 		int passed = passedTest;
 
@@ -152,6 +151,22 @@ public partial class Node2d : Node2D
 		Test(() => { if (character.Tile == TargetPosition) passedTest++; }, "final position is not right");	
 		if (passed + 2 == passedTest)
 			passedTest++;
+	}
+	
+	private void Test_SurroundSelfTarget()
+	{
+		int passed = passedTest;
+		Grid grid = new Grid(6, 6);
+		EventManager eventManager = new EventManager();
+		Character character = new Character(100, 1, grid.TileGrid[3][3]);
+		Character character2 = new Character(100, 1, grid.TileGrid[3][2]);
+		SurroundSelfTarget surroundTargeting = new SurroundSelfTarget(character.Tile);
+		SwordSpin spinSword = new SwordSpin(eventManager, surroundTargeting);
+		eventManager.EmitOnActivateAbility1();
+		Test(()=>{if(surroundTargeting.TargetInRange(character2))passedTest++;}, "comprehended character2 in range");
+		Test(()=>{if(character.Health==100)passedTest++;}, "did not damage self");
+		Test(()=>{if(character2.Health<100)passedTest++;}, "dealt damage to neighbouring character");
+		if(passed+3==passedTest)passedTest++;	
 	}
 	
 }
