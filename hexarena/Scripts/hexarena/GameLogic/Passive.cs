@@ -4,7 +4,7 @@ using Interfaces;
 
 namespace GameLogic{
 	
-	public abstract class Passive : AbilityBase, IPassive
+	public abstract class Passive : Ability, IPassive
 {
 
 }

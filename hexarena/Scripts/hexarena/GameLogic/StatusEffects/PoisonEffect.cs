@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using Interfaces;
+using System.Collections.Generic;
 
 namespace GameLogic
 {
@@ -9,8 +10,11 @@ namespace GameLogic
 	{
 		private int damage;
 		private int duration;
-		public PoisonEffect(int damage, int duration)
+		public PoisonEffect(int damage, int duration, EventManager eventManager, ICharacter character)
 		{
+			AddTarget(new SelfTarget(character));
+			Connect(eventManager);
+			character.TakeStatusEffect(this);
 			this.damage = damage;
 			this.duration = duration;
 		}
@@ -27,9 +31,9 @@ namespace GameLogic
 			{
 				return;
 			}
-			foreach(var target in Targets)
+			foreach(ITarget target in Targets)
 			{
-				foreach(var targetable in target.TargetList)
+				foreach(ITargetable targetable in target.TargetList)
 				{
 					targetable.TakeDamage(damage);
 				}

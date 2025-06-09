@@ -8,7 +8,7 @@ namespace GameLogic
 	public abstract class StatusEffect : IStatusEffect
 	{
 		public List<ITarget> Targets { get; set; }
-		public StatusEffectBase()
+		public StatusEffect()
 		{
 			Targets = new List<ITarget>();
 		}
