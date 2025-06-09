@@ -169,4 +169,16 @@ public partial class Node2d : Node2D
 		if(passed+3==passedTest)passedTest++;	
 	}
 	
+	private void Test_SweepFrontTarget()
+	{
+		int passed = passedTest;
+		Grid grid = new Grid(4, 4);
+		EventManager eventManager = new EventManager();
+		Character character = new Character(100, 1, grid.TileGrid[3][3]);
+		Character character2 = new Character(100, 1, grid.TileGrid[3][2]);
+		SweepFrontTarget sweepTargeting = new SweepFrontTarget (character.Tile, character2.Tile);
+		//Ability here
+		//ActivateAbility event here
+	}
+	
 }
