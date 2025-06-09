@@ -4,7 +4,7 @@ using Interfaces;
 
 namespace GameLogic
 {
-	public class PoisonEffect: StatusEffectBase 
+	public class PoisonEffect: StatusEffect
 	//Ne znam dali vseki poison effect shte ima edin i sushti duration i damage
 	{
 		private int damage;
