@@ -5,7 +5,7 @@ namespace Interfaces{
 	
 	public interface IRangeRestrictedTarget : ITarget
 	{
-		ITile Position {get; set;}
+		public ITile Position {get; set;}
 		public bool TargetInRange(ITargetable targetable);
 	}
 	
