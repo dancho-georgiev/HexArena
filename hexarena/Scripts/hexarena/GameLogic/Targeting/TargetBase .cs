@@ -29,7 +29,7 @@ namespace GameLogic
 			{
 				foreach (ITile tile in col)
 				{
-					if(tile.CharacterOnTile is ITargetable targetable)
+					if(tile.CharacterOnTile is ITargetable targetable) //Charactera ne e li vinagi targetable ????
 					{
 						AddTargetable(targetable);
 					}

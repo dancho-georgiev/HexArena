@@ -20,6 +20,7 @@ namespace GameLogic{
 			this.StepEnergyCost = stepEnergyCost;
 			this.Tile = tile;
 			StatusEffects = new List<IStatusEffect>();
+			tile.CharacterOnTile = this;  //Temporary fix 
 		}
 		
 		public override void TakeDamage(int damage){

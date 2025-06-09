@@ -25,6 +25,6 @@ namespace GameLogic
 		public void EmitOnEndTurn() => EmitSignal(SignalName.EndTurn);
 		public void EmitOnHit() => EmitSignal(SignalName.Hit);
 		public void EmitOnTakeDamage() => EmitSignal(SignalName.TakeDamage);
-		
+		public void EmitOnActivateAbility1() => EmitSignal(SignalName.ActivateAbility1);
 	}
 }
