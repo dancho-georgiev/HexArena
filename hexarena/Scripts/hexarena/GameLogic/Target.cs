@@ -12,7 +12,6 @@ namespace GameLogic
 	public abstract void PopulateFromGrid();
 	public abstract bool ValidTarget(ITargetable targetable);
 	public List<ITargetable> TargetList {get; set;}
-	public uint TargetCount {get; set;}
 	public virtual void AddTargetable(ITargetable targetable){
 		if(ValidTarget(targetable)) TargetList.Add(targetable);
 	}
