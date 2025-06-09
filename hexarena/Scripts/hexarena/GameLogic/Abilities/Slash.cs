@@ -21,7 +21,7 @@ namespace GameLogic{
 		if(target is AllEnemiesTarget){
 			Targets.Add(target);
 		}	
-		else {throw new ArgumentException();} 
+		else {throw new ArgumentException("Target not found");} 
 	}
 
 	
