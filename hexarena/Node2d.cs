@@ -26,6 +26,7 @@ public partial class Node2d : Node2D
 		Test(Test_SurroundSelfTarget, "Test_SurroundSelfTarget");
 		Test(Test_TileRangeBFS, "Test_TileRangeBFS");
 		Test(Test_PoisonStatusEffect, "Test_PoisonStatusEffect");
+		Test(Test_SweepFrontTarget, "Test_SweepFrontTarget");
 		GD.Print($"PASSED: {passedTest}");
 		GD.Print($"FAILED: {allTest-passedTest}");
 	}
@@ -173,6 +174,27 @@ public partial class Node2d : Node2D
 		if(passed+3==passedTest)passedTest++;	
 	}
 	
+	private void Test_SweepFrontTarget()
+	{
+		int passed = passedTest;
+		Grid grid = new Grid(5, 5);
+		EventManager eventManager = new EventManager();
+		Character character = new Character(100, 1, grid.TileGrid[3][3]);
+		Character character2 = new Character(100, 1, grid.TileGrid[3][2]);
+		Character character3 = new Character(100, 1, grid.TileGrid[2][2]);
+		Character character4 = new Character(100, 1, grid.TileGrid[2][4]);
+		SweepFrontTarget sweepTargeting = new SweepFrontTarget (character.Tile, character2.Tile);
+		SwordSweep sweepSword = new SwordSweep(eventManager, sweepTargeting);
+		
+		eventManager.EmitOnActivateAbility1();
+		Test(()=>{if(sweepTargeting.TargetInRange(character2))passedTest++;}, "comprehended character2 in range");
+		Test(()=>{if(character.Health==100)passedTest++;}, "did not damage self");
+		Test(()=>{if(character2.Health<100)passedTest++;}, "dealt damage to main target");
+		Test(()=>{if(character3.Health<100)passedTest++;}, "dealt damage adjacent to main target");
+		Test(()=>{if(character4.Health==100)passedTest++;}, "did not deal damage behind itself");
+		if(passed+5==passedTest)passedTest++;	
+	}
+
 	private void Test_PoisonStatusEffect(){
 		int passed = passedTest;
 		EventManager eventManager = new EventManager();

@@ -3,13 +3,13 @@ using System;
 using Interfaces;
 
 namespace GameLogic{
-	public class SwordSpin : Active
+	public class SwordSweep : Active
 	{
-		private int damage = 3;
-		public SwordSpin(EventManager eventManager, SurroundSelfTarget targeting)
+		private int damage = 2;
+		public SwordSweep(EventManager _eventManager, SweepFrontTarget _targeting) //Could be made to work with other forms of sweeping targeting
 		{
-			Connect(eventManager);
-			AddTarget(targeting);
+			Connect(_eventManager);
+			AddTarget(_targeting);
 		}
 		
 		public override void Connect(EventManager eventManager){
