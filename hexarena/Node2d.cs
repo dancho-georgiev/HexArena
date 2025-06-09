@@ -200,6 +200,7 @@ public partial class Node2d : Node2D
 		EventManager eventManager = new EventManager();
 		Character character = new Character(100, 1, new Tile(new Point(1,1)));
 		PoisonEffect poison = new PoisonEffect(10, 2, eventManager,character);
+		character.TakeStatusEffect(poison);
 		Test(()=>{if(character.StatusEffects.Count()==1)passedTest++;}, "added status effect");
 		eventManager.EmitOnStartTurn();
 		Test(()=>{if(character.Health == 90)passedTest++;}, "took damage 1");
