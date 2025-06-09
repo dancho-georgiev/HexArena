@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace GameLogic
 {
-	public abstract class StatusEffectBase : IStatusEffect
+	public abstract class StatusEffect : IStatusEffect
 	{
 		public List<ITarget> Targets { get; set; }
 		public StatusEffectBase()
