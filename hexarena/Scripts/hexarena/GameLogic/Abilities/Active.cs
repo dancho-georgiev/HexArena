@@ -4,7 +4,7 @@ using Interfaces;
 
 namespace GameLogic{
 	
-	public abstract class Active : Ability, IActive
+	public abstract class Active : AbilityBase, IActive
 {
 	
 }

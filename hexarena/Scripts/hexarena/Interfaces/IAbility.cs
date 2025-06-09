@@ -9,14 +9,9 @@ namespace Interfaces
 {
 	public interface IAbility
 	{
-	List<ITarget> Targets { get; set; }
-
-	void Use();
-
-	void AddTarget(ITarget target){
-		Targets.Add(target);
-	}
-
-	void Connect(EventManager eventManager);
+		List<ITarget> Targets { get; set; }
+		void Use();
+		void AddTarget(ITarget target);
+		void Connect(EventManager eventManager);
 	}
 }
