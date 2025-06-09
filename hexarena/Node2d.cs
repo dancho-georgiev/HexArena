@@ -22,6 +22,7 @@ public partial class Node2d : Node2D
 		Test(Test_SetupNeighbours,"Test_SetupNeighbours");
 		Test(Test_MoveCharacter,"Test_MoveCharacter");
 		Test(Test_SurroundSelfTarget, "Test_SurroundSelfTarget");
+		Test(Test_PoisonStatusEffect, "Test_PoisonStatusEffect");
 		GD.Print($"PASSED: {passedTest}");
 		GD.Print($"FAILED: {allTest-passedTest}");
 	}
@@ -169,4 +170,19 @@ public partial class Node2d : Node2D
 		if(passed+3==passedTest)passedTest++;	
 	}
 	
+	private void Test_PoisonStatusEffect(){
+		int passed = passedTest;
+		EventManager eventManager = new EventManager();
+		Character character = new Character(100, 1, new Tile(new Point(1,1)));
+		PoisonEffect poison = new PoisonEffect(10, 2, eventManager,character);
+		Test(()=>{if(character.StatusEffects.Count()==1)passedTest++;}, "added status effect");
+		eventManager.EmitOnStartTurn();
+		Test(()=>{if(character.Health == 90)passedTest++;}, "took damage 1");
+		eventManager.EmitOnStartTurn();
+		Test(()=>{if(character.Health == 80)passedTest++;}, "took damage 2");
+		eventManager.EmitOnStartTurn();
+		Test(()=>{if(character.Health == 80)passedTest++;}, "stopped taking damage");
+		
+		if(passed+4==passedTest)passedTest++;	
+	}
 }
