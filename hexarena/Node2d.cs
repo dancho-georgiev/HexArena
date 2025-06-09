@@ -27,6 +27,7 @@ public partial class Node2d : Node2D
 		Test(Test_TileRangeBFS, "Test_TileRangeBFS");
 		Test(Test_PoisonStatusEffect, "Test_PoisonStatusEffect");
 		Test(Test_SweepFrontTarget, "Test_SweepFrontTarget");
+		Test(Test_BasicAttack, "Test_BasicAttack");
 		GD.Print($"PASSED: {passedTest}");
 		GD.Print($"FAILED: {allTest-passedTest}");
 	}
@@ -56,11 +57,11 @@ public partial class Node2d : Node2D
 	private void Test_GridWidthLenghtConstructor(){
 		Grid grid = new Grid(3,5);
 		int passed = passedTest;
-		Test(()=>{if(grid.Length==3)passedTest++;}, "grid.length==3");
-		Test(()=>{if(grid.Width==5)passedTest++;},  "grid.width==5");
+		Test(()=>{if(grid.Width==3)passedTest++;},  "grid.width==3");
+		Test(()=>{if(grid.Length==5)passedTest++;}, "grid.length==5");
 		Test(()=>{if(grid.Enemies.Count==0)passedTest++;}, "grid.enemies.empty");
 		Test(()=>{if(grid.Players.Count==0)passedTest++;}, "grid.players.empty");
-		Test(()=>{if(grid.TileGrid.Count==5)passedTest++;}, "grid.tileGrid.Count==width");
+		Test(()=>{if(grid.TileGrid.Count==3)passedTest++;}, "grid.tileGrid.Count==width");
 		Test(()=>{if(grid.TileGrid[1][2].Position == new Point(2,1))passedTest++;}, "correct coordinates");
 		if(passed + 6 == passedTest) passedTest++;
 	}
@@ -209,6 +210,24 @@ public partial class Node2d : Node2D
 		Test(()=>{if(character.Health == 80)passedTest++;}, "stopped taking damage");
 		
 		if(passed+4==passedTest)passedTest++;	
+	}
+	
+	private void Test_BasicAttack()
+	{
+		Grid grid = new Grid(1, 2);
+		int passed = passedTest;
+		EventManager eventManager = new EventManager();
+		Character character = new Character(100, 1, grid.TileGrid[0][0]);
+		Character character2 = new Character(100, 1, grid.TileGrid[0][1]);
+		
+		SingleTarget targetSingle = new SingleTarget (character.Tile, character2.Tile, 1);
+		SwordSlash slashSword = new SwordSlash(eventManager, targetSingle);
+		eventManager.EmitOnActivateAbility1();
+		
+		Test(()=>{if(targetSingle.TargetInRange(character2))passedTest++;}, "comprehended character2 in range");
+		Test(()=>{if(character.Health==100)passedTest++;}, "did not damage self");
+		Test(()=>{if(character2.Health<100)passedTest++;}, "dealt damage to main target");
+		if(passed + 3 == passedTest)passedTest++;
 	}
 	
 	private void Test_TileRangeBFS(){

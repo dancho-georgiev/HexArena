@@ -13,7 +13,7 @@ namespace GameLogic{
 		public SurroundSelfTarget(ITile _position, int TargetRange)
 		{
 			Position = _position;
-			this.TargetRange= TargetRange;
+			this.TargetRange = TargetRange;
 			PopulateFromGrid();
 		}
 		
