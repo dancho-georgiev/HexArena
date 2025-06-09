@@ -1,31 +1,32 @@
 using Godot;
 using System;
 using Interfaces;
+using Utilities;
 using System.Collections.Generic;
 
 namespace GameLogic{
 	public class SurroundSelfTarget : Target, IRangeRestrictedTarget
 	{
 		public ITile Position {get; set;}
-		//public int TargetRange;
+		public int TargetRange;
 		
-		public SurroundSelfTarget(ITile _position)
+		public SurroundSelfTarget(ITile _position, int TargetRange)
 		{
 			Position = _position;
+			this.TargetRange= TargetRange;
 			PopulateFromGrid();
 		}
 		
 		public bool TargetInRange(ITargetable targetable)
 		//Graph traversal algorithm needed BFS or DFS or any other   
 		{
-			if(targetable is ITile)
-			{
-				return Position.Neighbours.Contains(targetable as ITile);
+			if(targetable is ITile){
+				return Utility.TileRangeBFS(Position, targetable as ITile, TargetRange);
 			}
-			else
-			{
-				return Position.Neighbours.Contains((targetable as ICharacter).Tile);
+			else{
+				return Utility.TileRangeBFS(Position, (targetable as ICharacter).Tile, TargetRange);
 			}
+			
 		}
 		public override void PopulateFromGrid()
 		{

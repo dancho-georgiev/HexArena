@@ -4,6 +4,8 @@ using GameLogic;
 using Interfaces;
 using System.Linq;
 using System.Collections.Generic;
+using Utilities;
+
 public partial class Node2d : Node2D
 {
 	private EventManager eventManager;
@@ -22,6 +24,7 @@ public partial class Node2d : Node2D
 		Test(Test_SetupNeighbours,"Test_SetupNeighbours");
 		Test(Test_MoveCharacter,"Test_MoveCharacter");
 		Test(Test_SurroundSelfTarget, "Test_SurroundSelfTarget");
+		Test(Test_TileRangeBFS, "Test_TileRangeBFS");
 		Test(Test_PoisonStatusEffect, "Test_PoisonStatusEffect");
 		GD.Print($"PASSED: {passedTest}");
 		GD.Print($"FAILED: {allTest-passedTest}");
@@ -161,7 +164,7 @@ public partial class Node2d : Node2D
 		EventManager eventManager = new EventManager();
 		Character character = new Character(100, 1, grid.TileGrid[3][3]);
 		Character character2 = new Character(100, 1, grid.TileGrid[3][2]);
-		SurroundSelfTarget surroundTargeting = new SurroundSelfTarget(character.Tile);
+		SurroundSelfTarget surroundTargeting = new SurroundSelfTarget(character.Tile, 1);
 		SwordSpin spinSword = new SwordSpin(eventManager, surroundTargeting);
 		eventManager.EmitOnActivateAbility1();
 		Test(()=>{if(surroundTargeting.TargetInRange(character2))passedTest++;}, "comprehended character2 in range");
@@ -184,5 +187,14 @@ public partial class Node2d : Node2D
 		Test(()=>{if(character.Health == 80)passedTest++;}, "stopped taking damage");
 		
 		if(passed+4==passedTest)passedTest++;	
+	}
+	
+	private void Test_TileRangeBFS(){
+		Grid grid = new Grid(6,6);
+		int passed = passedTest;
+		Test(()=>{if(Utility.TileRangeBFS(grid.TileGrid[0][0], grid.TileGrid[1][1], 1))passedTest++;}, "find target 1");
+		Test(()=>{if(Utility.TileRangeBFS(grid.TileGrid[0][0], grid.TileGrid[1][2], 2))passedTest++;}, "find target 2");
+		Test(()=>{if(Utility.TileRangeBFS(grid.TileGrid[0][0], grid.TileGrid[2][2], 3))passedTest++;}, "find target 3");
+		if(passed + 3 == passedTest)passedTest++;
 	}
 }
