@@ -8,10 +8,12 @@ namespace GameLogic{
 	
 	public class Character : Targetable, ICharacter
 {
-		public int Health { get;  set; }
+		public short Health { get;  set; }
 		
 		public double StepEnergyCost { get;  set; }
 		public List<IStatusEffect> StatusEffects {get; set;}
+		public List<IActive> ActiveAbilities {get; protected set;} 
+		public List<IPassive> CharacterPassives {get; protected set;}
 		public ITile Tile { get;  set; }
 		
 		public Character(int health,double stepEnergyCost,ITile tile)
@@ -20,6 +22,43 @@ namespace GameLogic{
 			this.StepEnergyCost = stepEnergyCost;
 			this.Tile = tile;
 			StatusEffects = new List<IStatusEffect>();
+			tile.CharacterOnTile = this;  //Temporary fix 
+		}
+		
+		public Character(int health,double stepEnergyCost,ITile tile, List<IActive> _activeAbilities)
+		{
+			this.Health = health;
+			this.StepEnergyCost = stepEnergyCost;
+			this.Tile = tile;
+			StatusEffects = new List<IStatusEffect>();
+			ActiveAbilities = new List<IActive>();
+			ActiveAbilities.AddRange(_activeAbilities);
+			CharacterPassives = new List<IPassive>();  //idk dali e nujno tuk
+			tile.CharacterOnTile = this;  //Temporary fix 
+		}
+		
+		public Character(int health,double stepEnergyCost,ITile tile, List<IPassive> _charPassives)
+		{
+			this.Health = health;
+			this.StepEnergyCost = stepEnergyCost;
+			this.Tile = tile;
+			StatusEffects = new List<IStatusEffect>();
+			ActiveAbilities = new List<IActive>(); //Idk dali e nujno tuk
+			CharacterPassives = new List<IPassive>();
+			CharacterPassives.AddRange(_charPassives);
+			tile.CharacterOnTile = this;  //Temporary fix 
+		}
+		
+		public Character(int health,double stepEnergyCost,ITile tile, List<IActive> _activeAbilities, List<IPassive> _charPassives)
+		{
+			this.Health = health;
+			this.StepEnergyCost = stepEnergyCost;
+			this.Tile = tile;
+			StatusEffects = new List<IStatusEffect>();
+			ActiveAbilities = new List<IActive>();
+			ActiveAbilities.AddRange(_activeAbilities);
+			CharacterPassives = new List<IPassive>();
+			CharacterPassives.AddRange(_activeAbilities);
 			tile.CharacterOnTile = this;  //Temporary fix 
 		}
 		
