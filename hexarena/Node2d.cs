@@ -221,6 +221,24 @@ public partial class Node2d : Node2D
 		
 		if(passed+4==passedTest)passedTest++;	
 	}
+		private void Test_PassiveHealEffect(){
+		int passed = passedTest;
+		EventManager eventManager = new EventManager();
+		Character character = new Peasant(eventManager, new Tile(new Point(1,1)));
+		PassiveHealEffect heal = new PassiveHealEffect(10, 2, eventManager,character);
+		character.TakeStatusEffect(heal);
+		Test(()=>{if(character.StatusEffects.Count()==1)passedTest++;}, "added status effect");
+		eventManager.EmitOnStartTurn();
+		
+		int oldHealth = character.Health;
+		Test(()=>{if(character.Health == oldHealth+heal.HealAmount)passedTest++;}, "took damage 1");
+		eventManager.EmitOnStartTurn();
+		Test(()=>{if(character.Health == oldHealth+(heal.HealAmount*2))passedTest++;}, "took damage 2");
+		eventManager.EmitOnStartTurn();
+		Test(()=>{if(character.Health == oldHealth+(heal.HealAmount*2))passedTest++;}, "stopped taking damage");
+		
+		if(passed+4==passedTest)passedTest++;	
+	}
 	
 	private void Test_BasicAttack()
 	{
