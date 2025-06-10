@@ -14,7 +14,6 @@ namespace GameLogic
 		{
 			AddTarget(new SelfTarget(character));
 			Connect(eventManager);
-			character.TakeStatusEffect(this);
 			this.damage = damage;
 			this.duration = duration;
 		}
