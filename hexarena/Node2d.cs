@@ -22,12 +22,12 @@ public partial class Node2d : Node2D
 		//Test(Test_AllEnemiesTarget, "AllEnemiesTarget and Slash");
 		//Test(Test_Pathfinding,"Test_Pathfinding");
 		Test(Test_SetupNeighbours,"Test_SetupNeighbours");
-		//Test(Test_MoveCharacter,"Test_MoveCharacter");
-		//Test(Test_SurroundSelfTarget, "Test_SurroundSelfTarget");
+		Test(Test_MoveCharacter,"Test_MoveCharacter");
+		Test(Test_SurroundSelfTarget, "Test_SurroundSelfTarget");
 		Test(Test_TileRangeBFS, "Test_TileRangeBFS");
-		//Test(Test_PoisonStatusEffect, "Test_PoisonStatusEffect");
-		//Test(Test_SweepFrontTarget, "Test_SweepFrontTarget");
-		//Test(Test_BasicAttack, "Test_BasicAttack");
+		Test(Test_PoisonStatusEffect, "Test_PoisonStatusEffect");
+		Test(Test_SweepFrontTarget, "Test_SweepFrontTarget");
+		Test(Test_BasicAttack, "Test_BasicAttack");
 		GD.Print($"PASSED: {passedTest}");
 		GD.Print($"FAILED: {allTest-passedTest}");
 	}
@@ -65,7 +65,7 @@ public partial class Node2d : Node2D
 		Test(()=>{if(grid.TileGrid[1][2].Position == new Point(2,1))passedTest++;}, "correct coordinates");
 		if(passed + 6 == passedTest) passedTest++;
 	}
-	////Character is abstract now GG
+	////Peasant is abstract now GG
 	//private void Test_EnemyConstructorTile(){
 		//Grid grid = new Grid(3,5);
 		//Enemy enemy = new Enemy(grid.TileGrid[1][2]);
@@ -122,115 +122,117 @@ public partial class Node2d : Node2D
 			passedTest++;
 	}
 	
-	//private void Test_Pathfinding(){ //HOLY SHIT CODA MI RABOTI
-		//Grid grid = new Grid(4,4);
-		//ITile start = grid.TileGrid[0][0];
-		//ITile end = grid.TileGrid[3][3];
-		//
-		//grid.SetupNeighbours();
-		//
-		//Character character = new Character(100, 1, start);
-			//
-			//ITile obstacle1 = grid.TileGrid[2][0];
-			//obstacle1.IsAvailable = false;
-		//
-			//ITile obstacle3 = grid.TileGrid[1][2];
-			//obstacle3.IsAvailable = false;
-		  //List<ITile> path = character.FindShortestPath(start, end);
-		//Test(() => { if (path != null) passedTest++; }, "path is not null");	
-		//Test(() => { if (path[0] == start) passedTest++; }, "path starts at start");
-		//Test(() => { if (path[path.Count - 1] == end) passedTest++; }, "path ends at end");
-		//Test(() => { if (path.Count >= 3) passedTest++; }, "path has reasonable length");
-		//GD.Print($"{path.Count} path count");
-	//}
-	//
-	//private void Test_MoveCharacter(){
-		//int passed = passedTest;
-		//Grid grid = new Grid(4, 4);
-		//Character character = new Character(100, 1, grid.TileGrid[0][0]);
-		//ITile TargetPosition = grid.TileGrid[3][3];
-		//ITile obstacle1 = grid.TileGrid[2][0];
-			//obstacle1.IsAvailable = false;
-			//ITile obstacle3 = grid.TileGrid[1][2];
-			//obstacle3.IsAvailable = false;
-		//Test(() => { if (character.Tile == grid.TileGrid[0][0] ) passedTest++; }, "start position is not right");	
-		//character.MoveCharacter(TargetPosition);
-		//Test(() => { if (character.Tile == TargetPosition) passedTest++; }, "final position is not right");	
-		//if (passed + 2 == passedTest)
-			//passedTest++;
-	//}
-	//
-	//private void Test_SurroundSelfTarget()
-	//{
-		//int passed = passedTest;
-		//Grid grid = new Grid(6, 6);
-		//EventManager eventManager = new EventManager();
-		//Character character = new Character(100, 1, grid.TileGrid[3][3]);
-		//Character character2 = new Character(100, 1, grid.TileGrid[3][2]);
-		//SurroundSelfTarget surroundTargeting = new SurroundSelfTarget(character.Tile, 1);
-		//SwordSpin spinSword = new SwordSpin(eventManager, surroundTargeting);
-		//eventManager.EmitOnActivateAbility1();
-		//Test(()=>{if(surroundTargeting.TargetInRange(character2))passedTest++;}, "comprehended character2 in range");
-		//Test(()=>{if(character.Health==100)passedTest++;}, "did not damage self");
-		//Test(()=>{if(character2.Health<100)passedTest++;}, "dealt damage to neighbouring character");
-		//if(passed+3==passedTest)passedTest++;	
-	//}
-	//
-	//private void Test_SweepFrontTarget()
-	//{
-		//int passed = passedTest;
-		//Grid grid = new Grid(5, 5);
-		//EventManager eventManager = new EventManager();
-		//Character character = new Character(100, 1, grid.TileGrid[3][3]);
-		//Character character2 = new Character(100, 1, grid.TileGrid[3][2]);
-		//Character character3 = new Character(100, 1, grid.TileGrid[2][2]);
-		//Character character4 = new Character(100, 1, grid.TileGrid[2][4]);
-		//SweepFrontTarget sweepTargeting = new SweepFrontTarget (character.Tile, character2.Tile);
-		//SwordSweep sweepSword = new SwordSweep(eventManager, sweepTargeting);
-		//
-		//eventManager.EmitOnActivateAbility1();
-		//Test(()=>{if(sweepTargeting.TargetInRange(character2))passedTest++;}, "comprehended character2 in range");
-		//Test(()=>{if(character.Health==100)passedTest++;}, "did not damage self");
-		//Test(()=>{if(character2.Health<100)passedTest++;}, "dealt damage to main target");
-		//Test(()=>{if(character3.Health<100)passedTest++;}, "dealt damage adjacent to main target");
-		//Test(()=>{if(character4.Health==100)passedTest++;}, "did not deal damage behind itself");
-		//if(passed+5==passedTest)passedTest++;	
-	//}
-//
-	//private void Test_PoisonStatusEffect(){
-		//int passed = passedTest;
-		//EventManager eventManager = new EventManager();
-		//Character character = new Character(100, 1, new Tile(new Point(1,1)));
-		//PoisonEffect poison = new PoisonEffect(10, 2, eventManager,character);
-		//character.TakeStatusEffect(poison);
-		//Test(()=>{if(character.StatusEffects.Count()==1)passedTest++;}, "added status effect");
-		//eventManager.EmitOnStartTurn();
-		//Test(()=>{if(character.Health == 90)passedTest++;}, "took damage 1");
-		//eventManager.EmitOnStartTurn();
-		//Test(()=>{if(character.Health == 80)passedTest++;}, "took damage 2");
-		//eventManager.EmitOnStartTurn();
-		//Test(()=>{if(character.Health == 80)passedTest++;}, "stopped taking damage");
-		//
-		//if(passed+4==passedTest)passedTest++;	
-	//}
-	//
-	//private void Test_BasicAttack()
-	//{
-		//Grid grid = new Grid(1, 2);
-		//int passed = passedTest;
-		//EventManager eventManager = new EventManager();
-		//Character character = new Character(100, 1, grid.TileGrid[0][0]);
-		//Character character2 = new Character(100, 1, grid.TileGrid[0][1]);
-		//
-		//SingleTarget targetSingle = new SingleTarget (character.Tile, character2.Tile, 1);
-		//SwordSlash slashSword = new SwordSlash(eventManager, targetSingle);
-		//eventManager.EmitOnActivateAbility1();
-		//
-		//Test(()=>{if(targetSingle.TargetInRange(character2))passedTest++;}, "comprehended character2 in range");
-		//Test(()=>{if(character.Health==100)passedTest++;}, "did not damage self");
-		//Test(()=>{if(character2.Health<100)passedTest++;}, "dealt damage to main target");
-		//if(passed + 3 == passedTest)passedTest++;
-	//}
+	private void Test_Pathfinding(){ //HOLY SHIT CODA MI RABOTI
+		Grid grid = new Grid(4,4);
+		ITile start = grid.TileGrid[0][0];
+		ITile end = grid.TileGrid[3][3];
+		
+		grid.SetupNeighbours();
+		
+		EventManager eventManager = new EventManager();
+		Peasant character = new Peasant(eventManager, start);
+			
+			ITile obstacle1 = grid.TileGrid[2][0];
+			obstacle1.IsAvailable = false;
+		
+			ITile obstacle3 = grid.TileGrid[1][2];
+			obstacle3.IsAvailable = false;
+		  List<ITile> path = character.FindShortestPath(start, end);
+		Test(() => { if (path != null) passedTest++; }, "path is not null");	
+		Test(() => { if (path[0] == start) passedTest++; }, "path starts at start");
+		Test(() => { if (path[path.Count - 1] == end) passedTest++; }, "path ends at end");
+		Test(() => { if (path.Count >= 3) passedTest++; }, "path has reasonable length");
+		GD.Print($"{path.Count} path count");
+	}
+	
+	private void Test_MoveCharacter(){
+		int passed = passedTest;
+		Grid grid = new Grid(4, 4);
+		EventManager eventManager = new EventManager();
+		Peasant character = new Peasant(eventManager, grid.TileGrid[0][0]);
+		ITile TargetPosition = grid.TileGrid[3][3];
+		ITile obstacle1 = grid.TileGrid[2][0];
+			obstacle1.IsAvailable = false;
+			ITile obstacle3 = grid.TileGrid[1][2];
+			obstacle3.IsAvailable = false;
+		Test(() => { if (character.Tile == grid.TileGrid[0][0] ) passedTest++; }, "start position is not right");	
+		character.MoveCharacter(TargetPosition);
+		Test(() => { if (character.Tile == TargetPosition) passedTest++; }, "final position is not right");	
+		if (passed + 2 == passedTest)
+			passedTest++;
+	}
+	
+	private void Test_SurroundSelfTarget()
+	{
+		int passed = passedTest;
+		Grid grid = new Grid(6, 6);
+		EventManager eventManager = new EventManager();
+		Peasant character = new Peasant(eventManager, grid.TileGrid[3][3]);
+		Peasant character2 = new Peasant(eventManager, grid.TileGrid[3][2]);
+		SurroundSelfTarget surroundTargeting = new SurroundSelfTarget(character.Tile, 1);
+		SwordSpin spinSword = new SwordSpin(eventManager, surroundTargeting);
+		eventManager.EmitOnActivateAbility1();
+		Test(()=>{if(surroundTargeting.TargetInRange(character2))passedTest++;}, "comprehended character2 in range");
+		Test(()=>{if(character.Health==100)passedTest++;}, "did not damage self");
+		Test(()=>{if(character2.Health<100)passedTest++;}, "dealt damage to neighbouring character");
+		if(passed+3==passedTest)passedTest++;	
+	}
+	
+	private void Test_SweepFrontTarget()
+	{
+		int passed = passedTest;
+		Grid grid = new Grid(5, 5);
+		EventManager eventManager = new EventManager();
+		Peasant character = new Peasant(eventManager, grid.TileGrid[3][3]);
+		Peasant character2 = new Peasant(eventManager, grid.TileGrid[3][2]);
+		Peasant character3 = new Peasant(eventManager, grid.TileGrid[2][2]);
+		Peasant character4 = new Peasant(eventManager, grid.TileGrid[2][4]);
+		SweepFrontTarget sweepTargeting = new SweepFrontTarget (character.Tile, character2.Tile);
+		SwordSweep sweepSword = new SwordSweep(eventManager, sweepTargeting);
+		
+		eventManager.EmitOnActivateAbility1();
+		Test(()=>{if(sweepTargeting.TargetInRange(character2))passedTest++;}, "comprehended character2 in range");
+		Test(()=>{if(character.Health==100)passedTest++;}, "did not damage self");
+		Test(()=>{if(character2.Health<100)passedTest++;}, "dealt damage to main target");
+		Test(()=>{if(character3.Health<100)passedTest++;}, "dealt damage adjacent to main target");
+		Test(()=>{if(character4.Health==100)passedTest++;}, "did not deal damage behind itself");
+		if(passed+5==passedTest)passedTest++;	
+	}
+
+	private void Test_PoisonStatusEffect(){
+		int passed = passedTest;
+		EventManager eventManager = new EventManager();
+		Peasant character = new Peasant(eventManager, new Tile(new Point(1,1)));
+		PoisonEffect poison = new PoisonEffect(10, 2, eventManager,character);
+		character.TakeStatusEffect(poison);
+		Test(()=>{if(character.StatusEffects.Count()==1)passedTest++;}, "added status effect");
+		eventManager.EmitOnStartTurn();
+		Test(()=>{if(character.Health == 90)passedTest++;}, "took damage 1");
+		eventManager.EmitOnStartTurn();
+		Test(()=>{if(character.Health == 80)passedTest++;}, "took damage 2");
+		eventManager.EmitOnStartTurn();
+		Test(()=>{if(character.Health == 80)passedTest++;}, "stopped taking damage");
+		
+		if(passed+4==passedTest)passedTest++;	
+	}
+	
+	private void Test_BasicAttack()
+	{
+		Grid grid = new Grid(1, 2);
+		int passed = passedTest;
+		EventManager eventManager = new EventManager();
+		Peasant character = new Peasant(eventManager, grid.TileGrid[0][0]);
+		Peasant character2 = new Peasant(eventManager, grid.TileGrid[0][1]);
+		
+		SingleTarget targetSingle = new SingleTarget (character.Tile, character2.Tile, 1);
+		SwordSlash slashSword = new SwordSlash(eventManager, targetSingle);
+		eventManager.EmitOnActivateAbility1();
+		
+		Test(()=>{if(targetSingle.TargetInRange(character2))passedTest++;}, "comprehended character2 in range");
+		Test(()=>{if(character.Health==100)passedTest++;}, "did not damage self");
+		Test(()=>{if(character2.Health<100)passedTest++;}, "dealt damage to main target");
+		if(passed + 3 == passedTest)passedTest++;
+	}
 	
 	private void Test_TileRangeBFS(){
 		Grid grid = new Grid(6,6);

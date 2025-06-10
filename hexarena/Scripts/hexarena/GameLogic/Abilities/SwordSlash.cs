@@ -8,7 +8,7 @@ namespace GameLogic{
 	//BasicAttack
 	public partial class SwordSlash : Active
 	{
-		private short damage = 2;
+		private int damage = 2;
 		
 		public SwordSlash(EventManager _eventManager, SingleTarget _targeting){ 
 			Connect(_eventManager);

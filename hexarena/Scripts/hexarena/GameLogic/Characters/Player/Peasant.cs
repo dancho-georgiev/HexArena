@@ -6,7 +6,7 @@ using Interfaces;
 namespace GameLogic{
 	public partial class Peasant : Character, IPlayer 
 	{	
-		public Peasant(ITile _position, EventManager _eventManager) : base (10, 1, _position)
+		public Peasant(EventManager _eventManager, ITile _position) : base (10, 1, _position)
 		{
 			InitializePassives();
 			InitializeActives();

@@ -8,9 +8,9 @@ namespace GameLogic
 	public class PoisonEffect: StatusEffect
 	//Ne znam dali vseki poison effect shte ima edin i sushti duration i damage
 	{
-		private short damage;
+		private int damage;
 		private int duration;
-		public PoisonEffect(short damage, int duration, EventManager eventManager, ICharacter character)
+		public PoisonEffect(int damage, int duration, EventManager eventManager, ICharacter character)
 		{
 			AddTarget(new SelfTarget(character));
 			Connect(eventManager);

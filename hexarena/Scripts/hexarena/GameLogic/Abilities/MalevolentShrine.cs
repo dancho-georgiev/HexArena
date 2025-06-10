@@ -7,7 +7,7 @@ namespace GameLogic
 	
 	public class MalevolentShrine : Passive //imeto e mnogo edgy
 	{
-		private short damage;
+		private int damage;
 		public MalevolentShrine(EventManager eventManager, AllEnemiesTarget target){
 			damage = 10;
 			Connect(eventManager);
