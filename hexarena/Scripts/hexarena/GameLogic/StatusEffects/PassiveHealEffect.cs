@@ -7,18 +7,17 @@ namespace GameLogic
 {
 	public class PassiveHealEffect: StatusEffect
 	{
-		private int healAmount;
+		public int HealAmount {get; protected set;}
 		private int duration;
 		
 		public PassiveHealEffect(int healAmount, int duration,
 			 EventManager eventManager, ICharacter character)
 		{
-			this.healAmount = healAmount;
+			this.HealAmount = healAmount;
 			this.duration = duration;
 			AddTarget(new SelfTarget(character));
 			Connect(eventManager);      
-		}
-		
+		}	
 		public override void Connect(EventManager eventManager)
 		{
 			eventManager.StartTurn += Use;
@@ -34,7 +33,7 @@ namespace GameLogic
 			{
 				foreach(ITargetable targetable in target.TargetList)
 				{
-					targetable.TakeDamage(-healAmount); //This heals
+					targetable.TakeDamage(-HealAmount); //This heals
 				}
 			}
 			duration--;
