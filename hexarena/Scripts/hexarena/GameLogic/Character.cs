@@ -26,7 +26,7 @@ namespace GameLogic{
 		public override void TakeDamage(int damage){
 			Health-=damage;
 		}
-	
+
 	public override void TakeStatusEffect(IStatusEffect statusEffect){
 		StatusEffects.Add(statusEffect);
 	}

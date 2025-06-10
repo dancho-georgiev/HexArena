@@ -28,6 +28,7 @@ public partial class Node2d : Node2D
 		Test(Test_PoisonStatusEffect, "Test_PoisonStatusEffect");
 		Test(Test_SweepFrontTarget, "Test_SweepFrontTarget");
 		Test(Test_BasicAttack, "Test_BasicAttack");
+		Test(Test_PassiveHealEffect, "Test_PassiveHealEffect");
 		GD.Print($"PASSED: {passedTest}");
 		GD.Print($"FAILED: {allTest-passedTest}");
 	}
@@ -209,6 +210,22 @@ public partial class Node2d : Node2D
 		Test(()=>{if(character.Health == 80)passedTest++;}, "took damage 2");
 		eventManager.EmitOnStartTurn();
 		Test(()=>{if(character.Health == 80)passedTest++;}, "stopped taking damage");
+		
+		if(passed+4==passedTest)passedTest++;	
+	}
+		private void Test_PassiveHealEffect(){
+		int passed = passedTest;
+		EventManager eventManager = new EventManager();
+		Character character = new Character(50, 1, new Tile(new Point(1,1)));
+		PassiveHealEffect heal = new PassiveHealEffect(10, 2, eventManager,character);
+		character.TakeStatusEffect(heal);
+		Test(()=>{if(character.StatusEffects.Count()==1)passedTest++;}, "added status effect");
+		eventManager.EmitOnStartTurn();
+		Test(()=>{if(character.Health == 60)passedTest++;}, "took damage 1");
+		eventManager.EmitOnStartTurn();
+		Test(()=>{if(character.Health == 70)passedTest++;}, "took damage 2");
+		eventManager.EmitOnStartTurn();
+		Test(()=>{if(character.Health == 70)passedTest++;}, "stopped taking damage");
 		
 		if(passed+4==passedTest)passedTest++;	
 	}
