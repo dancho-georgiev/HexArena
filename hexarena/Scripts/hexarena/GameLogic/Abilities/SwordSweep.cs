@@ -5,7 +5,7 @@ using Interfaces;
 namespace GameLogic{
 	public class SwordSweep : Active
 	{
-		private int damage = 2;
+		private short damage = 2;
 		public SwordSweep(EventManager _eventManager, SweepFrontTarget _targeting) //Could be made to work with other forms of sweeping targeting
 		{
 			Connect(_eventManager);

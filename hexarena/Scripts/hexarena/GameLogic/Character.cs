@@ -6,17 +6,17 @@ using System.Collections.Generic;
 
 namespace GameLogic{
 	
-	public class Character : Targetable, ICharacter
+	public abstract class Character : Targetable, ICharacter, IClass
 {
-		public short Health { get;  set; }
+		public int Health { get;  set; }
 		
 		public double StepEnergyCost { get;  set; }
 		public List<IStatusEffect> StatusEffects {get; set;}
-		public List<IActive> ActiveAbilities {get;  set;} 
-		public List<IPassive> CharacterPassives {get;  set;}
+		public List<IActive> ActiveAbilites { get; set; }
+		public List<IPassive> PassiveAbilities { get; set; }
 		public ITile Tile { get;  set; }
 		
-		public Character(short health,double stepEnergyCost,ITile tile)
+		public Character(int health,double stepEnergyCost,ITile tile)
 		{
 			this.Health = health;
 			this.StepEnergyCost = stepEnergyCost;
@@ -25,44 +25,11 @@ namespace GameLogic{
 			tile.CharacterOnTile = this;  //Temporary fix 
 		}
 		
-		//public Character(short health,double stepEnergyCost,ITile tile, List<IActive> _activeAbilities)
-		//{
-			//this.Health = health;
-			//this.StepEnergyCost = stepEnergyCost;
-			//this.Tile = tile;
-			//StatusEffects = new List<IStatusEffect>();
-			//ActiveAbilities = new List<IActive>();
-			//ActiveAbilities.AddRange(_activeAbilities);
-			//CharacterPassives = new List<IPassive>();  //idk dali e nujno tuk
-			//tile.CharacterOnTile = this;  //Temporary fix 
-		//}
-		//
-		//public Character(short health,double stepEnergyCost,ITile tile, List<IPassive> _charPassives)
-		//{
-			//this.Health = health;
-			//this.StepEnergyCost = stepEnergyCost;
-			//this.Tile = tile;
-			//StatusEffects = new List<IStatusEffect>();
-			//ActiveAbilities = new List<IActive>(); //Idk dali e nujno tuk
-			//CharacterPassives = new List<IPassive>();
-			//CharacterPassives.AddRange(_charPassives);
-			//tile.CharacterOnTile = this;  //Temporary fix 
-		//}
-		//
-		//public Character(short health,double stepEnergyCost,ITile tile, List<IActive> _activeAbilities, List<IPassive> _charPassives)
-		//{
-			//this.Health = health;
-			//this.StepEnergyCost = stepEnergyCost;
-			//this.Tile = tile;
-			//StatusEffects = new List<IStatusEffect>();
-			//ActiveAbilities = new List<IActive>();
-			//ActiveAbilities.AddRange(_activeAbilities);
-			//CharacterPassives = new List<IPassive>();
-			//CharacterPassives.AddRange(_activeAbilities);
-			//tile.CharacterOnTile = this;  //Temporary fix 
-		//}
+		protected abstract void InitializeActives();
+		protected abstract void InitializePassives();
 		
-		public override void TakeDamage(short damage){
+		
+		public override void TakeDamage(int damage){
 			Health-=damage;
 		}
 	

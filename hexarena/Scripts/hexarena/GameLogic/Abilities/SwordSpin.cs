@@ -5,7 +5,7 @@ using Interfaces;
 namespace GameLogic{
 	public class SwordSpin : Active
 	{
-		private int damage = 2;
+		private short damage = 2;
 		public SwordSpin(EventManager eventManager, SurroundSelfTarget targeting)
 		{
 			Connect(eventManager);

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 namespace GameLogic{
 		public abstract class Targetable : ITargetable
 	{
-		public abstract void TakeDamage(short damage);
+		public abstract void TakeDamage(int damage);
 		public abstract void TakeStatusEffect(IStatusEffect status);
 	}	
 }
