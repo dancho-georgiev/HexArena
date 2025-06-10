@@ -6,12 +6,14 @@ using System.Collections.Generic;
 
 namespace GameLogic{
 	
-	public class Character : Targetable, ICharacter
+	public abstract class Character : Targetable, ICharacter, IClass
 {
 		public int Health { get;  set; }
 		
 		public double StepEnergyCost { get;  set; }
 		public List<IStatusEffect> StatusEffects {get; set;}
+		public List<IActive> ActiveAbilites { get; set; }
+		public List<IPassive> PassiveAbilities { get; set; }
 		public ITile Tile { get;  set; }
 		
 		public Character(int health,double stepEnergyCost,ITile tile)
@@ -22,6 +24,10 @@ namespace GameLogic{
 			StatusEffects = new List<IStatusEffect>();
 			tile.CharacterOnTile = this;  //Temporary fix 
 		}
+		
+		protected abstract void InitializeActives();
+		protected abstract void InitializePassives();
+		
 		
 		public override void TakeDamage(int damage){
 			Health-=damage;

@@ -1,8 +1,10 @@
 using Godot;
 using System;
 using Interfaces;
+
 using System.Linq;
 using System.Collections.Generic;
+
 
 namespace GameLogic{
 	public class SweepFrontTarget : Target, IRangeRestrictedTarget, ICountRestrictedTarget  //Name should be changed to something more comprehensive
@@ -11,7 +13,7 @@ namespace GameLogic{
 		public uint TargetCount {get; set;}
 		
 		public SweepFrontTarget(ITile _position, ITargetable targetable)
-		{				
+		{
 			TargetList = new List<ITargetable>();
 			Position = _position;
 			TargetCount = 3;

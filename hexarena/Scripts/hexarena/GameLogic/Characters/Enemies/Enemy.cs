@@ -5,9 +5,9 @@ using System.Collections.Generic;
 
 
 namespace GameLogic{
-	public class Enemy : Character, IEnemy
+	public abstract class Enemy : Character, IEnemy, IClass
 	{		
-		public Enemy(ITile position) : base(100, 1, position){
+		public Enemy(int health, int stepCost, ITile position) : base(health, stepCost, position){
 			Tile = position;
 			StatusEffects = new List<IStatusEffect>();
 			position.CharacterOnTile = this; //ne e hubavo po dobre v grid

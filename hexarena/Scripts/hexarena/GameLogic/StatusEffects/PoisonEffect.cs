@@ -8,13 +8,13 @@ namespace GameLogic
 	public class PoisonEffect: StatusEffect
 	//Ne znam dali vseki poison effect shte ima edin i sushti duration i damage
 	{
-		private int damage;
+		public int Damage {get; protected set;}
 		private int duration;
 		public PoisonEffect(int damage, int duration, EventManager eventManager, ICharacter character)
 		{
 			AddTarget(new SelfTarget(character));
 			Connect(eventManager);
-			this.damage = damage;
+			Damage = damage;
 			this.duration = duration;
 		}
 		//tova ne znam dali pravi tova koeto si mislq che pravi
@@ -34,7 +34,7 @@ namespace GameLogic
 			{
 				foreach(ITargetable targetable in target.TargetList)
 				{
-					targetable.TakeDamage(damage);
+					targetable.TakeDamage(Damage);
 				}
 			}
 			duration--;

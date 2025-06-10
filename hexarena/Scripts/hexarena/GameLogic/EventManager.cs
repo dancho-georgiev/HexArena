@@ -10,7 +10,7 @@ namespace GameLogic
 	public partial class EventManager : Node
 	{
 		[Signal]
-		public  delegate void StartTurnEventHandler();
+		public delegate void StartTurnEventHandler();
 		[Signal]
 		public delegate void EndTurnEventHandler();
 		[Signal]

@@ -5,8 +5,8 @@ using Interfaces;
 namespace GameLogic{
 	
 	public abstract class Active : Ability, IActive
-{
+	{
 	
-}
+	}
 	
 }
