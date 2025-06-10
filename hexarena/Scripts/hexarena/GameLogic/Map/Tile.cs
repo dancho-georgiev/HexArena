@@ -20,7 +20,7 @@ namespace GameLogic{
 			Neighbours = new List<ITile>();
 		}
 		
-		public override void TakeDamage(int damage){
+		public override void TakeDamage(short damage){
 			if(CharacterOnTile == null){return;}
 			else{
 				CharacterOnTile.Health -= damage;
