@@ -8,9 +8,10 @@ namespace GameLogic{
 	//BasicAttack
 	public partial class SwordSlash : Active
 	{
-		private int damage = 2;
+		public int Damage {get; protected set;}
 		
 		public SwordSlash(EventManager _eventManager, SingleTarget _targeting){ 
+			Damage = 2;
 			Connect(_eventManager);
 			AddTarget(_targeting);
 		}
@@ -20,7 +21,7 @@ namespace GameLogic{
 		}
 		public override void Use()
 		{
-			Targets[0].TargetList[0].TakeDamage(damage);
+			Targets[0].TargetList[0].TakeDamage(Damage);
 		}
 	}
 }

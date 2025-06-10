@@ -7,9 +7,10 @@ namespace GameLogic{
 //BasicAttack
 public partial class PitchforkPoke : Active
 {
-	private int damage = 1;
+	public int Damage {get; protected set;}
 	
 	public PitchforkPoke(EventManager _eventManager, SingleTarget _targeting){ 
+		Damage = 1;
 		Connect(_eventManager);
 		AddTarget(_targeting);
 	}
@@ -19,6 +20,6 @@ public partial class PitchforkPoke : Active
 	}
 	public override void Use()
 	{
-		Targets[0].TargetList[0].TakeDamage(damage);
+		Targets[0].TargetList[0].TakeDamage(Damage);
 	}
 }}

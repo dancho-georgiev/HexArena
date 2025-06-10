@@ -5,9 +5,10 @@ using Interfaces;
 namespace GameLogic{
 	public class SwordSpin : Active
 	{
-		private int damage = 2;
+		public int Damage {get; protected set;}
 		public SwordSpin(EventManager eventManager, SurroundSelfTarget targeting)
 		{
+			Damage = 2;
 			Connect(eventManager);
 			AddTarget(targeting);
 		}
@@ -18,7 +19,7 @@ namespace GameLogic{
 		public override void Use(){
 			foreach(ITarget t in Targets){
 				foreach(ITargetable target in t.TargetList){
-					target.TakeDamage(damage);
+					target.TakeDamage(Damage);
 				}
 			}
 		}
