@@ -9,6 +9,8 @@ namespace GameLogic{
 	{		
 		public Enemy(int health, int stepCost) : base(health, stepCost){
 			StatusEffects = new List<IStatusEffect>();
+			ActiveAbilities = new List<IActive>();
+			PassiveAbilities = new List<IPassive>();
 		}
 		
 	}

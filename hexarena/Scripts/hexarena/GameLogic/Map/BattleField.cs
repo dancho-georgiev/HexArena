@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Interfaces;
 using Managers;
+using System.Linq;
 
 namespace GameLogic{
 	
@@ -33,14 +34,28 @@ namespace GameLogic{
 			return grid.TileGrid[x][y];
 		}
 		
+		public void InitializeGlobalTargets(ICharacter character){
+			foreach(IGlobalTarget globalTarget in
+			 character.ActiveAbilities.Where(x=> x.Target is IGlobalTarget).Select(x=>x.Target)){
+				globalTarget.SetBattleField(this);
+			}
+			foreach(IGlobalTarget globalTarget in
+			 character.PassiveAbilities.Where(x=> x.Target is IGlobalTarget).Select(x=>x.Target)){
+				globalTarget.SetBattleField(this);
+			}
+		}
+		
 		public void PlacePlayer(IPlayer character, ITile tile){
 			Players.Add(character);
+			InitializeGlobalTargets(character);
 			character.Tile = tile;
 			tile.CharacterOnTile = character;
+			
 		}
 		
 		public void PlaceEnemy(IEnemy character, ITile tile){
 			Enemies.Add(character);
+			InitializeGlobalTargets(character);
 			character.Tile = tile;
 			tile.CharacterOnTile = character;
 		}

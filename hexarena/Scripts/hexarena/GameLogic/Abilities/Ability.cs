@@ -20,6 +20,7 @@ namespace GameLogic{
 		}
 		
 		public abstract void Use();
+		public abstract ITarget GetTargetType();
 		public abstract void Connect(EventManager eventManager);
 		public abstract void Disconnect(EventManager eventManager);
 	}

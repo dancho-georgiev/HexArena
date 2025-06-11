@@ -97,10 +97,14 @@ public partial class Node2d : Node2D
 		grid.PlaceEnemy(enemy1, grid.GetTile(1,2));
 		grid.PlaceEnemy(enemy2, grid.GetTile(2,1));
 		
-		AllEnemiesTarget target = new AllEnemiesTarget(grid);
+		AllEnemiesTarget target = new AllEnemiesTarget();
+		target.SetBattleField(grid);
 		Test(()=>{if(target.TargetList.Count() == 2)passedTest++;}, "targeted all enemies");
 		Test(()=>{if(target.TargetList.Any(x=>(x as Enemy).Tile.Position == new Point(1,2)))passedTest++;}, "correct enemy");
-		MalevolentShrine slash = new MalevolentShrine(eventManager, target);
+		Peasant peasant = new Peasant(eventManager);
+		MalevolentShrine slash = new MalevolentShrine(eventManager);
+		peasant.PassiveAbilities.Add(slash);
+		grid.PlacePlayer(peasant, grid.GetTile(0,0));
 		eventManager.EmitOnStartTurn();
 		Test(()=>{if(enemy1.Health<100)passedTest++;}, "dealt damage to enemy1");
 		Test(()=>{if(enemy2.Health<100)passedTest++;}, "dealt damage to enemy2");

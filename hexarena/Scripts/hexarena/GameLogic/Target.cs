@@ -8,7 +8,6 @@ namespace GameLogic
 	
 	public abstract class Target : ITarget
 {
-	protected BattleField battleField;
 	public abstract bool IsReady();
 	public abstract void PopulateFromGrid();
 	public abstract bool ValidTarget(ITargetable targetable);
