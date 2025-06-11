@@ -9,10 +9,10 @@ namespace GameLogic
 	{
 		public abstract bool IsExpired();
 		public abstract void Disconnect(EventManager eventManager);
-		public List<ITarget> Targets { get; set; }
+		public ITarget Target { get; set; }
 		public StatusEffect()
 		{
-			Targets = new List<ITarget>();
+			
 		}
 		public abstract void Use();
 		public abstract void AddTarget(ITarget target);

@@ -11,8 +11,6 @@ namespace GameLogic
 		public int poisonDamage {get; set;}
 		public int poisonDuration {get; set;}
 		
-		public SingleTarget target;
-		
 		// this currently works but it takes itargetable and aplies the
 		// poison effect to the itargetable but it is not saved because the itargetable
 		//doesnt have place to save status effects
@@ -25,9 +23,16 @@ namespace GameLogic
 			AddTarget(_targeting);
 		}
 		
-	public override SingleTarget GetTargetType(){
-		return target;
-	}
+		public PoisonedStrike(ITile position){ 
+			Damage = 2;
+			poisonDamage = 3;
+			poisonDuration = 2;
+			Target = new SingleTarget(position, 1);
+		}
+		
+		public override SingleTarget GetTargetType(){
+			return Target as SingleTarget;
+		}
 		
 		public override void Connect(EventManager eventManager){
 			eventManager.ActivateAbility1 += Use;
@@ -37,10 +42,14 @@ namespace GameLogic
 		}
 		public override void Use()
 		{
-			 ITargetable target = Targets[0].TargetList[0];
-			 target.TakeDamage(Damage);
-			 PoisonEffect poison = new PoisonEffect(poisonDamage ,poisonDuration, eventManager,target);
-			 target.TakeStatusEffect(poison);
+			if (Target.IsReady())
+			{
+				 ITargetable target = Target.TargetList[0];
+				 target.TakeDamage(Damage);
+				 PoisonEffect poison = new PoisonEffect(poisonDamage ,poisonDuration, eventManager,target);
+				 target.TakeStatusEffect(poison);
+			}
+			else throw new Exception("not ready");
 		}
 	
 	}

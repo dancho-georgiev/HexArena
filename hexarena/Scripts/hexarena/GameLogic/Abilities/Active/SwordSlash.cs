@@ -9,7 +9,6 @@ namespace GameLogic{
 	public partial class SwordSlash : Active
 	{
 		public int Damage {get; protected set;}
-		public SingleTarget target;
 		
 		public SwordSlash(EventManager _eventManager, SingleTarget _targeting){ 
 			Damage = 2;
@@ -17,8 +16,14 @@ namespace GameLogic{
 			AddTarget(_targeting);
 		}
 		
+		public SwordSlash(ITile position)
+		{
+			Damage = 2;
+			Target = new SingleTarget(position, 1);
+		}
+		
 		public override SingleTarget GetTargetType(){
-			return target;
+			return Target as SingleTarget;
 		}
 		
 		public override void Connect(EventManager eventManager){
@@ -29,7 +34,11 @@ namespace GameLogic{
 		}
 		public override void Use()
 		{
-			Targets[0].TargetList[0].TakeDamage(Damage);
+			if (Target.IsReady())
+			{
+				Target.TargetList[0].TakeDamage(Damage);
+			}
+			else throw new Exception("not ready");
 		}
 	}
 }

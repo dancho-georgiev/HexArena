@@ -8,15 +8,14 @@ namespace GameLogic{
 public class PitchforkPoke : Active
 {
 	public int Damage {get; protected set;}
-	public SingleTarget target;
 	
 	public PitchforkPoke(ITile position){ 
 		Damage = 1;
-		target = new SingleTarget(position, 2);
+		Target = new SingleTarget(position, 2);
 	}
 	
 	public override SingleTarget GetTargetType(){
-		return target;
+		return Target as SingleTarget;
 	}
 	
 	public override void Connect(EventManager eventManager){
@@ -27,9 +26,9 @@ public class PitchforkPoke : Active
 		}
 	public override void Use()
 	{
-		if(target.IsReady()){
-			target.TargetList[0].TakeDamage(Damage);
-			target.Reset();
+		if(Target.IsReady()){
+			Target.TargetList[0].TakeDamage(Damage);
+			Target.Reset();
 		}
 		else throw new Exception("not ready");
 	}

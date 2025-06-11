@@ -16,9 +16,9 @@ namespace GameLogic{
 			Position = _position;
 			TargetCount = 1;
 			TargetRange = _targetRange;
+			TargetList = new List<ITargetable>();
 			if(TargetInRange(_targetable))
 			{
-				TargetList = new List<ITargetable>();
 				AddTargetable(_targetable);
 			}
 		}

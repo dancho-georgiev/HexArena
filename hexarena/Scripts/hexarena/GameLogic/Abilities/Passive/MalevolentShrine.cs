@@ -23,17 +23,14 @@ namespace GameLogic
 		
 		public override void AddTarget(ITarget target){
 			if(target is AllEnemiesTarget){
-				Targets.Add(target);
+				Target = target;
 			}	
 			else {throw new ArgumentException();} 
 		}
 
-		
 		public override void Use(){
-			foreach(ITarget t in Targets){
-				foreach(Enemy enemy in t.TargetList){
-					enemy.TakeDamage(damage);
-				}
+			foreach(Enemy enemy in Target.TargetList){
+				enemy.TakeDamage(damage);
 			}
 		}
 	}

@@ -58,6 +58,7 @@ namespace GameLogic{
 		public void SelectAbility(IActive selectedAbility){
 			if(SelectedCharacter.ActiveAbilities.Contains(selectedAbility)){
 				SelectedAbility = selectedAbility;
+				SelectedAbilityTarget = selectedAbility.GetTargetType();
 			}
 		}
 		

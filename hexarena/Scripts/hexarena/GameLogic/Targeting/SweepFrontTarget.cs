@@ -22,8 +22,15 @@ namespace GameLogic{
 				AddTargetable(targetable);
 				PopulateFromGrid();
 			}
-			
 		}
+		
+		public SweepFrontTarget(ITile _position)
+		{
+			TargetList = new List<ITargetable>();
+			Position = _position;
+			TargetCount = 3;
+		}
+		
 		public override bool IsReady(){return TargetCount == TargetList.Count;}
 		public bool ValidTargetCount()
 		{

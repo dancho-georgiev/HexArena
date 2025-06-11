@@ -36,18 +36,15 @@ namespace GameLogic
 				 
 				return;
 			}
-			foreach(ITarget target in Targets)
+			foreach(ITargetable targetable in Target.TargetList)
 			{
-				foreach(ITargetable targetable in target.TargetList)
-				{
-					targetable.TakeDamage(Damage);
-				}
+				targetable.TakeDamage(Damage);
 			}
 			duration--;
 		}
 		public override void AddTarget(ITarget target)
 		{
-			Targets.Add(target);
+			Target = target;
 		}
 		public override bool IsExpired()
 		{
