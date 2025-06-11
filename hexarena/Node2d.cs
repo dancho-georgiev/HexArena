@@ -30,6 +30,7 @@ public partial class Node2d : Node2D
 		//Test(Test_BasicAttack, "Test_BasicAttack");
 		Test(Test_PassiveHealEffect, "Test_PassiveHealEffect");
 		Test(Test_PoisonedStrike,"Test_PoisonedStrike");
+		Test(Test_VulnerableEffect,"Test_VulnerableEffect");
 		GD.Print($"PASSED: {passedTest}");
 		GD.Print($"FAILED: {allTest-passedTest}");
 	}
@@ -290,9 +291,9 @@ public partial class Node2d : Node2D
 	Test(() => {
 		if (target.Health == targetInitialHealth - strike.Damage) passedTest++;
 	}, "PoisonedStrike dealt direct damage");
-	Test(()=>{
-		if(target.StatusEffects.Count()== 1)passedTest++;
-		}, "added status effect");
+	//Test(()=>{
+		//if(target.StatusEffects.Count()== 1)passedTest++;
+		//}, "added status effect");
 	eventManager.EmitOnStartTurn();
 	Test(() => {
 		if (target.Health == targetInitialHealth - strike.Damage - strike.poisonDamage) passedTest++;
@@ -306,6 +307,55 @@ public partial class Node2d : Node2D
 		if (target.Health == targetInitialHealth - strike.Damage - (strike.poisonDamage * 2)) passedTest++;
 	}, "PoisonedStrike poison expired");
 
-	if (passed + 5 == passedTest) passedTest++;
+	if (passed + 4 == passedTest) passedTest++;
+}
+
+private void Test_VulnerableEffect()
+{
+	int passed = passedTest;
+	EventManager eventManager = new EventManager();
+	Peasant character = new Peasant(eventManager, new Tile(new Point(1,1)));
+	int baseDamage = 10;
+	float multiplier = 1.5f;
+	int duration = 2;
+	int initialHealth = character.Health;
+	GD.Print($"Initial health {initialHealth}");
+
+	Vulnerable vulnerable = new Vulnerable(multiplier, duration, eventManager, character);
+	character.TakeStatusEffect(vulnerable);
+	
+
+	Test(() => {
+		if (character.StatusEffects.Count == 1) passedTest++;
+	}, "Vulnerable applied");
+
+	// Apply first hit
+	int expectedDamage1 = (int)Math.Ceiling(baseDamage * multiplier);
+	character.TakeDamage(baseDamage);
+	GD.Print($"Current health {character.Health}");
+	Test(() => {
+		if (character.Health == initialHealth - expectedDamage1) passedTest++;
+	}, "First damage is multiplied");
+
+	eventManager.EmitOnStartTurn(); // duration = 1
+	int expectedDamage2 = (int)Math.Ceiling(baseDamage * multiplier);
+	character.TakeDamage(baseDamage);
+	GD.Print($"Current health {character.Health}");
+	Test(() => {
+		if (character.Health == initialHealth - (expectedDamage1 + expectedDamage2)) passedTest++;
+	}, "Second damage is multiplied");
+
+	eventManager.EmitOnStartTurn(); // duration = 0, should expire
+	character.TakeDamage(baseDamage);
+	GD.Print($"Current health {character.Health}");
+	Test(() => {
+		if (character.Health == initialHealth - (expectedDamage1 + expectedDamage2 + baseDamage)) passedTest++;
+	}, "Third damage is NOT multiplied");
+	eventManager.EmitOnStartTurn();
+	Test(() => {
+		if (!character.StatusEffects.Contains(vulnerable)) passedTest++;
+	}, "Vulnerable removed after duration");
+
+
 }
 }

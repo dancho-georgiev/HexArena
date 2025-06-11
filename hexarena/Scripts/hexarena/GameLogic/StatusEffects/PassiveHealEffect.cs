@@ -44,7 +44,10 @@ namespace GameLogic
 		{
 			Targets.Add(target);
 		}
-		
+		public override void Expire()
+		{
+			
+		}
 	}
 	
 	

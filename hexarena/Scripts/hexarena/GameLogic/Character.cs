@@ -28,9 +28,23 @@ namespace GameLogic{
 		protected abstract void InitializeActives();
 		protected abstract void InitializePassives();
 		
-		
+		public virtual int ModifyDamageTaken(int damage)
+		{
+			GD.Print($"ModifyDamageTaken entered with {damage}");
+			int modifiedDamage = damage;
+			foreach (IStatusEffect effect in StatusEffects)
+			{
+				if (effect is IModifyDamageTaken modifier)
+				{
+					modifiedDamage = modifier.ModifyDamage(modifiedDamage);
+				}
+			}
+			GD.Print($"ModifyDamageTaken exited with {modifiedDamage}");
+			return modifiedDamage;
+		}
 		public override void TakeDamage(int damage){
-			Health-=damage;
+			int modifiedDamage = ModifyDamageTaken(damage);
+			Health -= modifiedDamage;
 		}
 
 	public override void TakeStatusEffect(IStatusEffect statusEffect){

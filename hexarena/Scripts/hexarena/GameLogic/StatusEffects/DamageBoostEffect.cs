@@ -17,6 +17,9 @@ namespace GameLogic
 		public override void Use(){
 			
 		}
-		
+		public override void Expire()
+		{
+			
+		}
 	}
 }
