@@ -228,55 +228,22 @@ public partial class Node2d : Node2D
 		private void Test_PassiveHealEffect(){
 		int passed = passedTest;
 		EventManager eventManager = new EventManager();
-<<<<<<< HEAD
 		Peasant character = new Peasant(eventManager, new Tile(new Point(1,1)));
-=======
-		Character character = new Peasant(eventManager, new Tile(new Point(1,1)));
->>>>>>> 06417b7e98f8746bc734717aac3efc4bacc07c1d
+		//Character character = new Peasant(eventManager, new Tile(new Point(1,1)));
 		PassiveHealEffect heal = new PassiveHealEffect(10, 2, eventManager,character);
 		int oldHealth = character.Health;
 		character.TakeStatusEffect(heal);
 		Test(()=>{if(character.StatusEffects.Count()==1)passedTest++;}, "added status effect");
-<<<<<<< HEAD
+
 		eventManager.EmitOnStartTurn();
 		Test(()=>{if(character.Health == oldHealth+(heal.healAmount*1))passedTest++;}, "took damage 1");
 		eventManager.EmitOnStartTurn();
 		Test(()=>{if(character.Health == oldHealth+(heal.healAmount*2))passedTest++;}, "took damage 2");
 		eventManager.EmitOnStartTurn();
 		Test(()=>{if(character.Health == oldHealth+(heal.healAmount*2))passedTest++;}, "stopped taking damage");
-=======
->>>>>>> 06417b7e98f8746bc734717aac3efc4bacc07c1d
-		
-		int oldHealth = character.Health;
-		eventManager.EmitOnStartTurn();
-		Test(()=>{if(character.Health == oldHealth+heal.HealAmount)passedTest++;}, "took damage 1");
-		eventManager.EmitOnStartTurn();
-		Test(()=>{if(character.Health == oldHealth+(heal.HealAmount*2))passedTest++;}, "took damage 2");
-		eventManager.EmitOnStartTurn();
-		Test(()=>{if(character.Health == oldHealth+(heal.HealAmount*2))passedTest++;}, "stopped taking damage");
-		if(passed+4==passedTest)passedTest++;	
 	}
 	
-<<<<<<< HEAD
-	//private void Test_BasicAttack()
-	//{
-		//Grid grid = new Grid(1, 2);
-		//int passed = passedTest;
-		//EventManager eventManager = new EventManager();
-		//Peasant character = new Peasant(eventManager, grid.TileGrid[0][0]);
-		//Peasant character2 = new Peasant(eventManager, grid.TileGrid[0][1]);
-		//
-		//SingleTarget targetSingle = new SingleTarget(character.Tile, character2.Tile, 1);
-		//SwordSlash slashSword = new SwordSlash(eventManager, targetSingle);
-		//eventManager.EmitOnActivateAbility1();
-		//
-		//List<int> oldHealth = new List<int>(){character.Health, character2.Health};
-		//Test(()=>{if(targetSingle.TargetInRange(character2))passedTest++;}, "comprehended character2 in range");
-		//Test(()=>{if(character.Health==oldHealth[0])passedTest++;}, "did not damage self");
-		//Test(()=>{if(character2.Health==oldHealth[1]-slashSword.Damage)passedTest++;}, "dealt damage to main target");
-		//if(passed + 3 == passedTest)passedTest++;
-	//}
-=======
+
 	private void Test_BasicAttack()
 	{
 		Grid grid = new Grid(1, 2);
@@ -296,7 +263,7 @@ public partial class Node2d : Node2D
 		Test(()=>{if(character2.Health==oldHealth[1]-slashSword.Damage)passedTest++;}, "dealt damage to main target");
 		if(passed + 3 == passedTest)passedTest++;
 	}
->>>>>>> 06417b7e98f8746bc734717aac3efc4bacc07c1d
+
 	
 	private void Test_TileRangeBFS(){
 		Grid grid = new Grid(6,6);
@@ -307,7 +274,7 @@ public partial class Node2d : Node2D
 		if(passed + 3 == passedTest)passedTest++;
 	}
 	
-	//does not work
+	//works but the effect is not saved i think
 	private void Test_PoisonedStrike()
 {
 	int passed = passedTest;

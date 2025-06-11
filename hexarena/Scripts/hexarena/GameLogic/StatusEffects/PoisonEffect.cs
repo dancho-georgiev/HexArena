@@ -19,8 +19,7 @@ namespace GameLogic
 			Damage = damage;
 			this.duration = duration;
 		}
-		//tova ne znam dali pravi tova koeto si mislq che pravi
-		//celta mi e da subscribena poisona s StartTurn
+		
 		public override void Connect(EventManager eventManager)
 		{
 			eventManager.StartTurn += Use;
