@@ -17,6 +17,9 @@ namespace GameLogic
 		public override void Connect(EventManager eventManager){
 			eventManager.StartTurn += Use;
 		}
+		public override void Disconnect(EventManager eventManager){
+			eventManager.StartTurn -= Use;
+		}
 		
 		public override void AddTarget(ITarget target){
 			if(target is AllEnemiesTarget){

@@ -13,11 +13,12 @@ namespace GameLogic{
 		}
 		protected override void InitializePassives()
 		{
-			
+			PassiveAbilities = new List<IPassive>();
 		}
 		protected override void InitializeActives()
 		{
-			
+			ActiveAbilities = new List<IActive>();
+			ActiveAbilities.Add(new PitchforkPoke(Tile));
 		}
 	}
 	

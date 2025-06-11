@@ -8,6 +8,6 @@ namespace Interfaces
 {
 	public interface IActive : IAbility
 	{
-
+		public ITarget GetTargetType();
 	}
 }

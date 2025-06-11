@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 
 namespace GameLogic{
-	public abstract class Enemy : Character, IEnemy, IClass
+	public abstract class Enemy : Character, IEnemy
 	{		
 		public Enemy(int health, int stepCost, ITile position) : base(health, stepCost, position){
 			Tile = position;

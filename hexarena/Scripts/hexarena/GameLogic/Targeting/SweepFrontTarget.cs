@@ -24,7 +24,7 @@ namespace GameLogic{
 			}
 			
 		}
-		
+		public override bool IsReady(){return TargetCount == TargetList.Count;}
 		public bool ValidTargetCount()
 		{
 			return TargetList.Count<=TargetCount;     // HMmm

@@ -9,6 +9,7 @@ namespace GameLogic{
 	public partial class SwordSlash : Active
 	{
 		public int Damage {get; protected set;}
+		public SingleTarget target;
 		
 		public SwordSlash(EventManager _eventManager, SingleTarget _targeting){ 
 			Damage = 2;
@@ -16,8 +17,15 @@ namespace GameLogic{
 			AddTarget(_targeting);
 		}
 		
+		public override SingleTarget GetTargetType(){
+			return target;
+		}
+		
 		public override void Connect(EventManager eventManager){
 			eventManager.ActivateAbility1 += Use;
+		}
+		public override void Disconnect(EventManager eventManager){
+			eventManager.ActivateAbility1 -= Use;
 		}
 		public override void Use()
 		{

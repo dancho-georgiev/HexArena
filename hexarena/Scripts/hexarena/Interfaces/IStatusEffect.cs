@@ -8,5 +8,6 @@ namespace Interfaces
 {
 	public interface IStatusEffect : IPassive
 	{
+		public bool IsExpired();
 	}
 }

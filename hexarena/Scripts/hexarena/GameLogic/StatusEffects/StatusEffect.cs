@@ -7,6 +7,8 @@ namespace GameLogic
 {
 	public abstract class StatusEffect : IStatusEffect
 	{
+		public abstract bool IsExpired();
+		public abstract void Disconnect(EventManager eventManager);
 		public List<ITarget> Targets { get; set; }
 		public StatusEffect()
 		{
@@ -15,6 +17,5 @@ namespace GameLogic
 		public abstract void Use();
 		public abstract void AddTarget(ITarget target);
 		public abstract void Connect(EventManager eventManager);
-		public abstract void Expire();
 	}
 }

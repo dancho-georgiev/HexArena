@@ -23,13 +23,23 @@ namespace GameLogic{
 			}
 		}
 		
+		public SingleTarget(ITile _position, int _targetRange)
+		{		
+			TargetList = new List<ITargetable>();	
+			Position = _position;
+			TargetCount = 1;
+			TargetRange = _targetRange;
+		}
+		
+		public override bool IsReady(){return TargetCount == TargetList.Count;}
+		
 		public bool ValidTargetCount()
 		{
 			return TargetList.Count<=TargetCount;     // HMmm
 		}
 		public override bool ValidTarget(ITargetable targetable)
 		{
-			return TargetInRange(targetable);
+			return TargetInRange(targetable) && !IsReady();
 		}
 		
 		public bool TargetInRange(ITargetable targetable)

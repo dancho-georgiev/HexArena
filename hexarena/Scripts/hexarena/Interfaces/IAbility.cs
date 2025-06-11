@@ -13,5 +13,6 @@ namespace Interfaces
 		void Use();
 		void AddTarget(ITarget target);
 		void Connect(EventManager eventManager);
+		void Disconnect(EventManager eventManager);
 	}
 }

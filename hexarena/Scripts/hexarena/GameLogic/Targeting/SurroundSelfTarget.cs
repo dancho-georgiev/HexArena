@@ -5,6 +5,7 @@ using Utilities;
 using System.Collections.Generic;
 
 namespace GameLogic{
+	
 	public class SurroundSelfTarget : Target, IRangeRestrictedTarget
 	{
 		public ITile Position {get; set;}
@@ -16,6 +17,8 @@ namespace GameLogic{
 			this.TargetRange = TargetRange;
 			PopulateFromGrid();
 		}
+		
+		public override bool IsReady(){return true;}
 		
 		public bool TargetInRange(ITargetable targetable)
 		//Graph traversal algorithm needed BFS or DFS or any other   

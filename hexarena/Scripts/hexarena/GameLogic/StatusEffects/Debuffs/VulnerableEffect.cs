@@ -6,7 +6,7 @@ using System.Collections.Generic;
 namespace GameLogic
 {
 	//attacks do more damage to targets with vulnerable
-	//BUG or FEATURE: kogato ima 2 vulnerable na nqkoi toi stackva
+	//BUG or FEATURE: kogato ima 2 vulnerable na nqkoi toi stackva : BUG
 	//Example base damage e 10->15 pri 1 vulnerable 50%
 	//Example base damage e 10->23 pri 2 vulnerable 50%
 	public class Vulnerable : StatusEffect, IModifyDamageTaken
@@ -38,6 +38,9 @@ namespace GameLogic
 		{
 			eventManager.StartTurn += Use;
 		}
+		public override void Disconnect(EventManager eventManager){
+			eventManager.StartTurn -= Use;
+		}
 
 		public override void Use()
 		{
@@ -51,7 +54,12 @@ namespace GameLogic
 			return;
 			
 		}
-		public override void Expire()
+		
+		public override bool IsExpired(){
+			return duration == 0;
+		}
+		
+		public void Expire()
 		{
 			foreach (ITarget target in Targets)
 			{

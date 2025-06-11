@@ -14,6 +14,7 @@ public class AllEnemiesTarget : EnemiesOnlyTarget
 			PopulateFromGrid();
 		}
 
+	public override bool IsReady() {return true;}
 		
 		public override void PopulateFromGrid()
 		{

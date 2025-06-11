@@ -24,7 +24,9 @@ namespace GameLogic
 		{
 			eventManager.StartTurn += Use;
 		}
-		
+		public override void Disconnect(EventManager eventManager){
+			eventManager.StartTurn -= Use;
+		}
 		public override void Use()
 		{
 			if(duration <= 0)
@@ -44,9 +46,9 @@ namespace GameLogic
 		{
 			Targets.Add(target);
 		}
-		public override void Expire()
+		public override bool IsExpired()
 		{
-			
+			return duration==0;
 		}
 	}
 	

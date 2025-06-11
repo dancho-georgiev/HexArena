@@ -12,8 +12,6 @@ namespace GameLogic
 		public int Length; 
 		public int Width;
 		public List<List<ITile>> TileGrid;
-		public List<IEnemy> Enemies;
-		public List<IPlayer> Players;
 		
 		public Grid(int width, int length){
 			this.Width = width;
@@ -25,15 +23,10 @@ namespace GameLogic
 					TileGrid[i].Add(new Tile(new Point(j,i)));
 				}
 			}
-			Enemies = new List<IEnemy>();
-			Players = new List<IPlayer>();
 			
 			SetupNeighbours();
 		}
 		
-		public void AddEnemy(IEnemy enemy){
-			Enemies.Add(enemy);
-		}
 		
 		public void SetupNeighbours() //veche sa hexove
 		{

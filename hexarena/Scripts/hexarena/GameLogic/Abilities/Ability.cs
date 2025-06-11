@@ -21,7 +21,7 @@ namespace GameLogic{
 	
 	public abstract void Use();
 	public abstract void Connect(EventManager eventManager);
-	
+	public abstract void Disconnect(EventManager eventManager);
 
 }
 	

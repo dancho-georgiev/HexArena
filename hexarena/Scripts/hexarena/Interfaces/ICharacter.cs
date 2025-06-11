@@ -12,5 +12,9 @@ namespace Interfaces
 		public int Health { get; set; }
 		public List<IStatusEffect> StatusEffects {get; protected set;}
 		public ITile Tile { get; protected set; }
+		public void MoveCharacter(ITile target);
+		
+		public List<IActive> ActiveAbilities { get; set; }
+		public List<IPassive> PassiveAbilities { get; set; }
 	}
 }

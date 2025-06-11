@@ -6,6 +6,7 @@ namespace GameLogic{
 	public class SwordSweep : Active
 	{
 		public int Damage {get; protected set;}
+		public SweepFrontTarget target;
 		public SwordSweep(EventManager _eventManager, SweepFrontTarget _targeting) //Could be made to work with other forms of sweeping targeting
 		{
 			Damage = 2;
@@ -13,8 +14,15 @@ namespace GameLogic{
 			AddTarget(_targeting);
 		}
 		
+		public override SweepFrontTarget GetTargetType(){
+		return target;
+	}
+		
 		public override void Connect(EventManager eventManager){
 			eventManager.ActivateAbility1 += Use;
+		}
+		public override void Disconnect(EventManager eventManager){
+			eventManager.ActivateAbility1 -= Use;
 		}
 		public override void Use(){
 			foreach(ITarget t in Targets){

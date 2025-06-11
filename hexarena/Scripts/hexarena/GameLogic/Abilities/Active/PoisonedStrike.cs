@@ -11,7 +11,7 @@ namespace GameLogic
 		public int poisonDamage {get; set;}
 		public int poisonDuration {get; set;}
 		
-		
+		public SingleTarget target;
 		
 		// this currently works but it takes itargetable and aplies the
 		// poison effect to the itargetable but it is not saved because the itargetable
@@ -25,8 +25,15 @@ namespace GameLogic
 			AddTarget(_targeting);
 		}
 		
+	public override SingleTarget GetTargetType(){
+		return target;
+	}
+		
 		public override void Connect(EventManager eventManager){
 			eventManager.ActivateAbility1 += Use;
+		}
+		public override void Disconnect(EventManager eventManager){
+			eventManager.ActivateAbility1 -= Use;
 		}
 		public override void Use()
 		{

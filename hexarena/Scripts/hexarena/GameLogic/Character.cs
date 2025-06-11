@@ -6,13 +6,13 @@ using System.Collections.Generic;
 
 namespace GameLogic{
 	
-	public abstract class Character : Targetable, ICharacter, IClass
+	public abstract class Character : Targetable, ICharacter
 {
 		public int Health { get;  set; }
 		
 		public double StepEnergyCost { get;  set; }
 		public List<IStatusEffect> StatusEffects {get; set;}
-		public List<IActive> ActiveAbilites { get; set; }
+		public List<IActive> ActiveAbilities { get; set; }
 		public List<IPassive> PassiveAbilities { get; set; }
 		public ITile Tile { get;  set; }
 		
@@ -53,7 +53,7 @@ namespace GameLogic{
 	
 	public void TeleportCharacter(ITile TargetPosition)
 	{
-		if(TargetPosition.IsAvailable == true)
+		if(TargetPosition.IsAvailable)
 		{
 			this.Tile = TargetPosition;
 		}
@@ -63,9 +63,9 @@ namespace GameLogic{
 	//Grisho:tva trqq da vleze samo na characterite koito she nqma da sa playable(na enemytata)
 	// po nqkoe vreme go premesti
 	// Dancho: Ne tova shte vleze na vseki 
-	public void MoveCharacter(ITile TargetPosition)
+	public virtual void MoveCharacter(ITile TargetPosition)
 	{
-		if(TargetPosition.IsAvailable == true)
+		if(TargetPosition.IsAvailable)
 		{
 			List<ITile> pathTiles = FindShortestPath(this.Tile, TargetPosition);
 			foreach(ITile i in pathTiles){
