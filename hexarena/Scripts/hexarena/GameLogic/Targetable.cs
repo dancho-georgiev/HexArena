@@ -8,5 +8,6 @@ namespace GameLogic{
 	{
 		public abstract void TakeDamage(int damage);
 		public abstract void TakeStatusEffect(IStatusEffect status);
+	
 	}	
 }

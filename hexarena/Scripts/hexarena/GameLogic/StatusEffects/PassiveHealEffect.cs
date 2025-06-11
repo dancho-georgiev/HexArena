@@ -5,20 +5,24 @@ using System.Collections.Generic;
 
 namespace GameLogic
 {
+	//heal a small amount every turn
 	public class PassiveHealEffect: StatusEffect
 	{
-		private int healAmount;
+<<<<<<< HEAD
+		public int healAmount{get; set;}
+=======
+		public int HealAmount {get; protected set;}
+>>>>>>> 06417b7e98f8746bc734717aac3efc4bacc07c1d
 		private int duration;
 		
 		public PassiveHealEffect(int healAmount, int duration,
 			 EventManager eventManager, ICharacter character)
 		{
-			this.healAmount = healAmount;
+			this.HealAmount = healAmount;
 			this.duration = duration;
 			AddTarget(new SelfTarget(character));
 			Connect(eventManager);      
-		}
-		
+		}	
 		public override void Connect(EventManager eventManager)
 		{
 			eventManager.StartTurn += Use;
@@ -34,7 +38,7 @@ namespace GameLogic
 			{
 				foreach(ITargetable targetable in target.TargetList)
 				{
-					targetable.TakeDamage(-healAmount); //This heals
+					targetable.TakeDamage(-HealAmount); //This heals
 				}
 			}
 			duration--;

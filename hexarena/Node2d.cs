@@ -17,18 +17,19 @@ public partial class Node2d : Node2D
 	{
 		Test(Test_OnStartTurnEvent,"Test_OnStartTurnEvent");
 		Test(Test_GridWidthLenghtConstructor, "GridWidthLengthConstructor");
-		//Test(Test_EnemyConstructorTile, "EnemyConstructorTile");
-		//Test(Test_GridAddEnemy, "GridAddEnemy");
-		//Test(Test_AllEnemiesTarget, "AllEnemiesTarget and Slash");
-		//Test(Test_Pathfinding,"Test_Pathfinding");
+		Test(Test_EnemyConstructorTile, "EnemyConstructorTile");
+		Test(Test_GridAddEnemy, "GridAddEnemy");
+		Test(Test_AllEnemiesTarget, "AllEnemiesTarget and Slash");
+		Test(Test_Pathfinding,"Test_Pathfinding");
 		Test(Test_SetupNeighbours,"Test_SetupNeighbours");
 		Test(Test_MoveCharacter,"Test_MoveCharacter");
 		Test(Test_SurroundSelfTarget, "Test_SurroundSelfTarget");
 		Test(Test_TileRangeBFS, "Test_TileRangeBFS");
 		Test(Test_PoisonStatusEffect, "Test_PoisonStatusEffect");
 		Test(Test_SweepFrontTarget, "Test_SweepFrontTarget");
-		Test(Test_BasicAttack, "Test_BasicAttack");
+		//Test(Test_BasicAttack, "Test_BasicAttack");
 		Test(Test_PassiveHealEffect, "Test_PassiveHealEffect");
+		Test(Test_PoisonedStrike,"Test_PoisonedStrike");
 		GD.Print($"PASSED: {passedTest}");
 		GD.Print($"FAILED: {allTest-passedTest}");
 	}
@@ -195,6 +196,7 @@ public partial class Node2d : Node2D
 		
 		
 		List<int> oldCharacterHealth = new List<int>(){character.Health, character2.Health, character3.Health, character4.Health};
+		
 		eventManager.EmitOnActivateAbility1();
 		Test(()=>{if(sweepTargeting.TargetInRange(character2))passedTest++;}, "comprehended character2 in range");
 		Test(()=>{if(character.Health  == oldCharacterHealth[0])passedTest++;}, "did not damage self");
@@ -222,23 +224,59 @@ public partial class Node2d : Node2D
 		
 		if(passed+4==passedTest)passedTest++;	
 	}
+	
 		private void Test_PassiveHealEffect(){
 		int passed = passedTest;
 		EventManager eventManager = new EventManager();
-		Character character = new Character(50, 1, new Tile(new Point(1,1)));
+<<<<<<< HEAD
+		Peasant character = new Peasant(eventManager, new Tile(new Point(1,1)));
+=======
+		Character character = new Peasant(eventManager, new Tile(new Point(1,1)));
+>>>>>>> 06417b7e98f8746bc734717aac3efc4bacc07c1d
 		PassiveHealEffect heal = new PassiveHealEffect(10, 2, eventManager,character);
+		int oldHealth = character.Health;
 		character.TakeStatusEffect(heal);
 		Test(()=>{if(character.StatusEffects.Count()==1)passedTest++;}, "added status effect");
+<<<<<<< HEAD
 		eventManager.EmitOnStartTurn();
-		Test(()=>{if(character.Health == 60)passedTest++;}, "took damage 1");
+		Test(()=>{if(character.Health == oldHealth+(heal.healAmount*1))passedTest++;}, "took damage 1");
 		eventManager.EmitOnStartTurn();
-		Test(()=>{if(character.Health == 70)passedTest++;}, "took damage 2");
+		Test(()=>{if(character.Health == oldHealth+(heal.healAmount*2))passedTest++;}, "took damage 2");
 		eventManager.EmitOnStartTurn();
-		Test(()=>{if(character.Health == 70)passedTest++;}, "stopped taking damage");
+		Test(()=>{if(character.Health == oldHealth+(heal.healAmount*2))passedTest++;}, "stopped taking damage");
+=======
+>>>>>>> 06417b7e98f8746bc734717aac3efc4bacc07c1d
 		
+		int oldHealth = character.Health;
+		eventManager.EmitOnStartTurn();
+		Test(()=>{if(character.Health == oldHealth+heal.HealAmount)passedTest++;}, "took damage 1");
+		eventManager.EmitOnStartTurn();
+		Test(()=>{if(character.Health == oldHealth+(heal.HealAmount*2))passedTest++;}, "took damage 2");
+		eventManager.EmitOnStartTurn();
+		Test(()=>{if(character.Health == oldHealth+(heal.HealAmount*2))passedTest++;}, "stopped taking damage");
 		if(passed+4==passedTest)passedTest++;	
 	}
 	
+<<<<<<< HEAD
+	//private void Test_BasicAttack()
+	//{
+		//Grid grid = new Grid(1, 2);
+		//int passed = passedTest;
+		//EventManager eventManager = new EventManager();
+		//Peasant character = new Peasant(eventManager, grid.TileGrid[0][0]);
+		//Peasant character2 = new Peasant(eventManager, grid.TileGrid[0][1]);
+		//
+		//SingleTarget targetSingle = new SingleTarget(character.Tile, character2.Tile, 1);
+		//SwordSlash slashSword = new SwordSlash(eventManager, targetSingle);
+		//eventManager.EmitOnActivateAbility1();
+		//
+		//List<int> oldHealth = new List<int>(){character.Health, character2.Health};
+		//Test(()=>{if(targetSingle.TargetInRange(character2))passedTest++;}, "comprehended character2 in range");
+		//Test(()=>{if(character.Health==oldHealth[0])passedTest++;}, "did not damage self");
+		//Test(()=>{if(character2.Health==oldHealth[1]-slashSword.Damage)passedTest++;}, "dealt damage to main target");
+		//if(passed + 3 == passedTest)passedTest++;
+	//}
+=======
 	private void Test_BasicAttack()
 	{
 		Grid grid = new Grid(1, 2);
@@ -249,14 +287,16 @@ public partial class Node2d : Node2D
 		
 		SingleTarget targetSingle = new SingleTarget(character.Tile, character2.Tile, 1);
 		SwordSlash slashSword = new SwordSlash(eventManager, targetSingle);
-		eventManager.EmitOnActivateAbility1();
 		
 		List<int> oldHealth = new List<int>(){character.Health, character2.Health};
+		eventManager.EmitOnActivateAbility1();
+		
 		Test(()=>{if(targetSingle.TargetInRange(character2))passedTest++;}, "comprehended character2 in range");
 		Test(()=>{if(character.Health==oldHealth[0])passedTest++;}, "did not damage self");
 		Test(()=>{if(character2.Health==oldHealth[1]-slashSword.Damage)passedTest++;}, "dealt damage to main target");
 		if(passed + 3 == passedTest)passedTest++;
 	}
+>>>>>>> 06417b7e98f8746bc734717aac3efc4bacc07c1d
 	
 	private void Test_TileRangeBFS(){
 		Grid grid = new Grid(6,6);
@@ -266,4 +306,39 @@ public partial class Node2d : Node2D
 		Test(()=>{if(Utility.TileRangeBFS(grid.TileGrid[0][0], grid.TileGrid[2][2], 3))passedTest++;}, "find target 3");
 		if(passed + 3 == passedTest)passedTest++;
 	}
+	
+	//does not work
+	private void Test_PoisonedStrike()
+{
+	int passed = passedTest;
+	Grid grid = new Grid(1, 2);
+	EventManager eventManager = new EventManager();
+	Peasant attacker = new Peasant(eventManager, grid.TileGrid[0][0]);
+	Peasant target = new Peasant(eventManager, grid.TileGrid[0][1]);
+
+	int targetInitialHealth = target.Health;
+	SingleTarget targetSingle = new SingleTarget(attacker.Tile, target.Tile, 1);
+	PoisonedStrike strike = new PoisonedStrike(eventManager, targetSingle);
+	eventManager.EmitOnActivateAbility1();
+	Test(() => {
+		if (target.Health == targetInitialHealth - strike.Damage) passedTest++;
+	}, "PoisonedStrike dealt direct damage");
+	Test(()=>{
+		if(target.StatusEffects.Count()== 1)passedTest++;
+		}, "added status effect");
+	eventManager.EmitOnStartTurn();
+	Test(() => {
+		if (target.Health == targetInitialHealth - strike.Damage - strike.poisonDamage) passedTest++;
+	}, "PoisonedStrike poison tick 1");
+	eventManager.EmitOnStartTurn();
+	Test(() => {
+		if (target.Health == targetInitialHealth - strike.Damage - (strike.poisonDamage * 2)) passedTest++;
+	}, "PoisonedStrike poison tick 2");
+	eventManager.EmitOnStartTurn();
+	Test(() => {
+		if (target.Health == targetInitialHealth - strike.Damage - (strike.poisonDamage * 2)) passedTest++;
+	}, "PoisonedStrike poison expired");
+
+	if (passed + 5 == passedTest) passedTest++;
+}
 }

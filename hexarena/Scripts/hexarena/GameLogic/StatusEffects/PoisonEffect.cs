@@ -5,12 +5,14 @@ using System.Collections.Generic;
 
 namespace GameLogic
 {
+	//take small amount of damage every turn
+	
 	public class PoisonEffect: StatusEffect
 	//Ne znam dali vseki poison effect shte ima edin i sushti duration i damage
 	{
 		public int Damage {get; protected set;}
 		private int duration;
-		public PoisonEffect(int damage, int duration, EventManager eventManager, ICharacter character)
+		public PoisonEffect(int damage, int duration, EventManager eventManager, ITargetable character)
 		{
 			AddTarget(new SelfTarget(character));
 			Connect(eventManager);
@@ -26,8 +28,10 @@ namespace GameLogic
 		
 		public override void Use()
 		{
+			
 			if(duration <= 0)
 			{
+				 
 				return;
 			}
 			foreach(ITarget target in Targets)
