@@ -16,13 +16,11 @@ namespace GameLogic{
 		public List<IPassive> PassiveAbilities { get; set; }
 		public ITile Tile { get;  set; }
 		
-		public Character(int health,double stepEnergyCost,ITile tile)
+		public Character(int health,double stepEnergyCost)
 		{
 			this.Health = health;
 			this.StepEnergyCost = stepEnergyCost;
-			this.Tile = tile;
 			StatusEffects = new List<IStatusEffect>();
-			tile.CharacterOnTile = this;  //Temporary fix 
 		}
 		
 		protected abstract void InitializeActives();

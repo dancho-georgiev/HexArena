@@ -68,12 +68,14 @@ public partial class Node2d : Node2D
 	}
 	//Peasant is abstract now GG
 	private void Test_EnemyConstructorTile(){
-		Grid grid = new Grid(3,5);
-		PlaceholderEnemy enemy = new PlaceholderEnemy(100, 1, grid.TileGrid[1][2]);
+		EventManager eventManager = new EventManager();
+		BattleField grid = new BattleField(eventManager);
+		PlaceholderEnemy enemy = new PlaceholderEnemy(100, 1);
+		grid.PlaceEnemy(enemy, grid.GetTile(2,1));
 		int passed = passedTest;
 		Test(()=>{if(enemy.Health==100)passedTest++;}, "enemy.Health==100");
 		Test(()=>{if(enemy.StepEnergyCost==1)passedTest++;}, "enemy.StepEnergyCost==1");
-		Test(()=>{if(enemy.Tile.Position == new Point(2,1))passedTest++;}, "correct position");
+		Test(()=>{if(enemy.Tile.Position == new Point(1,2))passedTest++;}, "correct position");
 		Test(()=>{if(enemy.StatusEffects.Count == 0)passedTest++;}, "StatusEffects is empty");
 		if(passed + 4 == passedTest) passedTest++;
 	}
@@ -81,17 +83,20 @@ public partial class Node2d : Node2D
 		EventManager ev = new EventManager();
 		BattleField grid = new BattleField(ev);
 		int passed = passedTest;
-		PlaceholderEnemy enemy = new PlaceholderEnemy(100, 1, grid.getTile(1,2));
-		grid.AddEnemy(enemy);
+		PlaceholderEnemy enemy = new PlaceholderEnemy(100, 1);
+		grid.PlaceEnemy(enemy, grid.GetTile(1,2));
 		Test(()=>{if(grid.Enemies.Count==1)passedTest++;}, "added enemy");
 		if(passed + 1 == passedTest) passedTest++;
 	}
 	private void Test_AllEnemiesTarget(){
 		int passed = passedTest;
 		EventManager eventManager = new EventManager();
-		Grid grid = new Grid(3,5);
-		PlaceholderEnemy enemy1 = new PlaceholderEnemy(100, 1, grid.TileGrid[1][2]);
-		PlaceholderEnemy enemy2 = new PlaceholderEnemy(100, 1, grid.TileGrid[2][1]);
+		BattleField grid = new BattleField(eventManager);
+		PlaceholderEnemy enemy1 = new PlaceholderEnemy(100, 1);
+		PlaceholderEnemy enemy2 = new PlaceholderEnemy(100, 1);
+		grid.PlaceEnemy(enemy1, grid.GetTile(1,2));
+		grid.PlaceEnemy(enemy2, grid.GetTile(2,1));
+		
 		AllEnemiesTarget target = new AllEnemiesTarget(grid);
 		Test(()=>{if(target.TargetList.Count() == 2)passedTest++;}, "targeted all enemies");
 		Test(()=>{if(target.TargetList.Any(x=>(x as Enemy).Tile.Position == new Point(1,2)))passedTest++;}, "correct enemy");
@@ -123,19 +128,17 @@ public partial class Node2d : Node2D
 	}
 	
 	private void Test_Pathfinding(){ //HOLY SHIT CODA MI RABOTI
-		Grid grid = new Grid(4,4);
-		ITile start = grid.TileGrid[0][0];
-		ITile end = grid.TileGrid[3][3];
-		
-		grid.SetupNeighbours();
-		
 		EventManager eventManager = new EventManager();
-		Peasant character = new Peasant(eventManager, start);
-			
-			ITile obstacle1 = grid.TileGrid[2][0];
+		BattleField grid = new BattleField(eventManager);
+		ITile start = grid.GetTile(0, 0);
+		ITile end = grid.GetTile(3,3);
+		
+		Peasant character = new Peasant(eventManager);
+		grid.PlacePlayer(character, start);
+			ITile obstacle1 = grid.GetTile(2,0);
 			obstacle1.IsAvailable = false;
 		
-			ITile obstacle3 = grid.TileGrid[1][2];
+			ITile obstacle3 = grid.GetTile(1,2);
 			obstacle3.IsAvailable = false;
 		  List<ITile> path = character.FindShortestPath(start, end);
 		Test(() => { if (path != null) passedTest++; }, "path is not null");	
@@ -147,15 +150,17 @@ public partial class Node2d : Node2D
 	
 	private void Test_MoveCharacter(){
 		int passed = passedTest;
-		Grid grid = new Grid(4, 4);
+		
 		EventManager eventManager = new EventManager();
-		Peasant character = new Peasant(eventManager, grid.TileGrid[0][0]);
-		ITile TargetPosition = grid.TileGrid[3][3];
-		ITile obstacle1 = grid.TileGrid[2][0];
-			obstacle1.IsAvailable = false;
-			ITile obstacle3 = grid.TileGrid[1][2];
-			obstacle3.IsAvailable = false;
-		Test(() => { if (character.Tile == grid.TileGrid[0][0] ) passedTest++; }, "start position is not right");	
+		BattleField grid = new BattleField(eventManager);
+		Peasant character = new Peasant(eventManager);
+		grid.PlacePlayer(character, grid.GetTile(0,0));
+		ITile TargetPosition = grid.GetTile(3,3);
+		ITile obstacle1 = grid.GetTile(2,0);
+		obstacle1.IsAvailable = false;
+		ITile obstacle3 = grid.GetTile(1,2);
+		obstacle3.IsAvailable = false;
+		Test(() => { if (character.Tile == grid.GetTile(0,0)) passedTest++; }, "start position is not right");	
 		character.MoveCharacter(TargetPosition);
 		Test(() => { if (character.Tile == TargetPosition) passedTest++; }, "final position is not right");	
 		if (passed + 2 == passedTest)
@@ -165,10 +170,13 @@ public partial class Node2d : Node2D
 	private void Test_SurroundSelfTarget()
 	{
 		int passed = passedTest;
-		Grid grid = new Grid(6, 6);
+		
 		EventManager eventManager = new EventManager();
-		Peasant character = new Peasant(eventManager, grid.TileGrid[3][3]);
-		Peasant character2 = new Peasant(eventManager, grid.TileGrid[3][2]);
+		BattleField grid = new BattleField(eventManager);
+		Peasant character = new Peasant(eventManager);
+		grid.PlacePlayer(character, grid.GetTile(3,3));
+		Peasant character2 = new Peasant(eventManager);
+		grid.PlacePlayer(character2, grid.GetTile(3,2));
 		SurroundSelfTarget surroundTargeting = new SurroundSelfTarget(character.Tile, 1);
 		SwordSpin spinSword = new SwordSpin(eventManager, surroundTargeting);
 		
@@ -183,12 +191,18 @@ public partial class Node2d : Node2D
 	private void Test_SweepFrontTarget()
 	{
 		int passed = passedTest;
-		Grid grid = new Grid(5, 5);
 		EventManager eventManager = new EventManager();
-		Peasant character = new Peasant(eventManager, grid.TileGrid[3][3]);
-		Peasant character2 = new Peasant(eventManager, grid.TileGrid[3][2]);
-		Peasant character3 = new Peasant(eventManager, grid.TileGrid[2][2]);
-		Peasant character4 = new Peasant(eventManager, grid.TileGrid[2][4]);
+		
+		BattleField grid = new BattleField(eventManager);
+		
+		Peasant character = new Peasant(eventManager);
+		grid.PlacePlayer(character, grid.GetTile(3,3));
+		Peasant character2 = new Peasant(eventManager);
+		grid.PlacePlayer(character2, grid.GetTile(3,2));
+		Peasant character3 = new Peasant(eventManager);
+		grid.PlacePlayer(character3, grid.GetTile(2,2));
+		Peasant character4 = new Peasant(eventManager);
+		grid.PlacePlayer(character4, grid.GetTile(2,4));
 		SweepFrontTarget sweepTargeting = new SweepFrontTarget (character.Tile, character2.Tile);
 		SwordSweep sweepSword = new SwordSweep(eventManager, sweepTargeting);
 		
@@ -207,7 +221,7 @@ public partial class Node2d : Node2D
 	private void Test_PoisonStatusEffect(){
 		int passed = passedTest;
 		EventManager eventManager = new EventManager();
-		Peasant character = new Peasant(eventManager, new Tile(new Point(1,1)));
+		Peasant character = new Peasant(eventManager);
 		PoisonEffect poison = new PoisonEffect(10, 2, eventManager,character);
 		
 		int oldHealth = character.Health;
@@ -226,7 +240,7 @@ public partial class Node2d : Node2D
 		private void Test_PassiveHealEffect(){
 		int passed = passedTest;
 		EventManager eventManager = new EventManager();
-		Peasant character = new Peasant(eventManager, new Tile(new Point(1,1)));
+		Peasant character = new Peasant(eventManager);
 		//Character character = new Peasant(eventManager, new Tile(new Point(1,1)));
 		PassiveHealEffect heal = new PassiveHealEffect(10, 2, eventManager,character);
 		int oldHealth = character.Health;
@@ -244,12 +258,14 @@ public partial class Node2d : Node2D
 
 	private void Test_BasicAttack()
 	{
-		Grid grid = new Grid(1, 2);
+		
 		int passed = passedTest;
 		EventManager eventManager = new EventManager();
-		Peasant character = new Peasant(eventManager, grid.TileGrid[0][0]);
-		Peasant character2 = new Peasant(eventManager, grid.TileGrid[0][1]);
-		
+		BattleField grid = new BattleField(eventManager);
+		Peasant character = new Peasant(eventManager);
+		grid.PlacePlayer(character, grid.GetTile(0,0));
+		Peasant character2 = new Peasant(eventManager);
+		grid.PlacePlayer(character2, grid.GetTile(0,1));
 		SingleTarget targetSingle = new SingleTarget(character.Tile, character2.Tile, 1);
 		SwordSlash slashSword = new SwordSlash(eventManager, targetSingle);
 		
@@ -276,11 +292,13 @@ public partial class Node2d : Node2D
 	private void Test_PoisonedStrike()
 	{
 		int passed = passedTest;
-		Grid grid = new Grid(1, 2);
+		
 		EventManager eventManager = new EventManager();
-		Peasant attacker = new Peasant(eventManager, grid.TileGrid[0][0]);
-		Peasant target = new Peasant(eventManager, grid.TileGrid[0][1]);
-
+		BattleField grid = new BattleField(eventManager);
+		Peasant attacker = new Peasant(eventManager);
+		grid.PlacePlayer(attacker, grid.GetTile(0,0));
+		Peasant target = new Peasant(eventManager);
+		grid.PlacePlayer(target, grid.GetTile(0,1));
 		int targetInitialHealth = target.Health;
 		SingleTarget targetSingle = new SingleTarget(attacker.Tile, target.Tile, 1);
 		PoisonedStrike strike = new PoisonedStrike(eventManager, targetSingle);
@@ -311,7 +329,7 @@ public partial class Node2d : Node2D
 	{
 		int passed = passedTest;
 		EventManager eventManager = new EventManager();
-		Peasant character = new Peasant(eventManager, new Tile(new Point(1,1)));
+		Peasant character = new Peasant(eventManager);
 		int baseDamage = 10;
 		float multiplier = 1.5f;
 		int duration = 2;
@@ -357,10 +375,11 @@ public partial class Node2d : Node2D
 	private void Test_BattleField(){
 		EventManager eventManager = new EventManager();
 		BattleField battleField = new BattleField(eventManager);
-		Peasant peasant = new Peasant(eventManager, battleField.getTile(1,1));
-		PlaceholderEnemy enemy= new PlaceholderEnemy(100,1, battleField.getTile(1,2));
-		battleField.AddPlayer(peasant);
-		battleField.AddEnemy(enemy);
+		Peasant peasant = new Peasant(eventManager);
+		battleField.PlacePlayer(peasant, battleField.GetTile(1,1));
+		PlaceholderEnemy enemy= new PlaceholderEnemy(100,1);
+		battleField.PlaceEnemy(enemy, battleField.GetTile(1,2));
+
 		battleField.SelectCharacter(peasant);
 		battleField.SelectAbility(peasant.ActiveAbilities[0]);
 		battleField.UseSelectedAbility(); // ne trqq da raboti

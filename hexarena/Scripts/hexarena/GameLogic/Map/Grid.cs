@@ -23,7 +23,6 @@ namespace GameLogic
 					TileGrid[i].Add(new Tile(new Point(j,i)));
 				}
 			}
-			
 			SetupNeighbours();
 		}
 		

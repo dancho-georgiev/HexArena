@@ -8,25 +8,18 @@ namespace GameLogic{
 	
 public class AllEnemiesTarget : EnemiesOnlyTarget
 	{
-		public AllEnemiesTarget(Grid grid)
+		public AllEnemiesTarget(BattleField battleField)
 		{
-			this.grid = grid;
+			this.battleField = battleField;
 			PopulateFromGrid();
 		}
 
-	public override bool IsReady() {return true;}
+		public override bool IsReady() {return true;}
 		
 		public override void PopulateFromGrid()
 		{
 			TargetList = new List<ITargetable>();
-
-			 foreach (List<ITile> col in grid.TileGrid)
-			{
-				foreach (ITile tile in col)
-				{
-					AddTargetable(tile.CharacterOnTile);
-				}
-			}
+			TargetList = battleField.Enemies.Cast<ITargetable>().ToList();
 		}
 		
 	}

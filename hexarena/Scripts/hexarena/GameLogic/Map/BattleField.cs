@@ -29,15 +29,20 @@ namespace GameLogic{
 			statusEffectFactory = new StatusEffectFactory(eventManager);
 		}
 		
-		public ITile getTile(int x, int y){
+		public ITile GetTile(int x, int y){
 			return grid.TileGrid[x][y];
 		}
 		
-		public void AddEnemy(IEnemy enemy){
-			Enemies.Add(enemy);
+		public void PlacePlayer(IPlayer character, ITile tile){
+			Players.Add(character);
+			character.Tile = tile;
+			tile.CharacterOnTile = character;
 		}
-		public void AddPlayer(IPlayer player){
-			Players.Add(player);
+		
+		public void PlaceEnemy(IEnemy character, ITile tile){
+			Enemies.Add(character);
+			character.Tile = tile;
+			tile.CharacterOnTile = character;
 		}
 		
 		public void MoveSelectedCharacter(ITile position){
