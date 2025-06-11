@@ -13,7 +13,7 @@ namespace GameLogic
 		public TargetBase()
 		{
 			TargetList = new List<ITargetable>();
-			this.grid = grid;
+			this.grid = grid; //grid = grid?
 		}
 		public override bool ValidTarget(ITargetable targetable) {return true;}
 		

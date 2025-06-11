@@ -17,10 +17,10 @@ public partial class Node2d : Node2D
 	{
 		Test(Test_OnStartTurnEvent,"Test_OnStartTurnEvent");
 		Test(Test_GridWidthLenghtConstructor, "GridWidthLengthConstructor");
-		//Test(Test_EnemyConstructorTile, "EnemyConstructorTile");
-		//Test(Test_GridAddEnemy, "GridAddEnemy");
-		//Test(Test_AllEnemiesTarget, "AllEnemiesTarget and Slash");
-		//Test(Test_Pathfinding,"Test_Pathfinding");
+		Test(Test_EnemyConstructorTile, "EnemyConstructorTile");
+		Test(Test_GridAddEnemy, "GridAddEnemy");
+		Test(Test_AllEnemiesTarget, "AllEnemiesTarget and Slash");
+		Test(Test_Pathfinding,"Test_Pathfinding");
 		Test(Test_SetupNeighbours,"Test_SetupNeighbours");
 		Test(Test_MoveCharacter,"Test_MoveCharacter");
 		Test(Test_SurroundSelfTarget, "Test_SurroundSelfTarget");
@@ -194,6 +194,7 @@ public partial class Node2d : Node2D
 		
 		
 		List<int> oldCharacterHealth = new List<int>(){character.Health, character2.Health, character3.Health, character4.Health};
+		
 		eventManager.EmitOnActivateAbility1();
 		Test(()=>{if(sweepTargeting.TargetInRange(character2))passedTest++;}, "comprehended character2 in range");
 		Test(()=>{if(character.Health  == oldCharacterHealth[0])passedTest++;}, "did not damage self");
@@ -228,9 +229,9 @@ public partial class Node2d : Node2D
 		PassiveHealEffect heal = new PassiveHealEffect(10, 2, eventManager,character);
 		character.TakeStatusEffect(heal);
 		Test(()=>{if(character.StatusEffects.Count()==1)passedTest++;}, "added status effect");
-		eventManager.EmitOnStartTurn();
 		
 		int oldHealth = character.Health;
+		eventManager.EmitOnStartTurn();
 		Test(()=>{if(character.Health == oldHealth+heal.HealAmount)passedTest++;}, "took damage 1");
 		eventManager.EmitOnStartTurn();
 		Test(()=>{if(character.Health == oldHealth+(heal.HealAmount*2))passedTest++;}, "took damage 2");
@@ -250,9 +251,10 @@ public partial class Node2d : Node2D
 		
 		SingleTarget targetSingle = new SingleTarget(character.Tile, character2.Tile, 1);
 		SwordSlash slashSword = new SwordSlash(eventManager, targetSingle);
-		eventManager.EmitOnActivateAbility1();
 		
 		List<int> oldHealth = new List<int>(){character.Health, character2.Health};
+		eventManager.EmitOnActivateAbility1();
+		
 		Test(()=>{if(targetSingle.TargetInRange(character2))passedTest++;}, "comprehended character2 in range");
 		Test(()=>{if(character.Health==oldHealth[0])passedTest++;}, "did not damage self");
 		Test(()=>{if(character2.Health==oldHealth[1]-slashSword.Damage)passedTest++;}, "dealt damage to main target");
