@@ -30,6 +30,14 @@ namespace GameLogic{
 			statusEffectFactory = new StatusEffectFactory(eventManager);
 		}
 		
+		public BattleField(EventManager eventManager, int width, int length){
+			this.eventManager = eventManager;
+			grid = new Grid(width,length);
+			Enemies = new List<IEnemy>();
+			Players = new List<IPlayer>();
+			statusEffectFactory = new StatusEffectFactory(eventManager);
+		}
+		
 		public ITile GetTile(int x, int y){
 			return grid.TileGrid[x][y];
 		}
