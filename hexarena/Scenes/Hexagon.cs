@@ -23,6 +23,9 @@ public struct PointDouble{
 
 public partial class Hexagon : Node2D
 {
+	public Polygon2D polygon2D = new Polygon2D();
+	public CollisionPolygon2D collisionPolygon2D = new CollisionPolygon2D();
+	public Area2D area2D = new Area2D();
 	[Export]
 	public float Size {get; set;} = 30;
 	public static Vector2 pointy_hex_corner(Vector2 center, float size, int i){
@@ -36,10 +39,12 @@ public partial class Hexagon : Node2D
 		for(int i = 0; i < 6; i++){
 			polygon[i] = pointy_hex_corner(new Vector2(Position.X,Position.Y),Size,i);
 		}
-		Polygon2D polygon2D = new Polygon2D();
 		polygon2D.SetPolygon(polygon);
-		
+		collisionPolygon2D.SetPolygon(polygon);
+		area2D.AddChild(collisionPolygon2D);
+		area2D.InputPickable = true;
 		AddChild(polygon2D);
+		AddChild(area2D);
 	} 
 	
 }

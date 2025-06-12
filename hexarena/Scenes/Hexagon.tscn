@@ -1,6 +1,14 @@
-[gd_scene load_steps=2 format=3 uid="uid://botcm4t4n4d02"]
+[gd_scene load_steps=3 format=3 uid="uid://botcm4t4n4d02"]
 
 [ext_resource type="Script" uid="uid://bjrjwhdqxhg1m" path="res://Scenes/Hexagon.cs" id="1_ym8bo"]
+[ext_resource type="Script" uid="uid://b2pwu8bffxi30" path="res://Scenes/HexagonArea.cs" id="2_g3fas"]
 
 [node name="Hexagon" type="Node2D"]
 script = ExtResource("1_ym8bo")
+
+[node name="Area2D" type="Area2D" parent="."]
+script = ExtResource("2_g3fas")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Area2D"]
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
