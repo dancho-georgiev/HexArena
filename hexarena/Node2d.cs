@@ -149,7 +149,7 @@ public partial class Node2d : Node2D
 		Test(() => { if (path[0] == start) passedTest++; }, "path starts at start");
 		Test(() => { if (path[path.Count - 1] == end) passedTest++; }, "path ends at end");
 		Test(() => { if (path.Count >= 3) passedTest++; }, "path has reasonable length");
-		GD.Print($"{path.Count} path count");
+		 //GD.Print($"{path.Count} path count");
 	}
 	
 	private void Test_MoveCharacter(){
@@ -335,42 +335,53 @@ public partial class Node2d : Node2D
 		EventManager eventManager = new EventManager();
 		Peasant character = new Peasant(eventManager);
 		int baseDamage = 10;
-		float multiplier = 1.5f;
+		float multiplier = 0.5f; //this means +60%
+		float multiplier2 = 1f; //this means +40%
+		float total = multiplier +multiplier2;
+		//total 100%
 		int duration = 2;
+		int duration2 =2;
 		int initialHealth = character.Health;
-		GD.Print($"Initial health {initialHealth}");
+		 //GD.Print($"Initial health {initialHealth}");
 
 		Vulnerable vulnerable = new Vulnerable(multiplier, duration, eventManager, character);
 		character.TakeStatusEffect(vulnerable);
-		
-
+		Vulnerable vulnerable2 = new Vulnerable(multiplier2, duration2, eventManager, character);
+		character.TakeStatusEffect(vulnerable2);
+		//GD.Print($" duration:  {vulnerable.duration}");
+		//GD.Print($" duration2:  {vulnerable2.duration}");
 		Test(() => {
-			if (character.StatusEffects.Count == 1) passedTest++;
+			if (character.StatusEffects.Count == 2) passedTest++;
 		}, "Vulnerable applied");
 
 		// Apply first hit
-		int expectedDamage1 = (int)Math.Ceiling(baseDamage * multiplier);
+		int expectedDamage1 = (int)Math.Ceiling(baseDamage * (1+total));
 		character.TakeDamage(baseDamage);
-		GD.Print($"Current health {character.Health}");
+		 //GD.Print($"Current health {character.Health}");
 		Test(() => {
 			if (character.Health == initialHealth - expectedDamage1) passedTest++;
 		}, "First damage is multiplied");
 
 		eventManager.EmitOnStartTurn(); // duration = 1
-		int expectedDamage2 = (int)Math.Ceiling(baseDamage * multiplier);
+		//GD.Print($"Turn Started");
+		//GD.Print($" duration:  {vulnerable.duration}");
+		//GD.Print($" duration2:  {vulnerable2.duration}");
+		int expectedDamage2 = (int)Math.Ceiling(baseDamage * (1+total));
 		character.TakeDamage(baseDamage);
-		GD.Print($"Current health {character.Health}");
+		//GD.Print($"Current health {character.Health}");
 		Test(() => {
 			if (character.Health == initialHealth - (expectedDamage1 + expectedDamage2)) passedTest++;
 		}, "Second damage is multiplied");
 
 		eventManager.EmitOnStartTurn(); // duration = 0, should expire
+		//GD.Print($"Turn Started");
+		//GD.Print($" duration:  {vulnerable.duration}");
+		//GD.Print($" duration2:  {vulnerable2.duration}");
 		character.TakeDamage(baseDamage);
-		GD.Print($"Current health {character.Health}");
+		//GD.Print($"Current health {character.Health}");
 		Test(() => {
 			if (character.Health == initialHealth - (expectedDamage1 + expectedDamage2 + baseDamage)) passedTest++;
 		}, "Third damage is NOT multiplied");
-		eventManager.EmitOnStartTurn();
 		Test(() => {
 			if (!character.StatusEffects.Contains(vulnerable)) passedTest++;
 		}, "Vulnerable removed after duration");

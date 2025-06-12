@@ -28,16 +28,21 @@ namespace GameLogic{
 		
 		public virtual int ModifyDamageTaken(int damage)
 		{
-			GD.Print($"ModifyDamageTaken entered with {damage}");
-			int modifiedDamage = damage;
+			//GD.Print($"ModifyDamageTaken entered with {damage}");
+			
+			float totalPercent = 0f;
+
 			foreach (IStatusEffect effect in StatusEffects)
 			{
 				if (effect is IModifyDamageTaken modifier)
 				{
-					modifiedDamage = modifier.ModifyDamage(modifiedDamage);
+					totalPercent += modifier.GetBonusPercent();
 				}
 			}
-			GD.Print($"ModifyDamageTaken exited with {modifiedDamage}");
+
+			int modifiedDamage = (int)Math.Ceiling(damage * (1f + totalPercent));
+
+			//GD.Print($"ModifyDamageTaken exited with {modifiedDamage}");
 			return modifiedDamage;
 		}
 		public override void TakeDamage(int damage){

@@ -9,25 +9,28 @@ namespace GameLogic
 	//BUG or FEATURE: kogato ima 2 vulnerable na nqkoi toi stackva : BUG
 	//Example base damage e 10->15 pri 1 vulnerable 50%
 	//Example base damage e 10->23 pri 2 vulnerable 50%
+	
+	
+	//now its linear 2 vulnerable 50 give 100% instead of 125% 
 	public class Vulnerable : StatusEffect, IModifyDamageTaken
 	{
-		private float multiplier;
-		private int duration;
+		private float bonusPercent;
+		public int duration;
 		private EventManager eventManager;
 		
-		public Vulnerable(float damageMultiplier, int duration, EventManager eventManager, ITargetable target)
+		public Vulnerable(float bonusPercent, int duration, EventManager eventManager, ITargetable target)
 		{
-			this.multiplier = damageMultiplier;
+			this.bonusPercent = bonusPercent; // e.g 0.4f for 40% 
 			this.duration = duration;
 			this.eventManager = eventManager;
 			AddTarget(new SelfTarget(target));
 			Connect(eventManager);
 		}
 
-		public int ModifyDamage(int baseDamage)
-		{
-			return (int)Math.Ceiling(baseDamage * multiplier);
-		}
+		 public float GetBonusPercent()
+		   {
+			   return bonusPercent;
+		   }
 
 		public override void AddTarget(ITarget target)
 		{
@@ -44,15 +47,14 @@ namespace GameLogic
 
 		public override void Use()
 		{
+			duration--;
 			if (duration <= 0)
 			{
 				Expire();
 				return;
 				
 			}
-			duration--;
 			return;
-			
 		}
 			
 		public override bool IsExpired(){
@@ -66,6 +68,7 @@ namespace GameLogic
 				if (targetable is ICharacter character)
 				{
 					character.StatusEffects.Remove(this); 
+					//GD.Print("Status Effect has been removed");
 				}
 			}
 			eventManager.StartTurn -= Use;
