@@ -26,7 +26,10 @@ namespace GameLogic{
 		protected abstract void InitializeActives();
 		protected abstract void InitializePassives();
 		
-		public virtual int ModifyDamageTaken(int damage)
+		//curently used for vulnerable
+		//promenq podaden damage spored status efectite na Charactera
+		//returns modified damage
+		public virtual int ModifyDamageTaken(int damage) 
 		{
 			//GD.Print($"ModifyDamageTaken entered with {damage}");
 			
@@ -36,7 +39,7 @@ namespace GameLogic{
 			{
 				if (effect is IModifyDamageTaken modifier)
 				{
-					totalPercent += modifier.GetBonusPercent();
+					totalPercent += modifier.GetBonusPercent(); //set in the modifier
 				}
 			}
 
@@ -60,12 +63,12 @@ namespace GameLogic{
 		{
 			this.Tile = TargetPosition;
 		}
-		
 	}
 	
 	//Grisho:tva trqq da vleze samo na characterite koito she nqma da sa playable(na enemytata)
 	// po nqkoe vreme go premesti
 	// Dancho: Ne tova shte vleze na vseki 
+	//Dancho: grisho e prav :klumnala roza:
 	public virtual void MoveCharacter(ITile TargetPosition)
 	{
 		if(TargetPosition.IsAvailable)

@@ -30,7 +30,6 @@ namespace GameLogic
 		
 		public override void Use()
 		{
-			
 			if(duration <= 0)
 			{
 				 

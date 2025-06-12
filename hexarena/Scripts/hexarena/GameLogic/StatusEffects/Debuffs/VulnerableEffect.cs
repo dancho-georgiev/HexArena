@@ -12,13 +12,13 @@ namespace GameLogic
 	
 	
 	//now its linear 2 vulnerable 50 give 100% instead of 125% 
-	public class Vulnerable : StatusEffect, IModifyDamageTaken
+	public class VulnerableEffect : StatusEffect, IModifyDamageTaken
 	{
 		private float bonusPercent;
 		public int duration;
 		private EventManager eventManager;
 		
-		public Vulnerable(float bonusPercent, int duration, EventManager eventManager, ITargetable target)
+		public VulnerableEffect(float bonusPercent, int duration, EventManager eventManager, ICharacter target)
 		{
 			this.bonusPercent = bonusPercent; // e.g 0.4f for 40% 
 			this.duration = duration;
@@ -26,8 +26,10 @@ namespace GameLogic
 			AddTarget(new SelfTarget(target));
 			Connect(eventManager);
 		}
-
+		 //takes the set bonus percent from the constructor 
+		//its used in character
 		 public float GetBonusPercent()
+		
 		   {
 			   return bonusPercent;
 		   }
@@ -45,23 +47,22 @@ namespace GameLogic
 			eventManager.StartTurn -= Use;
 		}
 
-		public override void Use()
+		public override void Use() // decrements duration after a turn and calls expire
 		{
 			duration--;
 			if (duration <= 0)
 			{
 				Expire();
 				return;
-				
 			}
 			return;
 		}
 			
-		public override bool IsExpired(){
+		public override bool IsExpired(){ //idk
 			return duration == 0;
 		}
 			
-		public void Expire()
+		public void Expire() //removes status efect after duration finishes
 		{
 			foreach (ITargetable targetable in Target.TargetList)
 			{

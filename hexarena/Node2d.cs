@@ -344,9 +344,9 @@ public partial class Node2d : Node2D
 		int initialHealth = character.Health;
 		 //GD.Print($"Initial health {initialHealth}");
 
-		Vulnerable vulnerable = new Vulnerable(multiplier, duration, eventManager, character);
+		VulnerableEffect vulnerable = new VulnerableEffect(multiplier, duration, eventManager, character);
 		character.TakeStatusEffect(vulnerable);
-		Vulnerable vulnerable2 = new Vulnerable(multiplier2, duration2, eventManager, character);
+		VulnerableEffect vulnerable2 = new VulnerableEffect(multiplier2, duration2, eventManager, character);
 		character.TakeStatusEffect(vulnerable2);
 		//GD.Print($" duration:  {vulnerable.duration}");
 		//GD.Print($" duration2:  {vulnerable2.duration}");
