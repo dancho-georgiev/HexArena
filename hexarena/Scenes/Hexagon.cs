@@ -23,6 +23,8 @@ public struct PointDouble{
 
 public partial class Hexagon : Node2D
 {
+		
+		
 	public Polygon2D polygon2D = new Polygon2D();
 	public CollisionPolygon2D collisionPolygon2D = new CollisionPolygon2D();
 	public Area2D area2D = new Area2D();
@@ -45,6 +47,9 @@ public partial class Hexagon : Node2D
 		area2D.InputPickable = true;
 		AddChild(polygon2D);
 		AddChild(area2D);
+
 	} 
+			
+
 	
 }

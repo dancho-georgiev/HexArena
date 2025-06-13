@@ -16,6 +16,7 @@ namespace View{
 		public PackedScene Hexagon {get; set;}
 		public List<List<HexagonTile>> Grid {get; set;}
 		
+		//veche grida e or hexagonTileove
 		public override void _Ready(){
 			Grid = new List<List<HexagonTile>>();
 			EventManager eventManager = new EventManager();
@@ -25,11 +26,15 @@ namespace View{
 				for(int j = 0; j < Length; j++){
 					Hexagon inst = Hexagon.Instantiate<Hexagon>();
 					inst.Position = new Vector2(i *  inst.Size + (j % 2 == 1 ? inst.Size/2 : 0), j * inst.Size);
-					Grid[i].Add(new HexagonTile(inst, battleField.GetTile(i, j)));
-					AddChild(inst);
+					var hexTile = new HexagonTile(inst, battleField.GetTile(i, j));
+					hexTile.TileClicked += (tile) => GD.Print($"Clicked tile at {tile.Tile.Position.x}, {tile.Tile.Position.y }");
+					
+					Grid[i].Add(hexTile);
+					AddChild(hexTile);
 				}
 			}
 		} 
 	}
 	
 }
+ 	
