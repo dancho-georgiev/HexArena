@@ -26,7 +26,7 @@ namespace View{
 				for(int j = 0; j < Length; j++){
 					Hexagon inst = Hexagon.Instantiate<Hexagon>();
 					inst.Position = new Vector2(i *  inst.Size + (j % 2 == 1 ? inst.Size/2 : 0), j * inst.Size);
-					var hexTile = new HexagonTile(inst, battleField.GetTile(i, j));
+					HexagonTile hexTile = new HexagonTile(inst, battleField.GetTile(i, j));
 					hexTile.TileClicked += (tile) => GD.Print($"Clicked tile at {tile.Tile.Position.x}, {tile.Tile.Position.y }");
 					
 					Grid[i].Add(hexTile);
