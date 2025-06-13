@@ -5,6 +5,7 @@ using Interfaces;
 using System.Linq;
 using System.Collections.Generic;
 using Utilities;
+using View;
 
 public partial class Node2d : Node2D
 {
@@ -31,6 +32,7 @@ public partial class Node2d : Node2D
 		Test(Test_PassiveHealEffect, "Test_PassiveHealEffect");
 		Test(Test_PoisonedStrike,"Test_PoisonedStrike");
 		Test(Test_VulnerableEffect,"Test_VulnerableEffect");
+		Test(Test_SpawnCharacter,"Test_SpawnCharacter");
 		GD.Print($"PASSED: {passedTest}");
 		GD.Print($"FAILED: {allTest-passedTest}");
 	}
@@ -404,5 +406,36 @@ public partial class Node2d : Node2D
 		//move character dali bachka
 		//i moje bi oshte edin repeat na add targetable i useSelectedAbility
 		
+	}
+	
+	private void Test_SpawnCharacter()
+	{
+		int passed = passedTest;
+		
+		EventManager eventManager = new EventManager();
+		BattleField battleField = new BattleField(eventManager);
+		GridView gridView = new GridView(); 
+		
+		Peasant peasant = new Peasant(eventManager); 
+		
+		battleField.PlacePlayer(peasant, battleField.GetTile(0, 0));
+		Test(() => {
+		if (peasant.Tile.Position == new Point(0, 0)) passedTest++;
+		}, "Character spawned at correct tile");
+		Test(() => {
+		if (battleField.GetTile(0, 0).CharacterOnTile == peasant) passedTest++;
+		}, "Tile references character");
+		Test(() => {
+		 if (battleField.Players.Contains(peasant)) passedTest++;
+		}, "Character added to players list");
+		//TO DO check if peasant position and world pos i the same
+		//az ne uspqh da go napraq
+		//vijte kakvo sum napravil v ITile Point i Hexagon PointDouble
+	//Test(() => {
+		//PointDouble gridPos = new PointDouble(peasant.Tile.Position.X, peasant.Tile.Position.Y);
+		//Vector2 expectedWorldPos = gridView.TileToWorld(gridPos);
+		//Vector2 actualWorldPos = peasant.Position;
+		//if (actualWorldPos == expectedWorldPos) passedTest++;
+		//}, "World position correct");
 	}
 }

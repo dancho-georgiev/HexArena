@@ -10,7 +10,7 @@ namespace Interfaces
 	{	
 		double StepEnergyCost { get;  set; }
 		public int Health { get; set; }
-		public List<IStatusEffect> StatusEffects {get; protected set;}
+		public List<IStatusEffect> StatusEffects {get;  set;}
 		public ITile Tile { get; set; }
 		public void MoveCharacter(ITile target);
 		

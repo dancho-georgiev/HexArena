@@ -11,14 +11,17 @@ namespace View
 		public Hexagon Hexagon;
 		public Action<HexagonTile> TileClicked;
 		
-		//[Export] public Color DefaultColor = Colors.White;
-		//[Export] public Color SelectedColor = Colors.Blue;
-		//[Export] public Color MovableColor = Colors.Green;
-		//
-		//public void HighlightAsSelected() => polygon2D.Color = SelectedColor;
-		//public void HighlightAsMovable() => polygon2D.Color = MovableColor;
-		//public void ResetColor() => polygon2D.Color = DefaultColor;
-		
+		// ne znam tochno kak rabotat tezi grupi kusmet guys
+		[ExportGroup("Tile Colors")]
+		[Export] public Color DefaultColor { get; set; } = Colors.White; //ZAHSTO NE E BQLO AAAAAAAAAA
+		//qvno tova e bqlo???????? 
+		//mislq che ot nqkude drugade vzima cvqt i se dobavq otgore guys
+		//ok opraih go veche e bqlo
+		//Debug -> CollisionShapes off
+		[Export] public Color SelectedColor { get; set; } = Colors.Blue;
+		[Export] public Color MovableColor { get; set; } = Colors.Green;
+		[Export] public Color HoverColor { get; set; } = new Color(1, 0, 1, 1); // Purple
+
 		public HexagonTile(Hexagon hexagon, ITile tile)
 		{
 			Hexagon = hexagon;
@@ -28,22 +31,23 @@ namespace View
 			
 			Hexagon.area2D.MouseEntered += MouseEnter;
 			Hexagon.area2D.MouseExited += MouseExit;
-			 Hexagon.area2D.InputEvent += OnTileClicked; 
+			Hexagon.area2D.InputEvent += OnTileClicked; 
+			ResetColor();
 		}
+		public void HighlightAsSelected() => Hexagon.polygon2D.Color = SelectedColor;
+		public void HighlightAsMovable() => Hexagon.polygon2D.Color = MovableColor;
+		public void ResetColor() => Hexagon.polygon2D.Color = DefaultColor;
+		
 
-		public void ChangeColor(Polygon2D pol, Color color)
-		{
-			pol.Color = color;
-		}
 		
 		public void MouseEnter()
 		{
-			ChangeColor(Hexagon.polygon2D, new Color(1, 0, 1, 1));
+			Hexagon.polygon2D.Color = HoverColor;
 		}
 		
 		public void MouseExit()
 		{
-			ChangeColor(Hexagon.polygon2D, new Color(1, 1, 1, 1));
+			 ResetColor();
 		}
 		
 		private void OnTileClicked(Node viewport, InputEvent @event, long shapeIdx)

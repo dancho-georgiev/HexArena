@@ -34,6 +34,14 @@ namespace View{
 				}
 			}
 		} 
+			public Vector2 TileToWorld(PointDouble gridPosition)
+			{
+				float hexSize = Hexagon.Instantiate<Hexagon>().Size;
+				return new Vector2(
+				(float)(gridPosition.x * hexSize + (gridPosition.y % 2 == 1 ? hexSize / 2 : 0)),
+				(float)(gridPosition.y * hexSize * Mathf.Sqrt(3)/2) // Vertical stacking
+				);
+			}
 	}
 	
 }

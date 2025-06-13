@@ -19,6 +19,17 @@ public struct PointDouble{
 	public static bool operator!=(PointDouble p1, PointDouble p2){
 		return p1.x!=p2.x || p1.y!=p2.y;
 	}
+	public Vector2 ToVector2() { 
+		return new Vector2((float)x, (float)y); 
+}
+	public Vector2I ToVector2I() { 
+	return new Vector2I((int)Math.Round(x), (int)Math.Round(y)); 
+}
+public PointDouble(Vector2 vector)
+{
+	x = vector.X;
+	y = vector.Y;
+}
 }
 
 public partial class Hexagon : Node2D
