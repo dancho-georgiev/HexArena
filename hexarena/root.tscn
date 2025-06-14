@@ -1,9 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://b23sc6tmijrrd"]
+[gd_scene load_steps=4 format=3 uid="uid://b23sc6tmijrrd"]
 
 [ext_resource type="Script" uid="uid://ko5n1wxrr7jl" path="res://Node2d.cs" id="1_pq8q7"]
 [ext_resource type="Script" uid="uid://6fomfkptmmro" path="res://Scripts/hexarena/View/GridView.cs" id="1_pyidc"]
 [ext_resource type="PackedScene" uid="uid://botcm4t4n4d02" path="res://Scenes/Hexagon.tscn" id="2_vvh5c"]
-[ext_resource type="PackedScene" uid="uid://hujsqr5hssj4" path="res://Scenes/Mnogogon.tscn" id="3_28aoi"]
 
 [node name="Root" type="Node2D"]
 
@@ -15,7 +14,6 @@ script = ExtResource("1_pyidc")
 Width = 10
 Length = 8
 Hexagon = ExtResource("2_vvh5c")
-PlayerSprite = ExtResource("3_28aoi")
 
 [node name="ScriptTesting" type="Node2D" parent="."]
 script = ExtResource("1_pq8q7")

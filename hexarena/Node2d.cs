@@ -410,31 +410,32 @@ public partial class Node2d : Node2D
 	
 	private void Test_SpawnCharacter()
 	{
-		//int passed = passedTest;
-		//
-		//EventManager eventManager = new EventManager();
-		//BattleField battleField = new BattleField(eventManager);
-		//GridView gridView = new GridView(); 
-		//
-		//Peasant peasant = new Peasant(eventManager); 
-		//ITile spawnTile = battleField.GetTile(0, 0);
-		//
-		//battleField.PlacePlayer(peasant, spawnTile);
-		 //var peasantSprite = new Sprite2D();
-		//peasantSprite.Texture = GD.Load<Texture2D>("res://Assets/Characters/Friendly/peasant.png");
-		//peasantSprite.Centered = true;
-		//GetTree().Root.AddChild(peasantSprite);
-		//PointDouble tilePos = new PointDouble(spawnTile.Position.X, spawnTile.Position.Y);
-		//peasantSprite.GlobalPosition = gridView.TileToWorld(tilePos);
-		//Test(() => {
-		//if (peasant.Tile.Position == new Point(0, 0)) passedTest++;
-		//}, "Character spawned at correct tile");
-		//Test(() => {
-		//if (battleField.GetTile(0, 0).CharacterOnTile == peasant) passedTest++;
-		//}, "Tile references character");
-		//Test(() => {
-		 //if (battleField.Players.Contains(peasant)) passedTest++;
-		//}, "Character added to players list");
+		int passed = passedTest;
+		
+		EventManager eventManager = new EventManager();
+		BattleField battleField = new BattleField(eventManager);
+		GridView gridView = new GridView();
+		AddChild(gridView);
+		
+		Peasant peasant = new Peasant(eventManager);
+		ITile spawnTile = battleField.GetTile(0, 0);
+		battleField.PlacePlayer(peasant, spawnTile);
+		var peasantSprite = new Sprite2D();
+		peasantSprite.Texture = GD.Load<Texture2D>("res://Assets/Characters/Friendly/peasant.png");
+		peasantSprite.Centered = true;
+		peasantSprite.Scale = new Vector2(0.1f, 0.1f);
+		
+		peasantSprite.GlobalPosition = gridView.TileToWorld(0, 0);
+		AddChild(peasantSprite);
+		Test(() => {
+		if (peasant.Tile.Position == new Point(0, 0)) passedTest++;
+		}, "Character spawned at correct tile");
+		Test(() => {
+		if (battleField.GetTile(0, 0).CharacterOnTile == peasant) passedTest++;
+		}, "Tile references character");
+		Test(() => {
+		 if (battleField.Players.Contains(peasant)) passedTest++;
+		}, "Character added to players list");
 		//TO DO check if peasant position and world pos i the same
 		//az ne uspqh da go napraq
 		//vijte kakvo sum napravil v ITile Point i Hexagon PointDouble

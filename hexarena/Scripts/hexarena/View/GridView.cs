@@ -18,16 +18,27 @@ namespace View{
 		[Export]
 		public PackedScene PlayerSprite {get; set;}
 		
+		private float _hexSize;
+	
 		public List<List<HexagonTile>> Grid {get; set;}
 		
 		public HexagonTile hoveredTile {get; set;}
 		public bool selectingTarget {get; set;}
 		public EventManager eventManager {get; set;}
+		
 		//veche grida e or hexagonTileove
 		public override void _Ready(){
 			Grid = new List<List<HexagonTile>>();
 			eventManager = new EventManager();
 			battleField = new BattleField(eventManager, Width, Length);
+			Hexagon = GD.Load<PackedScene>("res://Scenes/Hexagon.tscn");
+			
+			//gets hexagon size for TileToWorld
+			Hexagon sampleHex = Hexagon.Instantiate<Hexagon>();
+			_hexSize = sampleHex.Size;
+			sampleHex.QueueFree();
+			
+			
 			for(int i = 0; i < Width; i++){
 				Grid.Add(new List<HexagonTile>());
 				for(int j = 0; j < Length; j++){
@@ -102,12 +113,11 @@ namespace View{
 		
 		
 		
-		public Vector2 TileToWorld(Vector2 gridPosition)
+		public Vector2 TileToWorld(int x, int y)
 		{
-			float hexSize = (Hexagon.Instantiate<Hexagon>()).Size;
 			return new Vector2(
-			(float)(gridPosition.X * hexSize + (gridPosition.Y % 2 == 1 ? hexSize / 2 : 0)),
-			(float)(gridPosition.Y * hexSize * Mathf.Sqrt(3)/2) // Vertical stacking
+				x * _hexSize + (y % 2 == 1 ? _hexSize / 2 : 0),
+				y * _hexSize * Mathf.Sqrt(3)/2
 			);
 		}
 	}
