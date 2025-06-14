@@ -417,8 +417,15 @@ public partial class Node2d : Node2D
 		GridView gridView = new GridView(); 
 		
 		Peasant peasant = new Peasant(eventManager); 
+		ITile spawnTile = battleField.GetTile(0, 0);
 		
-		battleField.PlacePlayer(peasant, battleField.GetTile(0, 0));
+		battleField.PlacePlayer(peasant, spawnTile);
+		 var peasantSprite = new Sprite2D();
+		peasantSprite.Texture = GD.Load<Texture2D>("res://Assets/Characters/Friendly/peasant.png");
+		peasantSprite.Centered = true;
+		GetTree().Root.AddChild(peasantSprite);
+		PointDouble tilePos = new PointDouble(spawnTile.Position.X, spawnTile.Position.Y);
+		peasantSprite.GlobalPosition = gridView.TileToWorld(tilePos);
 		Test(() => {
 		if (peasant.Tile.Position == new Point(0, 0)) passedTest++;
 		}, "Character spawned at correct tile");
