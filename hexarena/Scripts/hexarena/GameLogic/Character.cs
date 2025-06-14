@@ -14,13 +14,14 @@ namespace GameLogic{
 		public List<IStatusEffect> StatusEffects {get; set;}
 		public List<IActive> ActiveAbilities { get; set; }
 		public List<IPassive> PassiveAbilities { get; set; }
-		public ITile Tile { get;  set; }
+		public ITile Tile { get; set; }
 		
 		public Character(int health,double stepEnergyCost)
 		{
 			this.Health = health;
 			this.StepEnergyCost = stepEnergyCost;
 			StatusEffects = new List<IStatusEffect>();
+			Tile = new Tile(new Point(0,0), this);
 		}
 		
 		protected abstract void InitializeActives();

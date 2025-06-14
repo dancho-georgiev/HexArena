@@ -52,10 +52,21 @@ namespace GameLogic{
 				globalTarget.SetBattleField(this);
 			}
 		}
+		public void InitializeRangeRestrictedTargets(ICharacter character, ITile tile){
+			foreach(IRangeRestrictedTarget globalTarget in
+			 character.ActiveAbilities.Where(x=> x.Target is IRangeRestrictedTarget).Select(x=>x.Target)){
+				globalTarget.Position = tile;
+			}
+			foreach(IRangeRestrictedTarget globalTarget in
+			 character.PassiveAbilities.Where(x=> x.Target is IRangeRestrictedTarget).Select(x=>x.Target)){
+				globalTarget.Position = tile;
+			}
+		}
 		
 		public void PlacePlayer(IPlayer character, ITile tile){
 			Players.Add(character);
 			InitializeGlobalTargets(character);
+			InitializeRangeRestrictedTargets(character, tile);
 			character.Tile = tile;
 			tile.CharacterOnTile = character;
 			
@@ -64,6 +75,7 @@ namespace GameLogic{
 		public void PlaceEnemy(IEnemy character, ITile tile){
 			Enemies.Add(character);
 			InitializeGlobalTargets(character);
+			InitializeRangeRestrictedTargets(character, tile);
 			character.Tile = tile;
 			tile.CharacterOnTile = character;
 		}

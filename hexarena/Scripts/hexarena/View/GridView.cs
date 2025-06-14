@@ -2,6 +2,7 @@ using Godot;
 using System;
 using GameLogic;
 using System.Collections.Generic;
+using Interfaces;
 
 namespace View{
 	
@@ -14,34 +15,101 @@ namespace View{
 		public int Length {get; set;}
 		[Export]
 		public PackedScene Hexagon {get; set;}
+		[Export]
+		public PackedScene PlayerSprite {get; set;}
+		
 		public List<List<HexagonTile>> Grid {get; set;}
 		
+		public HexagonTile hoveredTile {get; set;}
+		public bool selectingTarget {get; set;}
+		public EventManager eventManager {get; set;}
 		//veche grida e or hexagonTileove
 		public override void _Ready(){
 			Grid = new List<List<HexagonTile>>();
-			EventManager eventManager = new EventManager();
+			eventManager = new EventManager();
 			battleField = new BattleField(eventManager, Width, Length);
 			for(int i = 0; i < Width; i++){
 				Grid.Add(new List<HexagonTile>());
 				for(int j = 0; j < Length; j++){
 					Hexagon inst = Hexagon.Instantiate<Hexagon>();
-					inst.Position = new Vector2(i *  inst.Size + (j % 2 == 1 ? inst.Size/2 : 0), j * inst.Size);
+					inst.GlobalPosition = new Vector2(i * inst.Size + (j % 2 == 1 ? inst.Size/2 : 0), j * inst.Size);
 					HexagonTile hexTile = new HexagonTile(inst, battleField.GetTile(i, j));
-					hexTile.TileClicked += (tile) => GD.Print($"Clicked tile at {tile.Tile.Position.x}, {tile.Tile.Position.y }");
-					
+					hexTile.TileClicked += OnTileClicked;
+					hexTile.MouseEntered += OnTileEntered;
+					hexTile.MouseExited += OnTileExited;
 					Grid[i].Add(hexTile);
 					AddChild(hexTile);
 				}
 			}
 		} 
-			public Vector2 TileToWorld(PointDouble gridPosition)
-			{
-				float hexSize = Hexagon.Instantiate<Hexagon>().Size;
-				return new Vector2(
-				(float)(gridPosition.x * hexSize + (gridPosition.y % 2 == 1 ? hexSize / 2 : 0)),
-				(float)(gridPosition.y * hexSize * Mathf.Sqrt(3)/2) // Vertical stacking
-				);
+		
+		public override void _Input(InputEvent @event){
+			if(@event is InputEventKey key){
+				if(key.Pressed && key.Keycode == Key.Q){
+					if(hoveredTile != null){
+						if(hoveredTile.Tile.CharacterOnTile == null){ // mnogo losho napraveno ne trqq da e taka
+							battleField.PlacePlayer(new Peasant(eventManager), hoveredTile.Tile);
+							Mnogogon player = PlayerSprite.Instantiate<Mnogogon>();
+							player.GlobalPosition = hoveredTile.Hexagon.GlobalPosition * 0.5f;
+							player.ZIndex = 2;
+							hoveredTile.Hexagon.AddChild(player);
+						}
+					}
 			}
+			
+				if(key.Pressed && key.Keycode == Key.E){
+					if(battleField.SelectedCharacter!=null){
+						battleField.SelectAbility(battleField.SelectedCharacter.ActiveAbilities[0]);
+						selectingTarget = true;
+						GD.Print($"using ability");
+					}
+				}
+			}
+			
+		}
+		
+		
+		
+		public void OnTileClicked(HexagonTile tile){
+			GD.Print($"Clicked tile at {tile.Tile.Position.x}, {tile.Tile.Position.y }");
+			if(!selectingTarget){
+				if(tile.Tile.CharacterOnTile!=null && tile.Tile.CharacterOnTile is IPlayer){
+					battleField.SelectCharacter(tile.Tile.CharacterOnTile as IPlayer);
+					GD.Print($"selected character");
+				}
+			}
+			else{
+				if(tile.Tile.CharacterOnTile!=null){
+					battleField.AddTargetable(tile.Tile.CharacterOnTile);
+					if(battleField.SelectedAbilityTarget.TargetList.Count>0)GD.Print($"added target");
+					if(battleField.SelectedAbilityTarget.IsReady()){
+						battleField.UseSelectedAbility();
+						GD.Print($"{tile.Tile.CharacterOnTile.Health}");
+						selectingTarget = false;
+					}
+					
+				}
+			}
+			
+			
+		}
+		public void OnTileEntered(HexagonTile tile){
+			hoveredTile = tile;
+		}
+		public void OnTileExited(HexagonTile tile){
+			hoveredTile = null;
+		}
+		
+		
+		
+		public Vector2 TileToWorld(Vector2 gridPosition)
+		{
+			float hexSize = (Hexagon.Instantiate<Hexagon>()).Size;
+			return new Vector2(
+			(float)(gridPosition.X * hexSize + (gridPosition.Y % 2 == 1 ? hexSize / 2 : 0)),
+			(float)(gridPosition.Y * hexSize * Mathf.Sqrt(3)/2) // Vertical stacking
+			);
+		}
 	}
 	
 }
