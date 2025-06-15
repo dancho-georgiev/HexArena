@@ -69,7 +69,6 @@ namespace GameLogic{
 			InitializeGlobalTargets(character);
 			InitializeRangeRestrictedTargets(character, tile);
 			character.Tile = tile;
-			tile.IsAvailable = false;
 			tile.CharacterOnTile = character;
 			
 		}
@@ -80,7 +79,6 @@ namespace GameLogic{
 			InitializeRangeRestrictedTargets(character, tile);
 			character.Tile = tile;
 			tile.CharacterOnTile = character;
-			tile.IsAvailable = false;
 			
 		}
 		

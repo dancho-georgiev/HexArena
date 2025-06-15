@@ -64,7 +64,7 @@ namespace View
 				GD.PrintErr("character is null");
 				return;
 			}
-			if(!hoveredTile.Tile.IsAvailable)
+			if(!hoveredTile.Tile.IsAvailable())
 			{
 				GD.Print("hovered tile is not available ");
 				return;
@@ -133,7 +133,7 @@ namespace View
 					{
 						row += "[C]";  // Tile has a character
 					}
-					else if (tile.IsAvailable) 
+					else if (tile.IsAvailable()) 
 					{
 						row += "[ ]";  // Available empty tile
 					}

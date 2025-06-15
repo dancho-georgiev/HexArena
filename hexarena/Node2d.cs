@@ -142,10 +142,8 @@ public partial class Node2d : Node2D
 		Peasant character = new Peasant(eventManager);
 		grid.PlacePlayer(character, start);
 			ITile obstacle1 = grid.GetTile(2,0);
-			obstacle1.IsAvailable = false;
 		
 			ITile obstacle3 = grid.GetTile(1,2);
-			obstacle3.IsAvailable = false;
 		  List<ITile> path = character.FindShortestPath(start, end);
 		Test(() => { if (path != null) passedTest++; }, "path is not null");	
 		Test(() => { if (path[0] == start) passedTest++; }, "path starts at start");
@@ -163,9 +161,9 @@ public partial class Node2d : Node2D
 		grid.PlacePlayer(character, grid.GetTile(0,0));
 		ITile TargetPosition = grid.GetTile(3,3);
 		ITile obstacle1 = grid.GetTile(2,0);
-		obstacle1.IsAvailable = false;
+
 		ITile obstacle3 = grid.GetTile(1,2);
-		obstacle3.IsAvailable = false;
+
 		Test(() => { if (character.Tile == grid.GetTile(0,0)) passedTest++; }, "start position is not right");	
 		character.MoveCharacter(TargetPosition);
 		Test(() => { if (character.Tile == TargetPosition) passedTest++; }, "final position is not right");	
