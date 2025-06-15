@@ -6,7 +6,7 @@ using GameLogic;
 
 public partial class GameCharacter : CharacterBody2D
 {
-	public ICharacter character;
+	public ICharacter Character {get; protected set;}
 	[Export] public Texture2D CharacterSpriteTexture;
 	[Export] public float MoveSpeed = 100f;
 	
@@ -24,7 +24,12 @@ public partial class GameCharacter : CharacterBody2D
 		AddChild(_sprite);
 	}
 	
-	 public override void _PhysicsProcess(double delta)
+	public void setCharacter(ICharacter _character, Sprite2D _sprite){
+		Character = _character;
+		
+	}
+	
+	public override void _PhysicsProcess(double delta)
 	{
 		if (_isMoving)
 		{
