@@ -19,7 +19,7 @@ namespace View
 		[Export]
 		public PackedScene PlayerSprite {get; set;}
 		
-		private Dictionary<IPlayer, GameCharacter> _playerVisuals = new();
+		private Dictionary<ICharacter, GameCharacter> _characterVisuals  = new();
 
 		private float _hexSize;
 	
@@ -74,15 +74,16 @@ namespace View
 			if(battleField.SelectedCharacter.Tile == hoveredTile.Tile)
 			{
 				GD.Print("Logic character moved");
-				if (_playerVisuals.ContainsKey(battleField.SelectedCharacter))
+				if (_characterVisuals.ContainsKey(battleField.SelectedCharacter))
 				{
 					GD.Print("visuals entered");
-					GameCharacter visualCharacter = _playerVisuals[battleField.SelectedCharacter];
+					GameCharacter visualCharacter = _characterVisuals[battleField.SelectedCharacter];
 					visualCharacter.MoveVisualCharacter(hoveredTile.Tile);
 				}
 			}
 				
 		}
+		
 		
 		public override void _Input(InputEvent @event)
 		{
@@ -92,15 +93,13 @@ namespace View
 				{
 					if(hoveredTile != null)
 					{
-						if(hoveredTile.Tile.CharacterOnTile == null)
-						{ // mnogo losho napraveno ne trqq da e taka
+						if(hoveredTile.Tile.CharacterOnTile == null){ // mnogo losho napraveno ne trqq da e taka
 							battleField.PlacePlayer(new Peasant(eventManager), hoveredTile.Tile);
 							Mnogogon player = PlayerSprite.Instantiate<Mnogogon>();
 							player.GlobalPosition = hoveredTile.Hexagon.GlobalPosition * 0.5f;
 							player.ZIndex = 2;
 							hoveredTile.Hexagon.AddChild(player);
-							_playerVisuals.Add(newPlayer, visualChar);
-						}
+							}
 					}
 				}
 			
