@@ -33,7 +33,11 @@ namespace GameLogic{
 	
 	public void TeleportCharacter(ITile TargetPosition)
 	{
+<<<<<<< Updated upstream
 		if(TargetPosition.IsAvailable == true)
+=======
+		if(TargetPosition.IsAvailable())
+>>>>>>> Stashed changes
 		{
 			this.Tile = TargetPosition;
 		}
@@ -45,12 +49,24 @@ namespace GameLogic{
 	// Dancho: Ne tova shte vleze na vseki 
 	public void MoveCharacter(ITile TargetPosition)
 	{
+<<<<<<< Updated upstream
 		if(TargetPosition.IsAvailable == true)
+=======
+		if(TargetPosition.IsAvailable())
+>>>>>>> Stashed changes
 		{
 			List<ITile> pathTiles = FindShortestPath(this.Tile, TargetPosition);
 			foreach(ITile i in pathTiles){
+<<<<<<< Updated upstream
 				this.Tile = i;
 				//GD.Print($"{this.Tile.Position.x}, {this.Tile.Position.y}");
+=======
+				lastTile.CharacterOnTile = null;
+				this.Tile = i;
+				i.CharacterOnTile = this;
+				lastTile = i;
+				GD.Print($"{this.Tile.Position.x}, {this.Tile.Position.y}");
+>>>>>>> Stashed changes
 			}
 		}
 	}
@@ -83,7 +99,7 @@ namespace GameLogic{
 						foreach (var neighbor in current.Neighbours)
 	   					{    
 							
-							if (neighbor.IsAvailable && !visited.Contains(neighbor))
+							if (neighbor.IsAvailable() && !visited.Contains(neighbor))
 							{
 								visited.Add(neighbor);
 								cameFrom[neighbor] = current;

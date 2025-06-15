@@ -120,6 +120,7 @@ public partial class Node2d : Node2D
 		ITile start = grid.TileGrid[0][0];
 		ITile end = grid.TileGrid[3][3];
 		
+<<<<<<< Updated upstream
 		grid.SetupNeighbours();
 		
 		Character character = new Character(100, 1, start);
@@ -129,6 +130,15 @@ public partial class Node2d : Node2D
 		
 			ITile obstacle3 = grid.TileGrid[1][2];
 			obstacle3.IsAvailable = false;
+=======
+		Peasant character = new Peasant(eventManager);
+		grid.PlacePlayer(character, start);
+			ITile obstacle1 = grid.GetTile(2,0);
+//			obstacle1.IsAvailable = false;
+		
+			ITile obstacle3 = grid.GetTile(1,2);
+//			obstacle3.IsAvailable = false;
+>>>>>>> Stashed changes
 		  List<ITile> path = character.FindShortestPath(start, end);
 		Test(() => { if (path != null) passedTest++; }, "path is not null");	
 		Test(() => { if (path[0] == start) passedTest++; }, "path starts at start");
@@ -139,6 +149,7 @@ public partial class Node2d : Node2D
 	
 	private void Test_MoveCharacter(){
 		int passed = passedTest;
+<<<<<<< Updated upstream
 		Grid grid = new Grid(4, 4);
 		Character character = new Character(100, 1, grid.TileGrid[0][0]);
 		ITile TargetPosition = grid.TileGrid[3][3];
@@ -147,6 +158,19 @@ public partial class Node2d : Node2D
 			ITile obstacle3 = grid.TileGrid[1][2];
 			obstacle3.IsAvailable = false;
 		Test(() => { if (character.Tile == grid.TileGrid[0][0] ) passedTest++; }, "start position is not right");	
+=======
+		
+		EventManager eventManager = new EventManager();
+		BattleField grid = new BattleField(eventManager);
+		Peasant character = new Peasant(eventManager);
+		grid.PlacePlayer(character, grid.GetTile(0,0));
+		ITile TargetPosition = grid.GetTile(3,3);
+		ITile obstacle1 = grid.GetTile(2,0);
+		//obstacle1.IsAvailable = false;
+		ITile obstacle3 = grid.GetTile(1,2);
+		//obstacle3.IsAvailable = false;
+		Test(() => { if (character.Tile == grid.GetTile(0,0)) passedTest++; }, "start position is not right");	
+>>>>>>> Stashed changes
 		character.MoveCharacter(TargetPosition);
 		Test(() => { if (character.Tile == TargetPosition) passedTest++; }, "final position is not right");	
 		if (passed + 2 == passedTest)
