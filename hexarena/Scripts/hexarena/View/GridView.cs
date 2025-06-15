@@ -96,10 +96,10 @@ namespace View
 						if(hoveredTile.Tile.CharacterOnTile == null){ // mnogo losho napraveno ne trqq da e taka
 							battleField.PlacePlayer(new Peasant(eventManager), hoveredTile.Tile);
 							GameCharacter player = PlayerSprite.Instantiate<GameCharacter>();
-							player.GlobalPosition = hoveredTile.Hexagon.GlobalPosition * 0.5f;
+							player.GlobalPosition = hoveredTile.Hexagon.GlobalPosition;
 							player.ZIndex = 2;
 							hoveredTile.Hexagon.AddChild(player);
-							}
+						}
 					}
 				}
 			

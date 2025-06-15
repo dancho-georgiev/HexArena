@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Interfaces;
 using GameLogic;
 
-public partial class GameCharacter : CharacterBody2D
+public partial class GameCharacter : Node2D
 {
 	public ICharacter Character {get; protected set;}
 	[Export] public Texture2D CharacterSpriteTexture;
@@ -21,6 +21,7 @@ public partial class GameCharacter : CharacterBody2D
 			Texture = CharacterSpriteTexture,
 			Centered = true
 		 };
+		_sprite.Scale = new Vector2(0.1f,0.1f);
 		AddChild(_sprite);
 	}
 	
