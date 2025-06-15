@@ -419,7 +419,7 @@ public partial class Node2d : Node2D
 		
 		Peasant peasant = new Peasant(eventManager);
 		ITile spawnTile = battleField.GetTile(0, 0);
-		battleField.PlacePlayer(peasant, spawnTile);
+			battleField.PlacePlayer(peasant, spawnTile);
 		var peasantSprite = new Sprite2D();
 		peasantSprite.Texture = GD.Load<Texture2D>("res://Assets/Characters/Friendly/peasant.png");
 		peasantSprite.Centered = true;
