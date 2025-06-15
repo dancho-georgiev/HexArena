@@ -95,7 +95,7 @@ namespace View
 					{
 						if(hoveredTile.Tile.CharacterOnTile == null){ // mnogo losho napraveno ne trqq da e taka
 							battleField.PlacePlayer(new Peasant(eventManager), hoveredTile.Tile);
-							Mnogogon player = PlayerSprite.Instantiate<Mnogogon>();
+							GameCharacter player = PlayerSprite.Instantiate<GameCharacter>();
 							player.GlobalPosition = hoveredTile.Hexagon.GlobalPosition * 0.5f;
 							player.ZIndex = 2;
 							hoveredTile.Hexagon.AddChild(player);

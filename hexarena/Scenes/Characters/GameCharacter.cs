@@ -24,7 +24,7 @@ public partial class GameCharacter : CharacterBody2D
 		AddChild(_sprite);
 	}
 	
-	public void setCharacter(ICharacter _character, Sprite2D _sprite){
+	public void setCharacter(ICharacter _character, Sprite2D _sprite){ //idontgetit
 		Character = _character;
 		
 	}
@@ -38,7 +38,7 @@ public partial class GameCharacter : CharacterBody2D
 	}
 	public void MoveVisualCharacter(ITile target)
 	{
-		if (character.Tile == target) return;
+		if (Character.Tile == target) return;
 		_targetTile = target;
 		_isMoving = true;
 		//walk animation
@@ -64,7 +64,7 @@ public partial class GameCharacter : CharacterBody2D
 	{
 		_isMoving = false;
 		GlobalPosition = GetTargetPosition(); // Snap to exact position
-		character.Tile = _targetTile;
+		Character.Tile = _targetTile;
 		//can start an idle animiation kato imame
 	}
 	
