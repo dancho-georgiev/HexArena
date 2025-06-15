@@ -2,12 +2,13 @@ using Godot;
 using System;
 using Interfaces;
 using GameLogic;
+using View;
 
 namespace GameLogic
 {
 	public static class CharacterFactory
 	{
-		public static GameCharacter CreateCharacter(CharacterType type, ITile spawnTile)
+		public static GameCharacter CreateCharacter(CharacterType type, HexagonTile spawnTile)
 		{
 			string scenePath;
 			switch(type)

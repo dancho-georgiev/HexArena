@@ -3,17 +3,19 @@ using System;
 using System.Collections.Generic;
 using Interfaces;
 using GameLogic;
+using View;
+
 
 public partial class GameCharacter : Node2D
 {
-	public ICharacter Character {get; protected set;}
+	public ICharacter Character {get; set;}
 	[Export] public Texture2D CharacterSpriteTexture;
 	[Export] public float MoveSpeed = 100f;
 	
 	private Sprite2D _sprite;
-	public ITile CurrentTile { get; set; }
+	public HexagonTile CurrentTile { get; set; }
 	private bool _isMoving = false;
-	private ITile _targetTile;
+	private HexagonTile _targetTile;
 	
 	public override void _Ready()
 	{
@@ -37,9 +39,8 @@ public partial class GameCharacter : Node2D
 			HandleMovement((float)delta);
 		}
 	}
-	public void MoveVisualCharacter(ITile target)
+	public void MoveVisualCharacter(HexagonTile target)
 	{
-		if (Character.Tile == target) return;
 		_targetTile = target;
 		_isMoving = true;
 		//walk animation
@@ -48,9 +49,9 @@ public partial class GameCharacter : Node2D
 	{
 		if (_targetTile == null) return;
 		
-		var targetPosition = GetTargetPosition();
-		var direction = (targetPosition - GlobalPosition).Normalized();
-		var movement = direction * MoveSpeed * delta;
+		Vector2 targetPosition = GetTargetPosition();
+		Vector2 direction = (targetPosition - GlobalPosition).Normalized();
+		Vector2 movement = direction * MoveSpeed * delta;
 		
 		// Move towards target
 		GlobalPosition += movement;
@@ -65,15 +66,16 @@ public partial class GameCharacter : Node2D
 	{
 		_isMoving = false;
 		GlobalPosition = GetTargetPosition(); // Snap to exact position
-		Character.Tile = _targetTile;
+		Character.Tile = _targetTile.Tile;
+		CurrentTile = _targetTile;
 		//can start an idle animiation kato imame
 	}
 	
 	private Vector2 GetTargetPosition()
 	{
-		if (_targetTile is Node2D tileNode)
+		if (_targetTile.Hexagon is Node2D)
 		{
-			return tileNode.GlobalPosition;
+			return _targetTile.Hexagon.GlobalPosition*2;
 		}
 		return GlobalPosition;
 	}

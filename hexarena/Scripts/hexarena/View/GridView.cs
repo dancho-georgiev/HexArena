@@ -3,6 +3,7 @@ using System;
 using GameLogic;
 using System.Collections.Generic;
 using Interfaces;
+using System.Linq;
 
 namespace View
 {
@@ -19,19 +20,21 @@ namespace View
 		[Export]
 		public PackedScene PlayerSprite {get; set;}
 		
-		private Dictionary<ICharacter, GameCharacter> _characterVisuals  = new();
 
 		private float _hexSize;
 	
 		public List<List<HexagonTile>> Grid {get; set;}
+		public List<GameCharacter> Characters{get; set;}
 		
 		public HexagonTile hoveredTile {get; set;}
 		public bool selectingTarget {get; set;}
+		public bool selectedCharacter {get; set;}
 		public EventManager eventManager {get; set;}
 		
 		//veche grida e or hexagonTileove
 		public override void _Ready(){
 			Grid = new List<List<HexagonTile>>();
+			Characters = new List<GameCharacter>();
 			eventManager = new EventManager();
 			battleField = new BattleField(eventManager, Width, Length);
 			Hexagon = GD.Load<PackedScene>("res://Scenes/Hexagon.tscn");
@@ -56,7 +59,7 @@ namespace View
 				}
 			}
 		} 
-		private void HandleCharacterMovement()
+		private void MoveSelectedCharacter(HexagonTile tile)
 		{
 			
 			if(battleField.SelectedCharacter == null)
@@ -70,15 +73,16 @@ namespace View
 				return;
 			}
 			
-			battleField.MoveSelectedCharacter(hoveredTile.Tile);
-			if(battleField.SelectedCharacter.Tile == hoveredTile.Tile)
+			battleField.MoveSelectedCharacter(tile.Tile);
+			
+			if(battleField.SelectedCharacter.Tile == tile.Tile)
 			{
 				GD.Print("Logic character moved");
-				if (_characterVisuals.ContainsKey(battleField.SelectedCharacter))
+				if (Characters.Any(x => x.Character == battleField.SelectedCharacter))
 				{
 					GD.Print("visuals entered");
-					GameCharacter visualCharacter = _characterVisuals[battleField.SelectedCharacter];
-					visualCharacter.MoveVisualCharacter(hoveredTile.Tile);
+					GameCharacter visualCharacter = Characters.First(x=>x.Character==battleField.SelectedCharacter);
+					visualCharacter.MoveVisualCharacter(tile);
 				}
 			}
 				
@@ -94,10 +98,14 @@ namespace View
 					if(hoveredTile != null)
 					{
 						if(hoveredTile.Tile.CharacterOnTile == null){ // mnogo losho napraveno ne trqq da e taka
-							battleField.PlacePlayer(new Peasant(eventManager), hoveredTile.Tile);
+							IPlayer peasant = new Peasant(eventManager); 
+							battleField.PlacePlayer(peasant, hoveredTile.Tile);
 							GameCharacter player = PlayerSprite.Instantiate<GameCharacter>();
 							player.GlobalPosition = hoveredTile.Hexagon.GlobalPosition;
 							player.ZIndex = 2;
+							player.Character = peasant;
+							player.CurrentTile = hoveredTile;
+							Characters.Add(player);
 							hoveredTile.Hexagon.AddChild(player);
 						}
 					}
@@ -112,11 +120,7 @@ namespace View
 						GD.Print($"using ability");
 					}
 				}
-				else if (key.Pressed && key.Keycode == Key.Z && hoveredTile != null)
-				{
-					HandleCharacterMovement();
-					PrintTilesWithCharacters();
-				}
+
 			}
 			
 		}
@@ -150,13 +154,14 @@ namespace View
 		
 		public void OnTileClicked(HexagonTile tile){
 			GD.Print($"Clicked tile at {tile.Tile.Position.x}, {tile.Tile.Position.y }");
-			if(!selectingTarget){
+			if(!selectedCharacter){
 				if(tile.Tile.CharacterOnTile!=null && tile.Tile.CharacterOnTile is IPlayer){
 					battleField.SelectCharacter(tile.Tile.CharacterOnTile as IPlayer);
 					GD.Print($"selected character");
+					selectedCharacter = true;
 				}
 			}
-			else{
+			else if(selectingTarget){
 				if(tile.Tile.CharacterOnTile!=null){
 					battleField.AddTargetable(tile.Tile.CharacterOnTile);
 					if(battleField.SelectedAbilityTarget.TargetList.Count>0)GD.Print($"added target");
@@ -164,11 +169,17 @@ namespace View
 						battleField.UseSelectedAbility();
 						GD.Print($"{tile.Tile.CharacterOnTile.Health}");
 						selectingTarget = false;
+						selectedCharacter = false;
 					}
 					
 				}
+				
 			}
-			
+			else if(selectedCharacter){
+					MoveSelectedCharacter(tile);
+					selectedCharacter = false;
+					//PrintTilesWithCharacters();
+				}
 			
 		}
 		public void OnTileEntered(HexagonTile tile){

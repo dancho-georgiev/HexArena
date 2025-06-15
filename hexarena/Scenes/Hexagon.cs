@@ -4,8 +4,6 @@ using System;
 
 public partial class Hexagon : Node2D
 {
-		
-		
 	public Polygon2D polygon2D = new Polygon2D();
 	public CollisionPolygon2D collisionPolygon2D = new CollisionPolygon2D();
 	public Area2D area2D = new Area2D();
