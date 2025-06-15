@@ -4,15 +4,9 @@ using System.Collections.Generic;
 using Interfaces;
 using GameLogic;
 
-public partial class GameCharacter : CharacterBody2D, ICharacter
+public partial class GameCharacter : CharacterBody2D
 {
-	public double StepEnergyCost { get;  set; }
-	public int Health { get; set; }
-	public List<IStatusEffect> StatusEffects {get;  set;}= new();
-	public ITile Tile { get; set; }
-	public List<IActive> ActiveAbilities { get; set; } = new();
-	public List<IPassive> PassiveAbilities { get; set; } = new();
-	
+	public ICharacter character;
 	[Export] public Texture2D CharacterSpriteTexture;
 	[Export] public float MoveSpeed = 100f;
 	
@@ -30,17 +24,6 @@ public partial class GameCharacter : CharacterBody2D, ICharacter
 		AddChild(_sprite);
 	}
 	
-	public void TakeDamage(int damage)
-	{
-		Health -= damage;
-		 // To do: Add damage animation
-	}
-	public void TakeStatusEffect(IStatusEffect statusEffect)
-	{
-		StatusEffects.Add(statusEffect);
-		// Optional: Add visual effect
-	}
-	
 	 public override void _PhysicsProcess(double delta)
 	{
 		if (_isMoving)
@@ -48,9 +31,9 @@ public partial class GameCharacter : CharacterBody2D, ICharacter
 			HandleMovement((float)delta);
 		}
 	}
-	public void MoveCharacter(ITile target)
+	public void MoveVisualCharacter(ITile target)
 	{
-		if (Tile == target) return;
+		if (character.Tile == target) return;
 		_targetTile = target;
 		_isMoving = true;
 		//walk animation
@@ -76,7 +59,7 @@ public partial class GameCharacter : CharacterBody2D, ICharacter
 	{
 		_isMoving = false;
 		GlobalPosition = GetTargetPosition(); // Snap to exact position
-		Tile = _targetTile;
+		character.Tile = _targetTile;
 		//can start an idle animiation kato imame
 	}
 	

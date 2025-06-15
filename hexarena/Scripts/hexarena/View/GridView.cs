@@ -4,7 +4,8 @@ using GameLogic;
 using System.Collections.Generic;
 using Interfaces;
 
-namespace View{
+namespace View
+{
 	
 	public partial class GridView : Node
 	{
@@ -18,6 +19,8 @@ namespace View{
 		[Export]
 		public PackedScene PlayerSprite {get; set;}
 		
+		private Dictionary<IPlayer, GameCharacter> _playerVisuals = new();
+
 		private float _hexSize;
 	
 		public List<List<HexagonTile>> Grid {get; set;}
@@ -53,30 +56,95 @@ namespace View{
 				}
 			}
 		} 
+		private void HandleCharacterMovement()
+		{
+			
+			if(battleField.SelectedCharacter == null)
+			{
+				GD.PrintErr("character is null");
+				return;
+			}
+			if(!hoveredTile.Tile.IsAvailable)
+			{
+				GD.Print("hovered tile is not available ");
+				return;
+			}
+			
+			battleField.MoveSelectedCharacter(hoveredTile.Tile);
+			if(battleField.SelectedCharacter.Tile == hoveredTile.Tile)
+			{
+				GD.Print("Logic character moved");
+				if (_playerVisuals.ContainsKey(battleField.SelectedCharacter))
+				{
+					GD.Print("visuals entered");
+					GameCharacter visualCharacter = _playerVisuals[battleField.SelectedCharacter];
+					visualCharacter.MoveVisualCharacter(hoveredTile.Tile);
+				}
+			}
+				
+		}
 		
-		public override void _Input(InputEvent @event){
-			if(@event is InputEventKey key){
-				if(key.Pressed && key.Keycode == Key.Q){
-					if(hoveredTile != null){
-						if(hoveredTile.Tile.CharacterOnTile == null){ // mnogo losho napraveno ne trqq da e taka
+		public override void _Input(InputEvent @event)
+		{
+			if(@event is InputEventKey key)
+			{
+				if(key.Pressed && key.Keycode == Key.Q)
+				{
+					if(hoveredTile != null)
+					{
+						if(hoveredTile.Tile.CharacterOnTile == null)
+						{ // mnogo losho napraveno ne trqq da e taka
 							battleField.PlacePlayer(new Peasant(eventManager), hoveredTile.Tile);
 							Mnogogon player = PlayerSprite.Instantiate<Mnogogon>();
 							player.GlobalPosition = hoveredTile.Hexagon.GlobalPosition * 0.5f;
 							player.ZIndex = 2;
 							hoveredTile.Hexagon.AddChild(player);
+							_playerVisuals.Add(newPlayer, visualChar);
 						}
 					}
-			}
+				}
 			
-				if(key.Pressed && key.Keycode == Key.E){
-					if(battleField.SelectedCharacter!=null){
+				if(key.Pressed && key.Keycode == Key.E)
+				{
+					if(battleField.SelectedCharacter!=null)
+					{
 						battleField.SelectAbility(battleField.SelectedCharacter.ActiveAbilities[0]);
 						selectingTarget = true;
 						GD.Print($"using ability");
 					}
 				}
+				else if (key.Pressed && key.Keycode == Key.Z && hoveredTile != null)
+				{
+					HandleCharacterMovement();
+					PrintTilesWithCharacters();
+				}
 			}
 			
+		}
+		public void PrintTilesWithCharacters()
+		{
+			GD.Print("===== Grid State =====");
+			for (int y = 0; y < Length; y++)
+			{
+				string row = "";
+				for (int x = 0; x < Width; x++)
+				{
+					var tile = battleField.GetTile(x, y);
+					if (tile.CharacterOnTile != null) 
+					{
+						row += "[C]";  // Tile has a character
+					}
+					else if (tile.IsAvailable) 
+					{
+						row += "[ ]";  // Available empty tile
+					}
+					else 
+					{
+						row += "[X]";  // Unavailable tile
+					}
+				}
+				GD.Print(row);
+			}
 		}
 		
 		
@@ -123,4 +191,3 @@ namespace View{
 	}
 	
 }
- 	

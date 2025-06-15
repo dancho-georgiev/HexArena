@@ -22,6 +22,7 @@ namespace GameLogic{
 		public IAbility SelectedAbility{get; set;}
 		public ITarget SelectedAbilityTarget {get; set;}
 		
+		// TUK NE TRQBVA LI VSICHKO DA NE E I(NESHTA)
 		public BattleField(EventManager eventManager){
 			this.eventManager = eventManager;
 			grid = new Grid(6,6);
@@ -78,10 +79,12 @@ namespace GameLogic{
 			InitializeRangeRestrictedTargets(character, tile);
 			character.Tile = tile;
 			tile.CharacterOnTile = character;
+			
 		}
 		
-		public void MoveSelectedCharacter(ITile position){
+		public ITile MoveSelectedCharacter(ITile position){
 			SelectedCharacter.MoveCharacter(position);
+			return position;
 		}
 		
 		public void SelectCharacter(IPlayer selected){
