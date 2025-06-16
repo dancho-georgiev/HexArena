@@ -12,9 +12,11 @@ namespace GameLogic{
 			public List<ITile> Neighbours { get; set;}
 			public ICharacter CharacterOnTile { get; set;}
 			
-		public virtual bool IsAvailable (){
-			return CharacterOnTile==null;	
+		public virtual bool IsAvailable ()
+		{
+			return CharacterOnTile==null; 
 		}
+		
 		public Tile(Point position,Character character = null)
 		{
 			this.Position = position;

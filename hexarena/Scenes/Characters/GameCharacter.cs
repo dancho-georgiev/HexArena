@@ -18,6 +18,7 @@ public partial class GameCharacter : Node2D
 	private bool _isMoving = false;
 	private HexagonTile _targetTile;
 	private List<HexagonTile> _hexPath = new List<HexagonTile>();
+	private int _currentPathIndex;
 	
 	public override void _Ready()
 	{
@@ -43,19 +44,43 @@ public partial class GameCharacter : Node2D
 	}
 	public void MoveVisualCharacter(HexagonTile target)
 	{
+		 if (CurrentTile == null || target == null) return;
 		List<ITile> pathTiles = Utility.FindShortestPath(CurrentTile.Tile, target.Tile);
-		GD.Print(pathTiles.Count);
+		_hexPath = new List<HexagonTile>();
 		
-		//foreach(ITile tile in pathTiles)
-		//{
-			//GD.Print($"{tile.Position.x},{tile.Position.y}");
-		//}
-		_targetTile = target;
-		_isMoving = true;
-		//walk animation
+		//convert logical tiles to visual hexagonTiles
+		 foreach (ITile tile in pathTiles)
+		{
+			HexagonTile hexTile = FindHexagonTileByITile(tile);
+			if (hexTile != null)
+			{
+				_hexPath.Add(hexTile);
+			}
+		}
+		
+		if (_hexPath.Count > 0)
+			_currentPathIndex = 0; 
+			if (_currentPathIndex < _hexPath.Count)
+			{
+				_targetTile = _hexPath[_currentPathIndex];
+				_isMoving = true;
+			}
 	}
-	
-	
+	 private HexagonTile FindHexagonTileByITile(ITile tile)
+	{	
+		// Search through all nodes in HexTiles group- Check HexTiles
+		//I dont know if its a good practice
+		 foreach (Node node in GetTree().GetNodesInGroup("HexTiles"))
+		{
+			if (node is HexagonTile hexTile && hexTile.Tile == tile)
+			{
+				//GD.Print($"HexTile Tile {hexTile.Tile.Position.x},{hexTile.Tile.Position.y}" );	
+				return hexTile;
+			}
+		}
+		//GD.PrintErr($"FindHexagonTileByITile returns null");
+		return null;
+	}
 	
 	private void HandleMovement(float delta)
 	{
@@ -71,7 +96,21 @@ public partial class GameCharacter : Node2D
 		// Check if reached target
 		if (GlobalPosition.DistanceTo(targetPosition) < 5f)
 		{
-			FinishMovement();
+			CurrentTile = _targetTile;
+			
+			// Move to next tile in path
+			_currentPathIndex++;
+			
+			 // If more tiles remain
+			 if (_currentPathIndex < _hexPath.Count)
+			{
+				// Set next target
+				_targetTile = _hexPath[_currentPathIndex];
+			}
+			else
+			{
+				FinishMovement();
+			}
 		}
 	}
 	 private void FinishMovement()

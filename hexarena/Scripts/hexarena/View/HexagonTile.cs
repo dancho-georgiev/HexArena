@@ -28,7 +28,7 @@ namespace View
 			Tile = tile;
 			
 			AddChild(Hexagon);
-			
+			AddToGroup("HexTiles");
 			Hexagon.area2D.MouseEntered += MouseEnter;
 			Hexagon.area2D.MouseExited += MouseExit;
 			Hexagon.area2D.InputEvent += HandleInput; 

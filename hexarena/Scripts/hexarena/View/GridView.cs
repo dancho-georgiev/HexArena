@@ -184,7 +184,7 @@ namespace View
 			else if(selectedCharacter){
 					MoveSelectedCharacter(tile);
 					selectedCharacter = false;
-					//PrintTilesWithCharacters();
+					PrintTilesWithCharacters();
 				}
 			
 		}
@@ -200,7 +200,7 @@ namespace View
 		public Vector2 TileToWorld(int x, int y)
 		{
 			return new Vector2(
-				x * _hexSize + (y % 2 == 1 ? _hexSize / 2 : 0),
+				x * _hexSize + (y % 2 == 0 ? _hexSize / 2 : 1),
 				y * _hexSize * Mathf.Sqrt(3)/2
 			);
 		}

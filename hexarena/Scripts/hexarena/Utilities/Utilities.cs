@@ -59,8 +59,7 @@ namespace Utilities{
 				}
 						foreach (ITile neighbor in current.Neighbours)
 	   					{    
-							
-							if (neighbor.IsAvailable() && !visited.Contains(neighbor))
+							if ( !visited.Contains(neighbor))
 							{
 								visited.Add(neighbor);
 								cameFrom[neighbor] = current;
@@ -68,6 +67,7 @@ namespace Utilities{
 							}
 						}
 			}
+			GD.Print("FindShortestPath exited with null");
 			return null;
 		}
 	}
