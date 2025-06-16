@@ -27,6 +27,9 @@ namespace View
 		public List<GameCharacter> Characters{get; set;}
 		
 		public HexagonTile hoveredTile {get; set;}
+		
+		public List<HexagonTile> hexPath {get; set;}
+		
 		public bool selectingTarget {get; set;}
 		public bool selectedCharacter {get; set;}
 		public EventManager eventManager {get; set;}
