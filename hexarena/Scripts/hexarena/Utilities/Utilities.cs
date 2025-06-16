@@ -40,7 +40,7 @@ namespace Utilities{
 			path.Add(current);
 			while(current!=endTile){
 				current = current.Neighbours.Where(x=>!path.Contains(x))
-				.MinBy(x => Distance(x, endTile) + Distance(x,startTile));
+				.MinBy(x => Distance(Direction(current, x),(Direction(current,endTile))));
 				path.Add(current);
 			}
 			return path;
@@ -58,21 +58,21 @@ namespace Utilities{
 			return path;
 		}
 		
-		private static float Distance(ITile tile1, ITile tile2){
+		public static float Distance(ITile tile1, ITile tile2){
 			return Mathf.Sqrt(Mathf.Pow(tile2.Position.x - tile1.Position.x,2) + 
 							Mathf.Pow(tile2.Position.y - tile1.Position.y,2));
 		}
 		
-		private static float Distance(Vector2 point1, Vector2 point2){
+		public static float Distance(Vector2 point1, Vector2 point2){
 			return Mathf.Sqrt(Mathf.Pow(point2.X - point1.X,2) + 
 							Mathf.Pow(point2.Y - point1.Y,2));
 		}
 		
-		private static Vector2 Direction(HexagonTile tile1, HexagonTile tile2){
+		public static Vector2 Direction(HexagonTile tile1, HexagonTile tile2){
 			return (tile2.Hexagon.GlobalPosition-tile1.Hexagon.GlobalPosition).Normalized();
 		}
 		
-		private static Vector2 Direction(ITile tile1, ITile tile2){
+		public static Vector2 Direction(ITile tile1, ITile tile2){
 			return (new Vector2(tile2.Position.x-tile1.Position.x, tile2.Position.y - tile1.Position.y)).Normalized();
 		}
 		
