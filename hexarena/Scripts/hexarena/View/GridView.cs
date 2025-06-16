@@ -4,6 +4,7 @@ using GameLogic;
 using System.Collections.Generic;
 using Interfaces;
 using System.Linq;
+using Utilities;
 
 namespace View
 {
@@ -40,6 +41,7 @@ namespace View
 			Characters = new List<GameCharacter>();
 			eventManager = new EventManager();
 			battleField = new BattleField(eventManager, Width, Length);
+			hexPath = new List<HexagonTile>();
 			Hexagon = GD.Load<PackedScene>("res://Scenes/Hexagon.tscn");
 			
 			//gets hexagon size for TileToWorld
@@ -74,7 +76,7 @@ namespace View
 			}
 		}
 		
-		private void MoveSelectedCharacter(HexagonTile tile)
+		private void MoveSelectedCharacter(List<HexagonTile> path)
 		{
 			
 			if(battleField.SelectedCharacter == null)
@@ -94,16 +96,16 @@ namespace View
 				return;
 			}
 			
-			battleField.MoveSelectedCharacter(tile.Tile);
+			battleField.MoveSelectedCharacter(path.Last().Tile);
 			
-			if(battleField.SelectedCharacter.Tile == tile.Tile)
+			if(battleField.SelectedCharacter.Tile == path.Last().Tile)
 			{
 				GD.Print("Logic character moved");
 				if (Characters.Any(x => x.Character == battleField.SelectedCharacter))
 				{
 					GD.Print("visuals entered");
 					GameCharacter visualCharacter = Characters.First(x=>x.Character==battleField.SelectedCharacter);
-					visualCharacter.MoveVisualCharacter(tile);
+					visualCharacter.MoveVisualCharacter(path);
 				}
 			}
 				
@@ -171,6 +173,9 @@ namespace View
 			}
 		}
 		
+		public HexagonTile GetTile(ITile tile){
+			return Grid[tile.Position.y][tile.Position.x];
+		}
 		
 		
 		public void OnTileClicked(HexagonTile tile){
@@ -197,14 +202,35 @@ namespace View
 				
 			}
 			else if(selectedCharacter){
-					MoveSelectedCharacter(tile);
+					MoveSelectedCharacter(hexPath);
 					selectedCharacter = false;
-					//PrintTilesWithCharacters();
+					ClearHexPath();
 				}
+					//PrintTilesWithCharacters();
+				
 			
 		}
+		
+		private void ClearHexPath(){
+			if(hexPath.Count>0){
+				foreach(HexagonTile t in hexPath){
+					t.Hovered = false;
+				}
+			}
+			hexPath.Clear();
+		}
+		
 		public void OnTileEntered(HexagonTile tile){
+			if(hoveredTile==tile) return; 
 			hoveredTile = tile;
+			
+			if(selectedCharacter){
+				ClearHexPath();
+				hexPath = Utility.FindShortestPath2(GetTile(battleField.SelectedCharacter.Tile), tile);
+				foreach(HexagonTile t in hexPath){
+						t.Hovered = true;
+				}
+			}
 		}
 		public void OnTileExited(HexagonTile tile){
 			hoveredTile = null;

@@ -41,9 +41,9 @@ public partial class GameCharacter : Node2D
 			HandleMovement((float)delta);
 		}
 	}
-	public void MoveVisualCharacter(HexagonTile target)
+	public void MoveVisualCharacter(List<HexagonTile> path)
 	{
-		 _hexPath = new Queue<HexagonTile>(Utility.FindShortestPath2(CurrentTile, target));
+		 _hexPath = new Queue<HexagonTile>(path);
 		
 		GD.Print(_hexPath.Count);
 		

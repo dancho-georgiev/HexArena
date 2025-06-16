@@ -9,6 +9,8 @@ namespace View
 {
 	public partial class HexagonTile : Node2D
 	{
+		private bool hovered;
+		private bool selected = false;
 		public ITile Tile;
 		public Hexagon Hexagon;
 		public List<HexagonTile> Neighbours;
@@ -16,7 +18,24 @@ namespace View
 		public Action<HexagonTile> TileClicked;
 		public Action<HexagonTile> MouseEntered;
 		public Action<HexagonTile> MouseExited;
-		private bool selected = false;
+		
+		public bool Hovered {
+			get{ return hovered;}
+			set{
+				hovered = value;
+				if(hovered){
+					if(!selected){
+						Hexagon.polygon2D.Color = HoverColor;
+					}
+					
+				}
+				else{
+					if(!selected){
+						ResetColor();
+					} 	
+				}
+		}
+	}
 
 		[ExportGroup("Tile Colors")]
 		[Export] public Color DefaultColor { get; set; } = new Color(1,1,1,1); //ZAHSTO NE E BQLO AAAAAAAAAA
@@ -47,18 +66,14 @@ namespace View
 		
 		public void MouseEnter()
 		{
-			if(!selected){
-				Hexagon.polygon2D.Color = HoverColor;
-			}
+			Hovered = true;
 			MouseEntered?.Invoke(this);
 			
 		}
 		
 		public void MouseExit()
 		{
-			if(!selected){
-				ResetColor();
-			} 
+			Hovered = false;
 			MouseExited?.Invoke(this);
 		}
 		
