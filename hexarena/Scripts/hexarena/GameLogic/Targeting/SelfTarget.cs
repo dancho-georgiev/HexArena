@@ -11,6 +11,9 @@ namespace GameLogic{
 			TargetList = new List<ITargetable>();
 			TargetList.Add(self);
 		}
+		
+		public override bool IsReady(){return true;}
+		
 		public override bool ValidTarget(ITargetable targetable){
 			return true;
 		}

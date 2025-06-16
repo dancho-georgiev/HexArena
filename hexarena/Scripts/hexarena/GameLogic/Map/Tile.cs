@@ -11,7 +11,11 @@ namespace GameLogic{
 			public Point Position { get;set;}
 			public List<ITile> Neighbours { get; set;}
 			public ICharacter CharacterOnTile { get; set;}
-			public bool IsAvailable { get; set;} = true;
+			
+		public virtual bool IsAvailable ()
+		{
+			return CharacterOnTile==null; 
+		}
 		
 		public Tile(Point position,Character character = null)
 		{

@@ -13,14 +13,25 @@ namespace GameLogic{
 			AddTarget(_targeting);
 		}
 		
+		public SwordSweep(ITile position)
+		{
+			Damage = 2;
+			Target = new SweepFrontTarget(position);
+		}
+		
+		public override SweepFrontTarget GetTargetType(){
+		return Target as SweepFrontTarget;
+	}
+		
 		public override void Connect(EventManager eventManager){
 			eventManager.ActivateAbility1 += Use;
 		}
+		public override void Disconnect(EventManager eventManager){
+			eventManager.ActivateAbility1 -= Use;
+		}
 		public override void Use(){
-			foreach(ITarget t in Targets){
-				foreach(ITargetable target in t.TargetList){
-					target.TakeDamage(Damage);
-				}
+			foreach(ITargetable target in Target.TargetList){
+				target.TakeDamage(Damage);
 			}
 		}
 	}

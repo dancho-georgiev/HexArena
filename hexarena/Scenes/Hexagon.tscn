@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://botcm4t4n4d02"]
+
+[ext_resource type="Script" uid="uid://bjrjwhdqxhg1m" path="res://Scenes/Hexagon.cs" id="1_ym8bo"]
+
+[node name="Hexagon" type="Node2D"]
+script = ExtResource("1_ym8bo")

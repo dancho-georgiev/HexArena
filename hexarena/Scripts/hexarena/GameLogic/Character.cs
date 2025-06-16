@@ -2,44 +2,51 @@ using Godot;
 using System;
 using Interfaces;
 using System.Collections.Generic;
+using Utilities;
 
-
-namespace GameLogic{
-	
-	public abstract class Character : Targetable, ICharacter, IClass
+namespace GameLogic
 {
+	
+	public abstract class Character : Targetable, ICharacter
+	{
 		public int Health { get;  set; }
-		
 		public double StepEnergyCost { get;  set; }
 		public List<IStatusEffect> StatusEffects {get; set;}
-		public List<IActive> ActiveAbilites { get; set; }
+		public List<IActive> ActiveAbilities { get; set; }
 		public List<IPassive> PassiveAbilities { get; set; }
-		public ITile Tile { get;  set; }
+		public ITile Tile { get; set; }
 		
-		public Character(int health,double stepEnergyCost,ITile tile)
+		public Character(int health,double stepEnergyCost)
 		{
 			this.Health = health;
 			this.StepEnergyCost = stepEnergyCost;
-			this.Tile = tile;
 			StatusEffects = new List<IStatusEffect>();
-			tile.CharacterOnTile = this;  //Temporary fix 
+			Tile = new Tile(new Point(0,0), this);
 		}
 		
 		protected abstract void InitializeActives();
 		protected abstract void InitializePassives();
 		
-		public virtual int ModifyDamageTaken(int damage)
+		//curently used for vulnerable
+		//promenq podaden damage spored status efectite na Charactera
+		//returns modified damage
+		public virtual int ModifyDamageTaken(int damage) 
 		{
-			GD.Print($"ModifyDamageTaken entered with {damage}");
-			int modifiedDamage = damage;
+			//GD.Print($"ModifyDamageTaken entered with {damage}");
+			
+			float totalPercent = 0f;
+
 			foreach (IStatusEffect effect in StatusEffects)
 			{
 				if (effect is IModifyDamageTaken modifier)
 				{
-					modifiedDamage = modifier.ModifyDamage(modifiedDamage);
+					totalPercent += modifier.GetBonusPercent(); //set in the modifier
 				}
 			}
-			GD.Print($"ModifyDamageTaken exited with {modifiedDamage}");
+
+			int modifiedDamage = (int)Math.Ceiling(damage * (1f + totalPercent));
+
+			//GD.Print($"ModifyDamageTaken exited with {modifiedDamage}");
 			return modifiedDamage;
 		}
 		public override void TakeDamage(int damage){
@@ -47,71 +54,41 @@ namespace GameLogic{
 			Health -= modifiedDamage;
 		}
 
-	public override void TakeStatusEffect(IStatusEffect statusEffect){
-		StatusEffects.Add(statusEffect);
-	}
-	
-	public void TeleportCharacter(ITile TargetPosition)
-	{
-		if(TargetPosition.IsAvailable == true)
-		{
-			this.Tile = TargetPosition;
+		public override void TakeStatusEffect(IStatusEffect statusEffect){
+			StatusEffects.Add(statusEffect);
 		}
 		
-	}
+		public void TeleportCharacter(ITile TargetPosition)
+		{
+			if(TargetPosition.IsAvailable())
+			{
+				this.Tile = TargetPosition;
+			}
+		}
 	
 	//Grisho:tva trqq da vleze samo na characterite koito she nqma da sa playable(na enemytata)
 	// po nqkoe vreme go premesti
 	// Dancho: Ne tova shte vleze na vseki 
-	public void MoveCharacter(ITile TargetPosition)
-	{
-		if(TargetPosition.IsAvailable == true)
+	//Dancho: grisho e prav :klumnala roza:
+		public virtual void MoveCharacter(ITile TargetPosition)
 		{
-			List<ITile> pathTiles = FindShortestPath(this.Tile, TargetPosition);
-			foreach(ITile i in pathTiles){
-				this.Tile = i;
-				//GD.Print($"{this.Tile.Position.x}, {this.Tile.Position.y}");
-			}
-		}
-	}
-		//standart shortest path algo; can be improved
-		public List<ITile> FindShortestPath(ITile startTile, ITile endTile)
-		{
-			var cameFrom = new Dictionary<ITile,ITile>();
-			var visited = new List<ITile>();
-			var queue = new Queue<ITile>();
-			
-			 queue.Enqueue(startTile);
-   			 visited.Add(startTile);
-
-			while (queue.Count > 0)
+			if(TargetPosition.IsAvailable())
 			{
-				var current = queue.Dequeue();
-				if(current == endTile)
+				List<ITile> pathTiles = Utility.FindShortestPath(this.Tile, TargetPosition);
+				ITile lastTile = pathTiles[0]; // this helps clearing the characters which we create* along the path
+				foreach(ITile i in pathTiles)
 				{
-					var path = new List<ITile>();
-					var tile = current;
-			   			while (tile != startTile)
-						{
-							path.Add(tile);
-							tile = cameFrom[tile];
-						}
-						path.Add(startTile);
-						path.Reverse();
-		   				return path;
+					lastTile.CharacterOnTile = null;
+					//lastTile.IsAvailable = true;
+					this.Tile = i;
+					i.CharacterOnTile = this;
+					//i.IsAvailable = false;
+					lastTile = i;
+					GD.Print($"{this.Tile.Position.x}, {this.Tile.Position.y}");
 				}
-						foreach (var neighbor in current.Neighbours)
-	   					{    
-							
-							if (neighbor.IsAvailable && !visited.Contains(neighbor))
-							{
-								visited.Add(neighbor);
-								cameFrom[neighbor] = current;
-								queue.Enqueue(neighbor);
-							}
-						}
+				GD.Print($"curent pos {this.Tile.Position.x}, {this.Tile.Position.y}");
+
 			}
-			return null;
 		}
 	}
 }

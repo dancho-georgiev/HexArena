@@ -9,9 +9,10 @@ namespace Interfaces
 {
 	public interface IAbility
 	{
-		List<ITarget> Targets { get; set; }
+		ITarget Target { get; set; }
 		void Use();
 		void AddTarget(ITarget target);
 		void Connect(EventManager eventManager);
+		void Disconnect(EventManager eventManager);
 	}
 }

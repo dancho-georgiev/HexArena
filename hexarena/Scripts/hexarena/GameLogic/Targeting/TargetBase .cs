@@ -13,10 +13,9 @@ namespace GameLogic
 		public TargetBase()
 		{
 			TargetList = new List<ITargetable>();
-			this.grid = grid; //grid = grid?
 		}
 		public override bool ValidTarget(ITargetable targetable) {return true;}
-		
+		public override bool IsReady(){return true;}
 		public override void AddTargetable(ITargetable targetable)
 		{
 			 TargetList.Add(targetable); 
@@ -24,17 +23,7 @@ namespace GameLogic
 		
 		public override void PopulateFromGrid()
 		{
-			TargetList = new List<ITargetable>();
-			foreach (List<ITile> col in grid.TileGrid)
-			{
-				foreach (ITile tile in col)
-				{
-					if(tile.CharacterOnTile is ITargetable targetable) //Charactera ne e li vinagi targetable ????
-					{
-						AddTargetable(targetable);
-					}
-				}
-			}
+		
 		}
 		//public List<T> SelectNOfType<T>(int n) where T : class, ITargetable
 		

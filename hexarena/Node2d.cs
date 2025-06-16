@@ -5,6 +5,7 @@ using Interfaces;
 using System.Linq;
 using System.Collections.Generic;
 using Utilities;
+using View;
 
 public partial class Node2d : Node2D
 {
@@ -31,6 +32,7 @@ public partial class Node2d : Node2D
 		Test(Test_PassiveHealEffect, "Test_PassiveHealEffect");
 		Test(Test_PoisonedStrike,"Test_PoisonedStrike");
 		Test(Test_VulnerableEffect,"Test_VulnerableEffect");
+		Test(Test_SpawnCharacter,"Test_SpawnCharacter");
 		GD.Print($"PASSED: {passedTest}");
 		GD.Print($"FAILED: {allTest-passedTest}");
 	}
@@ -62,43 +64,49 @@ public partial class Node2d : Node2D
 		int passed = passedTest;
 		Test(()=>{if(grid.Width==3)passedTest++;},  "grid.width==3");
 		Test(()=>{if(grid.Length==5)passedTest++;}, "grid.length==5");
-		Test(()=>{if(grid.Enemies.Count==0)passedTest++;}, "grid.enemies.empty");
-		Test(()=>{if(grid.Players.Count==0)passedTest++;}, "grid.players.empty");
 		Test(()=>{if(grid.TileGrid.Count==3)passedTest++;}, "grid.tileGrid.Count==width");
 		Test(()=>{if(grid.TileGrid[1][2].Position == new Point(2,1))passedTest++;}, "correct coordinates");
 		if(passed + 6 == passedTest) passedTest++;
 	}
 	//Peasant is abstract now GG
 	private void Test_EnemyConstructorTile(){
-		Grid grid = new Grid(3,5);
-		PlaceholderEnemy enemy = new PlaceholderEnemy(100, 1, grid.TileGrid[1][2]);
+		EventManager eventManager = new EventManager();
+		BattleField grid = new BattleField(eventManager);
+		PlaceholderEnemy enemy = new PlaceholderEnemy(100, 1);
+		grid.PlaceEnemy(enemy, grid.GetTile(2,1));
 		int passed = passedTest;
 		Test(()=>{if(enemy.Health==100)passedTest++;}, "enemy.Health==100");
 		Test(()=>{if(enemy.StepEnergyCost==1)passedTest++;}, "enemy.StepEnergyCost==1");
-		Test(()=>{if(enemy.Tile.Position == new Point(2,1))passedTest++;}, "correct position");
+		Test(()=>{if(enemy.Tile.Position == new Point(1,2))passedTest++;}, "correct position");
 		Test(()=>{if(enemy.StatusEffects.Count == 0)passedTest++;}, "StatusEffects is empty");
 		if(passed + 4 == passedTest) passedTest++;
 	}
 	private void Test_GridAddEnemy(){
-		Grid grid = new Grid(3,5);
+		EventManager ev = new EventManager();
+		BattleField grid = new BattleField(ev);
 		int passed = passedTest;
-		PlaceholderEnemy enemy = new PlaceholderEnemy(100, 1, grid.TileGrid[1][2]);
-		grid.AddEnemy(enemy);
+		PlaceholderEnemy enemy = new PlaceholderEnemy(100, 1);
+		grid.PlaceEnemy(enemy, grid.GetTile(1,2));
 		Test(()=>{if(grid.Enemies.Count==1)passedTest++;}, "added enemy");
 		if(passed + 1 == passedTest) passedTest++;
 	}
 	private void Test_AllEnemiesTarget(){
 		int passed = passedTest;
 		EventManager eventManager = new EventManager();
-		Grid grid = new Grid(3,5);
-		PlaceholderEnemy enemy1 = new PlaceholderEnemy(100, 1, grid.TileGrid[1][2]);
-		PlaceholderEnemy enemy2 = new PlaceholderEnemy(100, 1, grid.TileGrid[2][1]);
-		grid.AddEnemy(enemy1);
-		grid.AddEnemy(enemy2);
-		AllEnemiesTarget target = new AllEnemiesTarget(grid);
+		BattleField grid = new BattleField(eventManager);
+		PlaceholderEnemy enemy1 = new PlaceholderEnemy(100, 1);
+		PlaceholderEnemy enemy2 = new PlaceholderEnemy(100, 1);
+		grid.PlaceEnemy(enemy1, grid.GetTile(1,2));
+		grid.PlaceEnemy(enemy2, grid.GetTile(2,1));
+		
+		AllEnemiesTarget target = new AllEnemiesTarget();
+		target.SetBattleField(grid);
 		Test(()=>{if(target.TargetList.Count() == 2)passedTest++;}, "targeted all enemies");
 		Test(()=>{if(target.TargetList.Any(x=>(x as Enemy).Tile.Position == new Point(1,2)))passedTest++;}, "correct enemy");
-		MalevolentShrine slash = new MalevolentShrine(eventManager, target);
+		Peasant peasant = new Peasant(eventManager);
+		MalevolentShrine slash = new MalevolentShrine(eventManager);
+		peasant.PassiveAbilities.Add(slash);
+		grid.PlacePlayer(peasant, grid.GetTile(0,0));
 		eventManager.EmitOnStartTurn();
 		Test(()=>{if(enemy1.Health<100)passedTest++;}, "dealt damage to enemy1");
 		Test(()=>{if(enemy2.Health<100)passedTest++;}, "dealt damage to enemy2");
@@ -126,39 +134,37 @@ public partial class Node2d : Node2D
 	}
 	
 	private void Test_Pathfinding(){ //HOLY SHIT CODA MI RABOTI
-		Grid grid = new Grid(4,4);
-		ITile start = grid.TileGrid[0][0];
-		ITile end = grid.TileGrid[3][3];
-		
-		grid.SetupNeighbours();
-		
 		EventManager eventManager = new EventManager();
-		Peasant character = new Peasant(eventManager, start);
-			
-			ITile obstacle1 = grid.TileGrid[2][0];
-			obstacle1.IsAvailable = false;
+		BattleField grid = new BattleField(eventManager);
+		ITile start = grid.GetTile(0, 0);
+		ITile end = grid.GetTile(3,3);
 		
-			ITile obstacle3 = grid.TileGrid[1][2];
-			obstacle3.IsAvailable = false;
-		  List<ITile> path = character.FindShortestPath(start, end);
+		Peasant character = new Peasant(eventManager);
+		grid.PlacePlayer(character, start);
+			ITile obstacle1 = grid.GetTile(2,0);
+		
+			ITile obstacle3 = grid.GetTile(1,2);
+		  List<ITile> path = Utility.FindShortestPath(start, end);
 		Test(() => { if (path != null) passedTest++; }, "path is not null");	
 		Test(() => { if (path[0] == start) passedTest++; }, "path starts at start");
 		Test(() => { if (path[path.Count - 1] == end) passedTest++; }, "path ends at end");
 		Test(() => { if (path.Count >= 3) passedTest++; }, "path has reasonable length");
-		GD.Print($"{path.Count} path count");
+		 //GD.Print($"{path.Count} path count");
 	}
 	
 	private void Test_MoveCharacter(){
 		int passed = passedTest;
-		Grid grid = new Grid(4, 4);
+		
 		EventManager eventManager = new EventManager();
-		Peasant character = new Peasant(eventManager, grid.TileGrid[0][0]);
-		ITile TargetPosition = grid.TileGrid[3][3];
-		ITile obstacle1 = grid.TileGrid[2][0];
-			obstacle1.IsAvailable = false;
-			ITile obstacle3 = grid.TileGrid[1][2];
-			obstacle3.IsAvailable = false;
-		Test(() => { if (character.Tile == grid.TileGrid[0][0] ) passedTest++; }, "start position is not right");	
+		BattleField grid = new BattleField(eventManager);
+		Peasant character = new Peasant(eventManager);
+		grid.PlacePlayer(character, grid.GetTile(0,0));
+		ITile TargetPosition = grid.GetTile(3,3);
+		ITile obstacle1 = grid.GetTile(2,0);
+
+		ITile obstacle3 = grid.GetTile(1,2);
+
+		Test(() => { if (character.Tile == grid.GetTile(0,0)) passedTest++; }, "start position is not right");	
 		character.MoveCharacter(TargetPosition);
 		Test(() => { if (character.Tile == TargetPosition) passedTest++; }, "final position is not right");	
 		if (passed + 2 == passedTest)
@@ -168,10 +174,13 @@ public partial class Node2d : Node2D
 	private void Test_SurroundSelfTarget()
 	{
 		int passed = passedTest;
-		Grid grid = new Grid(6, 6);
+		
 		EventManager eventManager = new EventManager();
-		Peasant character = new Peasant(eventManager, grid.TileGrid[3][3]);
-		Peasant character2 = new Peasant(eventManager, grid.TileGrid[3][2]);
+		BattleField grid = new BattleField(eventManager);
+		Peasant character = new Peasant(eventManager);
+		grid.PlacePlayer(character, grid.GetTile(3,3));
+		Peasant character2 = new Peasant(eventManager);
+		grid.PlacePlayer(character2, grid.GetTile(3,2));
 		SurroundSelfTarget surroundTargeting = new SurroundSelfTarget(character.Tile, 1);
 		SwordSpin spinSword = new SwordSpin(eventManager, surroundTargeting);
 		
@@ -186,12 +195,18 @@ public partial class Node2d : Node2D
 	private void Test_SweepFrontTarget()
 	{
 		int passed = passedTest;
-		Grid grid = new Grid(5, 5);
 		EventManager eventManager = new EventManager();
-		Peasant character = new Peasant(eventManager, grid.TileGrid[3][3]);
-		Peasant character2 = new Peasant(eventManager, grid.TileGrid[3][2]);
-		Peasant character3 = new Peasant(eventManager, grid.TileGrid[2][2]);
-		Peasant character4 = new Peasant(eventManager, grid.TileGrid[2][4]);
+		
+		BattleField grid = new BattleField(eventManager);
+		
+		Peasant character = new Peasant(eventManager);
+		grid.PlacePlayer(character, grid.GetTile(3,3));
+		Peasant character2 = new Peasant(eventManager);
+		grid.PlacePlayer(character2, grid.GetTile(3,2));
+		Peasant character3 = new Peasant(eventManager);
+		grid.PlacePlayer(character3, grid.GetTile(2,2));
+		Peasant character4 = new Peasant(eventManager);
+		grid.PlacePlayer(character4, grid.GetTile(2,4));
 		SweepFrontTarget sweepTargeting = new SweepFrontTarget (character.Tile, character2.Tile);
 		SwordSweep sweepSword = new SwordSweep(eventManager, sweepTargeting);
 		
@@ -210,7 +225,7 @@ public partial class Node2d : Node2D
 	private void Test_PoisonStatusEffect(){
 		int passed = passedTest;
 		EventManager eventManager = new EventManager();
-		Peasant character = new Peasant(eventManager, new Tile(new Point(1,1)));
+		Peasant character = new Peasant(eventManager);
 		PoisonEffect poison = new PoisonEffect(10, 2, eventManager,character);
 		
 		int oldHealth = character.Health;
@@ -229,7 +244,7 @@ public partial class Node2d : Node2D
 		private void Test_PassiveHealEffect(){
 		int passed = passedTest;
 		EventManager eventManager = new EventManager();
-		Peasant character = new Peasant(eventManager, new Tile(new Point(1,1)));
+		Peasant character = new Peasant(eventManager);
 		//Character character = new Peasant(eventManager, new Tile(new Point(1,1)));
 		PassiveHealEffect heal = new PassiveHealEffect(10, 2, eventManager,character);
 		int oldHealth = character.Health;
@@ -247,12 +262,14 @@ public partial class Node2d : Node2D
 
 	private void Test_BasicAttack()
 	{
-		Grid grid = new Grid(1, 2);
+		
 		int passed = passedTest;
 		EventManager eventManager = new EventManager();
-		Peasant character = new Peasant(eventManager, grid.TileGrid[0][0]);
-		Peasant character2 = new Peasant(eventManager, grid.TileGrid[0][1]);
-		
+		BattleField grid = new BattleField(eventManager);
+		Peasant character = new Peasant(eventManager);
+		grid.PlacePlayer(character, grid.GetTile(0,0));
+		Peasant character2 = new Peasant(eventManager);
+		grid.PlacePlayer(character2, grid.GetTile(0,1));
 		SingleTarget targetSingle = new SingleTarget(character.Tile, character2.Tile, 1);
 		SwordSlash slashSword = new SwordSlash(eventManager, targetSingle);
 		
@@ -277,85 +294,154 @@ public partial class Node2d : Node2D
 	
 	//works but the effect is not saved i think
 	private void Test_PoisonedStrike()
-{
-	int passed = passedTest;
-	Grid grid = new Grid(1, 2);
-	EventManager eventManager = new EventManager();
-	Peasant attacker = new Peasant(eventManager, grid.TileGrid[0][0]);
-	Peasant target = new Peasant(eventManager, grid.TileGrid[0][1]);
+	{
+		int passed = passedTest;
+		
+		EventManager eventManager = new EventManager();
+		BattleField grid = new BattleField(eventManager);
+		Peasant attacker = new Peasant(eventManager);
+		grid.PlacePlayer(attacker, grid.GetTile(0,0));
+		Peasant target = new Peasant(eventManager);
+		grid.PlacePlayer(target, grid.GetTile(0,1));
+		int targetInitialHealth = target.Health;
+		SingleTarget targetSingle = new SingleTarget(attacker.Tile, target.Tile, 1);
+		PoisonedStrike strike = new PoisonedStrike(eventManager, targetSingle);
+		eventManager.EmitOnActivateAbility1();
+		Test(() => {
+			if (target.Health == targetInitialHealth - strike.Damage) passedTest++;
+		}, "PoisonedStrike dealt direct damage");
+		//Test(()=>{
+			//if(target.StatusEffects.Count()== 1)passedTest++;
+			//}, "added status effect");
+		eventManager.EmitOnStartTurn();
+		Test(() => {
+			if (target.Health == targetInitialHealth - strike.Damage - strike.poisonDamage) passedTest++;
+		}, "PoisonedStrike poison tick 1");
+		eventManager.EmitOnStartTurn();
+		Test(() => {
+			if (target.Health == targetInitialHealth - strike.Damage - (strike.poisonDamage * 2)) passedTest++;
+		}, "PoisonedStrike poison tick 2");
+		eventManager.EmitOnStartTurn();
+		Test(() => {
+			if (target.Health == targetInitialHealth - strike.Damage - (strike.poisonDamage * 2)) passedTest++;
+		}, "PoisonedStrike poison expired");
 
-	int targetInitialHealth = target.Health;
-	SingleTarget targetSingle = new SingleTarget(attacker.Tile, target.Tile, 1);
-	PoisonedStrike strike = new PoisonedStrike(eventManager, targetSingle);
-	eventManager.EmitOnActivateAbility1();
-	Test(() => {
-		if (target.Health == targetInitialHealth - strike.Damage) passedTest++;
-	}, "PoisonedStrike dealt direct damage");
-	//Test(()=>{
-		//if(target.StatusEffects.Count()== 1)passedTest++;
-		//}, "added status effect");
-	eventManager.EmitOnStartTurn();
-	Test(() => {
-		if (target.Health == targetInitialHealth - strike.Damage - strike.poisonDamage) passedTest++;
-	}, "PoisonedStrike poison tick 1");
-	eventManager.EmitOnStartTurn();
-	Test(() => {
-		if (target.Health == targetInitialHealth - strike.Damage - (strike.poisonDamage * 2)) passedTest++;
-	}, "PoisonedStrike poison tick 2");
-	eventManager.EmitOnStartTurn();
-	Test(() => {
-		if (target.Health == targetInitialHealth - strike.Damage - (strike.poisonDamage * 2)) passedTest++;
-	}, "PoisonedStrike poison expired");
+		if (passed + 4 == passedTest) passedTest++;
+	}
 
-	if (passed + 4 == passedTest) passedTest++;
-}
+	private void Test_VulnerableEffect()
+	{
+		int passed = passedTest;
+		EventManager eventManager = new EventManager();
+		Peasant character = new Peasant(eventManager);
+		int baseDamage = 10;
+		float multiplier = 0.5f; //this means +60%
+		float multiplier2 = 1f; //this means +40%
+		float total = multiplier +multiplier2;
+		//total 100%
+		int duration = 2;
+		int duration2 =2;
+		int initialHealth = character.Health;
+		 //GD.Print($"Initial health {initialHealth}");
 
-private void Test_VulnerableEffect()
-{
-	int passed = passedTest;
-	EventManager eventManager = new EventManager();
-	Peasant character = new Peasant(eventManager, new Tile(new Point(1,1)));
-	int baseDamage = 10;
-	float multiplier = 1.5f;
-	int duration = 2;
-	int initialHealth = character.Health;
-	GD.Print($"Initial health {initialHealth}");
+		VulnerableEffect vulnerable = new VulnerableEffect(multiplier, duration, eventManager, character);
+		character.TakeStatusEffect(vulnerable);
+		VulnerableEffect vulnerable2 = new VulnerableEffect(multiplier2, duration2, eventManager, character);
+		character.TakeStatusEffect(vulnerable2);
+		//GD.Print($" duration:  {vulnerable.duration}");
+		//GD.Print($" duration2:  {vulnerable2.duration}");
+		Test(() => {
+			if (character.StatusEffects.Count == 2) passedTest++;
+		}, "Vulnerable applied");
 
-	Vulnerable vulnerable = new Vulnerable(multiplier, duration, eventManager, character);
-	character.TakeStatusEffect(vulnerable);
+		// Apply first hit
+		int expectedDamage1 = (int)Math.Ceiling(baseDamage * (1+total));
+		character.TakeDamage(baseDamage);
+		 //GD.Print($"Current health {character.Health}");
+		Test(() => {
+			if (character.Health == initialHealth - expectedDamage1) passedTest++;
+		}, "First damage is multiplied");
+
+		eventManager.EmitOnStartTurn(); // duration = 1
+		//GD.Print($"Turn Started");
+		//GD.Print($" duration:  {vulnerable.duration}");
+		//GD.Print($" duration2:  {vulnerable2.duration}");
+		int expectedDamage2 = (int)Math.Ceiling(baseDamage * (1+total));
+		character.TakeDamage(baseDamage);
+		//GD.Print($"Current health {character.Health}");
+		Test(() => {
+			if (character.Health == initialHealth - (expectedDamage1 + expectedDamage2)) passedTest++;
+		}, "Second damage is multiplied");
+
+		eventManager.EmitOnStartTurn(); // duration = 0, should expire
+		//GD.Print($"Turn Started");
+		//GD.Print($" duration:  {vulnerable.duration}");
+		//GD.Print($" duration2:  {vulnerable2.duration}");
+		character.TakeDamage(baseDamage);
+		//GD.Print($"Current health {character.Health}");
+		Test(() => {
+			if (character.Health == initialHealth - (expectedDamage1 + expectedDamage2 + baseDamage)) passedTest++;
+		}, "Third damage is NOT multiplied");
+		Test(() => {
+			if (!character.StatusEffects.Contains(vulnerable)) passedTest++;
+		}, "Vulnerable removed after duration");
+	}
 	
+	private void Test_BattleField(){
+		EventManager eventManager = new EventManager();
+		BattleField battleField = new BattleField(eventManager);
+		Peasant peasant = new Peasant(eventManager);
+		battleField.PlacePlayer(peasant, battleField.GetTile(1,1));
+		PlaceholderEnemy enemy= new PlaceholderEnemy(100,1);
+		battleField.PlaceEnemy(enemy, battleField.GetTile(1,2));
 
-	Test(() => {
-		if (character.StatusEffects.Count == 1) passedTest++;
-	}, "Vulnerable applied");
-
-	// Apply first hit
-	int expectedDamage1 = (int)Math.Ceiling(baseDamage * multiplier);
-	character.TakeDamage(baseDamage);
-	GD.Print($"Current health {character.Health}");
-	Test(() => {
-		if (character.Health == initialHealth - expectedDamage1) passedTest++;
-	}, "First damage is multiplied");
-
-	eventManager.EmitOnStartTurn(); // duration = 1
-	int expectedDamage2 = (int)Math.Ceiling(baseDamage * multiplier);
-	character.TakeDamage(baseDamage);
-	GD.Print($"Current health {character.Health}");
-	Test(() => {
-		if (character.Health == initialHealth - (expectedDamage1 + expectedDamage2)) passedTest++;
-	}, "Second damage is multiplied");
-
-	eventManager.EmitOnStartTurn(); // duration = 0, should expire
-	character.TakeDamage(baseDamage);
-	GD.Print($"Current health {character.Health}");
-	Test(() => {
-		if (character.Health == initialHealth - (expectedDamage1 + expectedDamage2 + baseDamage)) passedTest++;
-	}, "Third damage is NOT multiplied");
-	eventManager.EmitOnStartTurn();
-	Test(() => {
-		if (!character.StatusEffects.Contains(vulnerable)) passedTest++;
-	}, "Vulnerable removed after duration");
-
-
-}
+		battleField.SelectCharacter(peasant);
+		battleField.SelectAbility(peasant.ActiveAbilities[0]);
+		battleField.UseSelectedAbility(); // ne trqq da raboti
+		battleField.AddTargetable(enemy);
+		battleField.AddTargetable(enemy); //ne trqq da raboti
+		battleField.UseSelectedAbility();
+		//move character dali bachka
+		//i moje bi oshte edin repeat na add targetable i useSelectedAbility
+		
+	}
+	
+	private void Test_SpawnCharacter()
+	{
+		int passed = passedTest;
+		
+		EventManager eventManager = new EventManager();
+		BattleField battleField = new BattleField(eventManager);
+		GridView gridView = new GridView();
+		AddChild(gridView);
+		
+		Peasant peasant = new Peasant(eventManager);
+		ITile spawnTile = battleField.GetTile(0, 0);
+			battleField.PlacePlayer(peasant, spawnTile);
+		var peasantSprite = new Sprite2D();
+		peasantSprite.Texture = GD.Load<Texture2D>("res://Assets/Characters/Friendly/peasant.png");
+		peasantSprite.Centered = true;
+		peasantSprite.Scale = new Vector2(0.1f, 0.1f);
+		
+		peasantSprite.GlobalPosition = gridView.TileToWorld(0, 0);
+		AddChild(peasantSprite);
+		Test(() => {
+		if (peasant.Tile.Position == new Point(0, 0)) passedTest++;
+		}, "Character spawned at correct tile");
+		Test(() => {
+		if (battleField.GetTile(0, 0).CharacterOnTile == peasant) passedTest++;
+		}, "Tile references character");
+		Test(() => {
+		 if (battleField.Players.Contains(peasant)) passedTest++;
+		}, "Character added to players list");
+		//TO DO check if peasant position and world pos i the same
+		//az ne uspqh da go napraq
+		//vijte kakvo sum napravil v ITile Point i Hexagon PointDouble
+	//Test(() => {
+		//PointDouble gridPos = new PointDouble(peasant.Tile.Position.X, peasant.Tile.Position.Y);
+		//Vector2 expectedWorldPos = gridView.TileToWorld(gridPos);
+		//Vector2 actualWorldPos = peasant.Position;
+		//if (actualWorldPos == expectedWorldPos) passedTest++;
+		//}, "World position correct");
+	}
 }

@@ -16,12 +16,29 @@ namespace GameLogic{
 			AddTarget(_targeting);
 		}
 		
+		public SwordSlash(ITile position)
+		{
+			Damage = 2;
+			Target = new SingleTarget(position, 1);
+		}
+		
+		public override SingleTarget GetTargetType(){
+			return Target as SingleTarget;
+		}
+		
 		public override void Connect(EventManager eventManager){
 			eventManager.ActivateAbility1 += Use;
 		}
+		public override void Disconnect(EventManager eventManager){
+			eventManager.ActivateAbility1 -= Use;
+		}
 		public override void Use()
 		{
-			Targets[0].TargetList[0].TakeDamage(Damage);
+			if (Target.IsReady())
+			{
+				Target.TargetList[0].TakeDamage(Damage);
+			}
+			else throw new Exception("not ready");
 		}
 	}
 }

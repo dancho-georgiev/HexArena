@@ -16,12 +16,22 @@ namespace GameLogic{
 			Position = _position;
 			TargetCount = 1;
 			TargetRange = _targetRange;
+			TargetList = new List<ITargetable>();
 			if(TargetInRange(_targetable))
 			{
-				TargetList = new List<ITargetable>();
 				AddTargetable(_targetable);
 			}
 		}
+		
+		public SingleTarget(ITile _position, int _targetRange)
+		{		
+			TargetList = new List<ITargetable>();	
+			Position = _position;
+			TargetCount = 1;
+			TargetRange = _targetRange;
+		}
+		
+		public override bool IsReady(){return TargetCount == TargetList.Count;}
 		
 		public bool ValidTargetCount()
 		{
@@ -29,7 +39,7 @@ namespace GameLogic{
 		}
 		public override bool ValidTarget(ITargetable targetable)
 		{
-			return TargetInRange(targetable);
+			return TargetInRange(targetable) && !IsReady();
 		}
 		
 		public bool TargetInRange(ITargetable targetable)

@@ -6,6 +6,8 @@ namespace GameLogic{
 	
 	public abstract class AlliesOnlyTarget : Target, ITypeRestrictedTarget
 {
+		
+	
 		public bool ValidType(ITargetable ally){
 			return ally is IPlayer;
 		}
