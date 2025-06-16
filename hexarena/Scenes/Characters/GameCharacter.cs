@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Interfaces;
 using GameLogic;
 using View;
+using Utilities;
 
 
 public partial class GameCharacter : Node2D
@@ -16,7 +17,7 @@ public partial class GameCharacter : Node2D
 	public HexagonTile CurrentTile { get; set; }
 	private bool _isMoving = false;
 	private HexagonTile _targetTile;
-	private List<HexagonTile> hexPath = new List<HexagonTile>();
+	private List<HexagonTile> _hexPath = new List<HexagonTile>();
 	
 	public override void _Ready()
 	{
@@ -28,10 +29,10 @@ public partial class GameCharacter : Node2D
 		AddChild(_sprite);
 	}
 	
-	public void setCharacter(ICharacter _character, Sprite2D _sprite){ //idontgetit
-		Character = _character;
-		
-	}
+	//public void setCharacter(ICharacter _character, Sprite2D _sprite){ //idontgetit
+		//Character = _character;
+		//
+	//}
 	
 	public override void _PhysicsProcess(double delta)
 	{
@@ -42,7 +43,13 @@ public partial class GameCharacter : Node2D
 	}
 	public void MoveVisualCharacter(HexagonTile target)
 	{
+		List<ITile> pathTiles = Utility.FindShortestPath(CurrentTile.Tile, target.Tile);
+		GD.Print(pathTiles.Count);
 		
+		//foreach(ITile tile in pathTiles)
+		//{
+			//GD.Print($"{tile.Position.x},{tile.Position.y}");
+		//}
 		_targetTile = target;
 		_isMoving = true;
 		//walk animation

@@ -67,6 +67,12 @@ namespace View
 				GD.PrintErr("character is null");
 				return;
 			}
+			 if (hoveredTile == null)
+			{
+				GD.PrintErr("hoveredTile is null");
+				return;
+			}
+			
 			if(!hoveredTile.Tile.IsAvailable())
 			{
 				GD.Print("hovered tile is not available ");
