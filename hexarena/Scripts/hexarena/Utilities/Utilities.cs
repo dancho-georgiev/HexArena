@@ -51,7 +51,7 @@ namespace Utilities{
 			HexagonTile current = startTile;
 			path.Add(current);
 			while(current!=endTile){
-				current = current.Neighbours.Where(x=>!path.Contains(x))
+				current = current.Neighbours.Where(x=>!path.Contains(x) && x.Tile.IsAvailable())
 				.MinBy(x => Distance(Direction(current, x),(Direction(current,endTile))));
 				path.Add(current);
 			}
@@ -104,7 +104,7 @@ namespace Utilities{
 				}
 						foreach (ITile neighbor in current.Neighbours)
 	   					{    
-							if ( !visited.Contains(neighbor))
+							if (!visited.Contains(neighbor))
 							{
 								visited.Add(neighbor);
 								cameFrom[neighbor] = current;
