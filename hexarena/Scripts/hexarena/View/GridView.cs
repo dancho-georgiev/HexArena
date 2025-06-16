@@ -49,7 +49,7 @@ namespace View
 				Grid.Add(new List<HexagonTile>());
 				for(int j = 0; j < Length; j++){
 					Hexagon inst = Hexagon.Instantiate<Hexagon>();
-					inst.GlobalPosition = new Vector2(i * inst.Size + (j % 2 == 1 ? inst.Size/2 : 0), j * inst.Size);
+					inst.GlobalPosition = new Vector2(i * inst.Size + (j % 2 == 0 ? inst.Size/2 : 1), j * inst.Size);
 					HexagonTile hexTile = new HexagonTile(inst, battleField.GetTile(i, j));
 					hexTile.TileClicked += OnTileClicked;
 					hexTile.MouseEntered += OnTileEntered;

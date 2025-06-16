@@ -144,7 +144,7 @@ public partial class Node2d : Node2D
 			ITile obstacle1 = grid.GetTile(2,0);
 		
 			ITile obstacle3 = grid.GetTile(1,2);
-		  List<ITile> path = character.FindShortestPath(start, end);
+		  List<ITile> path = Utility.FindShortestPath(start, end);
 		Test(() => { if (path != null) passedTest++; }, "path is not null");	
 		Test(() => { if (path[0] == start) passedTest++; }, "path starts at start");
 		Test(() => { if (path[path.Count - 1] == end) passedTest++; }, "path ends at end");

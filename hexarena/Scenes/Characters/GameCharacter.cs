@@ -16,6 +16,7 @@ public partial class GameCharacter : Node2D
 	public HexagonTile CurrentTile { get; set; }
 	private bool _isMoving = false;
 	private HexagonTile _targetTile;
+	private List<HexagonTile> hexPath = new List<HexagonTile>();
 	
 	public override void _Ready()
 	{
@@ -41,10 +42,14 @@ public partial class GameCharacter : Node2D
 	}
 	public void MoveVisualCharacter(HexagonTile target)
 	{
+		
 		_targetTile = target;
 		_isMoving = true;
 		//walk animation
 	}
+	
+	
+	
 	private void HandleMovement(float delta)
 	{
 		if (_targetTile == null) return;
