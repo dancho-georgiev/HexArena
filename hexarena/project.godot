@@ -16,6 +16,11 @@ config/features=PackedStringArray("4.4", "C#", "Forward Plus")
 config/icon="res://Assets/icon.svg"
 <<<<<<<HEADrun/main_scene="res://root.tscn"
 
+[display]
+
+window/stretch/mode="viewport"
+window/stretch/aspect="expand"
+
 [dotnet]
 
 project/assembly_name="HexArena"
