@@ -83,12 +83,12 @@ namespace Utilities{
 			Queue<ITile> queue = new Queue<ITile>();
 			
 			 queue.Enqueue(startTile);
-
+			visited.Add(startTile);
 
 			while (queue.Count > 0)
 			{
 				ITile current = queue.Dequeue();
-				visited.Add(current);
+				
 				if(current == endTile)
 				{
 					List<ITile> path = new List<ITile>();
@@ -104,15 +104,15 @@ namespace Utilities{
 				}
 						foreach (ITile neighbor in current.Neighbours)
 	   					{    
-							
-							if (neighbor.IsAvailable() && !visited.Contains(neighbor))
+							if ( !visited.Contains(neighbor))
 							{
-								
+								visited.Add(neighbor);
 								cameFrom[neighbor] = current;
 								queue.Enqueue(neighbor);
 							}
 						}
 			}
+			GD.Print("FindShortestPath exited with null");
 			return null;
 		}
 	}

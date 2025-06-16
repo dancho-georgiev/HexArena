@@ -17,7 +17,11 @@ public partial class GameCharacter : Node2D
 	public HexagonTile CurrentTile { get; set; }
 	private bool _isMoving = false;
 	private HexagonTile _targetTile;
-	private Queue<HexagonTile> _hexPath = new Queue<HexagonTile>();
+//<<<<<<< HEAD
+	//private Queue<HexagonTile> _hexPath = new Queue<HexagonTile>();
+//=======
+	private List<HexagonTile> _hexPath = new List<HexagonTile>();
+	private int _currentPathIndex;
 	
 	public override void _Ready()
 	{
@@ -41,20 +45,61 @@ public partial class GameCharacter : Node2D
 			HandleMovement((float)delta);
 		}
 	}
-	public void MoveVisualCharacter(List<HexagonTile> path)
-	{
-		 _hexPath = new Queue<HexagonTile>(path);
-		
-		GD.Print(_hexPath.Count);
-		
-		nextTarget();
-		
-		//walk animation
-	}
+	//public void MoveVisualCharacter(List<HexagonTile> path)
+	//{
+//<<<<<<< HEAD
+		 //_hexPath = new Queue<HexagonTile>(path);
+		//
+		//GD.Print(_hexPath.Count);
+		//
+		//nextTarget();
+		//
+		////walk animation
+	//}
+	//
+	//private void nextTarget(){
+		//_targetTile = _hexPath.Dequeue();
+		//_isMoving = true;
+	//}
 	
-	private void nextTarget(){
-		_targetTile = _hexPath.Dequeue();
-		_isMoving = true;
+//=======
+public void MoveVisualCharacter(HexagonTile target){
+		 if (CurrentTile == null || target == null) return;
+		List<ITile> pathTiles = Utility.FindShortestPath(CurrentTile.Tile, target.Tile);
+		_hexPath = new List<HexagonTile>();
+		
+		//convert logical tiles to visual hexagonTiles
+		 foreach (ITile tile in pathTiles)
+		{
+			HexagonTile hexTile = FindHexagonTileByITile(tile);
+			if (hexTile != null)
+			{
+				_hexPath.Add(hexTile);
+			}
+		}
+		
+		if (_hexPath.Count > 0)
+			_currentPathIndex = 0; 
+			if (_currentPathIndex < _hexPath.Count)
+			{
+				_targetTile = _hexPath[_currentPathIndex];
+				_isMoving = true;
+			}
+	}
+	 private HexagonTile FindHexagonTileByITile(ITile tile)
+	{	
+		// Search through all nodes in HexTiles group- Check HexTiles
+		//I dont know if its a good practice
+		 foreach (Node node in GetTree().GetNodesInGroup("HexTiles"))
+		{
+			if (node is HexagonTile hexTile && hexTile.Tile == tile)
+			{
+				//GD.Print($"HexTile Tile {hexTile.Tile.Position.x},{hexTile.Tile.Position.y}" );	
+				return hexTile;
+			}
+		}
+		//GD.PrintErr($"FindHexagonTileByITile returns null");
+		return null;
 	}
 	
 	private void HandleMovement(float delta)
@@ -71,7 +116,21 @@ public partial class GameCharacter : Node2D
 		// Check if reached target
 		if (GlobalPosition.DistanceTo(targetPosition) < 5f)
 		{
-			FinishMovement();
+			CurrentTile = _targetTile;
+			
+			// Move to next tile in path
+			_currentPathIndex++;
+			
+			 // If more tiles remain
+			 if (_currentPathIndex < _hexPath.Count)
+			{
+				// Set next target
+				_targetTile = _hexPath[_currentPathIndex];
+			}
+			else
+			{
+				FinishMovement();
+			}
 		}
 	}
 	 private void FinishMovement()
@@ -80,7 +139,7 @@ public partial class GameCharacter : Node2D
 		GlobalPosition = GetTargetPosition(); // Snap to exact position
 		Character.Tile = _targetTile.Tile;
 		CurrentTile = _targetTile;
-		if(_hexPath.Count>0) nextTarget();
+		//if(_hexPath.Count>0) nextTarget();
 		
 		//can start an idle animiation kato imame
 	}
