@@ -39,7 +39,7 @@ namespace Utilities{
 			ITile current = startTile;
 			path.Add(current);
 			while(current!=endTile){
-				current = current.Neighbours.Where(x=>!path.Contains(x))
+				current = current.Neighbours.Where(x=>!path.Contains(x) && x.IsAvailable())
 				.MinBy(x => Distance(Direction(current, x),(Direction(current,endTile))));
 				path.Add(current);
 			}
@@ -48,6 +48,8 @@ namespace Utilities{
 		
 		public static List<HexagonTile> FindShortestPath2(HexagonTile startTile, HexagonTile endTile){
 			List<HexagonTile> path = new List<HexagonTile>();
+			if(startTile == endTile) return path;
+			List<HexagonTile> rejected = new List<HexagonTile>();
 			HexagonTile current = startTile;
 			path.Add(current);
 			while(current!=endTile){
@@ -68,21 +70,99 @@ namespace Utilities{
 							Mathf.Pow(point2.Y - point1.Y,2));
 		}
 		
+		public static float Distance(HexagonTile point1, HexagonTile point2){
+			return Mathf.Sqrt(Mathf.Pow(point2.Hexagon.GlobalPosition.X - point1.Hexagon.GlobalPosition.X,2) + 
+							Mathf.Pow(point2.Hexagon.GlobalPosition.Y - point1.Hexagon.GlobalPosition.Y,2));
+		}
+		
 		public static Vector2 Direction(HexagonTile tile1, HexagonTile tile2){
 			return (tile2.Hexagon.GlobalPosition-tile1.Hexagon.GlobalPosition).Normalized();
+		}
+		
+		public static Vector2 Direction(Vector2 tile1, Vector2 tile2){
+			return (tile2-tile1).Normalized();
 		}
 		
 		public static Vector2 Direction(ITile tile1, ITile tile2){
 			return (new Vector2(tile2.Position.x-tile1.Position.x, tile2.Position.y - tile1.Position.y)).Normalized();
 		}
 		
+		private static Vector2 AverageDirection(List<HexagonTile> path){
+			Vector2 result = new Vector2(0,0);
+			for(int i = 0; i < path.Count-1; i++){
+				result+=Direction(path[i],path[i+1]);
+			}
+			return result.Normalized();
+		}
+		
+		private static Vector2 AverageDirection(List<ITile> path){
+			Vector2 result = new Vector2(0,0);
+			for(int i = 0; i < path.Count-1; i++){
+				result+=Direction(path[i],path[i+1]);
+			}
+			return result.Normalized();
+		}
+		
+		private static float CumulativeAverageDirection(List<HexagonTile> path){
+			float result = 0;
+			for(int i = 0; i < path.Count-1; i++){
+				result += Distance(AverageDirection(path.GetRange(0,i)),AverageDirection(path));
+			}
+			return result;
+		}
+		
+		private static float CumulativeAverageDirection(List<ITile> path){
+			float result = 0;
+			for(int i = 0; i < path.Count ; i++){
+				result+=Distance(AverageDirection(path), AverageDirection(path.GetRange(0,i+1)));
+			}
+			return result;
+		}
+		
+		private static List<HexagonTile> FindShortestPath3_Helper(HexagonTile startTile, HexagonTile endTile,
+		 Dictionary<HexagonTile, int> distances, List<HexagonTile> visited, int depth, List<HexagonTile> path){
+			if(!distances.Keys.Contains(startTile))distances.Add(startTile, int.MaxValue);
+			if(distances[startTile]<depth || visited.Contains(startTile)) return null;
+			if(startTile==endTile){
+				path.Add(endTile);
+				distances[endTile] = depth;
+				return path;
+			}
+			if(!endTile.Tile.IsAvailable()) return null;
+			
+			
+			
+			path.Add(startTile);
+			visited.Add(startTile);
+			distances[startTile] = depth;
+			List<List<HexagonTile>> paths = new List<List<HexagonTile>>();
+			
+			foreach(HexagonTile neighbour in startTile.Neighbours){
+				if(neighbour.Tile.IsAvailable()){
+					List<HexagonTile> result = FindShortestPath3_Helper(neighbour, endTile, distances, new List<HexagonTile>(visited), depth+1, new List<HexagonTile>(path));
+					if(result!=null){
+						paths.Add(result);
+					}
+				}
+			}
+			return paths.MinBy(path => path.Count + CumulativeAverageDirection(path));
+		}
+		
+		public static List<HexagonTile> FindShortestPath3(HexagonTile startTile, HexagonTile endTile){
+			Dictionary<HexagonTile, int> distances = new Dictionary<HexagonTile, int>();
+			List<HexagonTile> result = FindShortestPath3_Helper(startTile, endTile, distances,new List<HexagonTile>(), 0, new List<HexagonTile>());
+			return result == null ? new List<HexagonTile>() : result;
+			
+		}
+		
+		
 		public static List<ITile> FindShortestPath(ITile startTile, ITile endTile)
 		{
 			Dictionary<ITile,ITile> cameFrom = new Dictionary<ITile,ITile>();
 			List<ITile> visited = new List<ITile>();
 			Queue<ITile> queue = new Queue<ITile>();
-			
-			 queue.Enqueue(startTile);
+			List<List<ITile>> paths = new List<List<ITile>>();
+			queue.Enqueue(startTile);
 			visited.Add(startTile);
 
 			while (queue.Count > 0)
@@ -100,7 +180,8 @@ namespace Utilities{
 						}
 						path.Add(startTile);
 						path.Reverse();
-		   				return path;
+		   				paths.Add(path);
+						visited.Remove(current);
 				}
 						foreach (ITile neighbor in current.Neighbours)
 	   					{    
@@ -113,7 +194,55 @@ namespace Utilities{
 						}
 			}
 			GD.Print("FindShortestPath exited with null");
-			return null;
+			return paths.MinBy(path=>CumulativeAverageDirection(path));
+		}
+		
+		
+		public static List<HexagonTile> FindShortestPath(HexagonTile startTile, HexagonTile endTile)
+		{
+			Dictionary<HexagonTile,HexagonTile> cameFrom = new Dictionary<HexagonTile,HexagonTile>();
+			Dictionary<HexagonTile, int> visited = new Dictionary<HexagonTile, int>();
+			Queue<HexagonTile> queue = new Queue<HexagonTile>();
+			List<List<HexagonTile>> paths = new List<List<HexagonTile>>();
+			queue.Enqueue(startTile);
+			visited.Add(startTile,0);
+
+			while (queue.Count > 0)
+			{
+				HexagonTile current = queue.Dequeue();
+				
+				if(current == endTile)
+				{
+					List<HexagonTile> path = new List<HexagonTile>();
+					HexagonTile tile = current;
+			   			while (tile != startTile)
+						{
+							path.Add(tile);
+							tile = cameFrom[tile];
+						}
+						path.Add(startTile);
+						path.Reverse();
+		   				paths.Add(path);
+				}
+						foreach (HexagonTile neighbour in current.Neighbours)
+	   					{    
+							if (!visited.Keys.Contains(neighbour))
+							{
+								visited.Add(neighbour, visited[current]+1);
+								cameFrom[neighbour] = current;
+								queue.Enqueue(neighbour);
+							}
+							else if(visited[neighbour] >= visited[current]+1){
+								queue.Enqueue(neighbour);
+								visited[neighbour] = visited[current]+1;
+								cameFrom[neighbour] = current;
+							}
+						}
+			}
+			GD.Print(paths.Count);
+			GD.Print("FindShortestPath exited with null");
+			//return paths.MinBy(path=>CumulativeAverageDirection(path).Average());
+			return paths.MaxBy(path=>path.Count);
 		}
 	}
 	

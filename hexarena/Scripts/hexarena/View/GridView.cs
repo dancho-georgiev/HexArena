@@ -105,7 +105,7 @@ namespace View
 				{
 					GD.Print("visuals entered");
 					GameCharacter visualCharacter = Characters.First(x=>x.Character==battleField.SelectedCharacter);
-					visualCharacter.MoveVisualCharacter(path.Last());
+					visualCharacter.MoveVisualCharacter(path);
 				}
 			}
 				
@@ -222,12 +222,11 @@ namespace View
 		}
 		
 		public void OnTileEntered(HexagonTile tile){
-			if(hoveredTile==tile) return; 
 			hoveredTile = tile;
 			
 			if(selectedCharacter){
 				ClearHexPath();
-				hexPath = Utility.FindShortestPath2(GetTile(battleField.SelectedCharacter.Tile), tile);
+				hexPath = Utility.FindShortestPath3(GetTile(battleField.SelectedCharacter.Tile), tile);
 				foreach(HexagonTile t in hexPath){
 						t.Hovered = true;
 				}

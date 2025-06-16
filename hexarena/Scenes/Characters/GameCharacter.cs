@@ -5,6 +5,7 @@ using Interfaces;
 using GameLogic;
 using View;
 using Utilities;
+using System.Linq;
 
 
 public partial class GameCharacter : Node2D
@@ -63,9 +64,9 @@ public partial class GameCharacter : Node2D
 	//}
 	
 //=======
-public void MoveVisualCharacter(HexagonTile target){
-		 if (CurrentTile == null || target == null) return;
-		List<ITile> pathTiles = Utility.FindShortestPath(CurrentTile.Tile, target.Tile);
+public void MoveVisualCharacter(List<HexagonTile> path){
+		 if (CurrentTile == null || path == null) return;
+		List<ITile> pathTiles = path.Select(x => x.Tile).ToList();
 		_hexPath = new List<HexagonTile>();
 		
 		//convert logical tiles to visual hexagonTiles
