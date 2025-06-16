@@ -88,25 +88,21 @@ namespace Utilities{
 		}
 		
 		private static Vector2 AverageDirection(List<HexagonTile> path){
-			Vector2 result = new Vector2(0,0);
-			for(int i = 0; i < path.Count-1; i++){
-				result+=Direction(path[i],path[i+1]);
-			}
+			if(path.Count==0) return new Vector2(0,0);
+			Vector2 result = Direction(path.First(), path.Last());
 			return result.Normalized();
 		}
 		
 		private static Vector2 AverageDirection(List<ITile> path){
-			Vector2 result = new Vector2(0,0);
-			for(int i = 0; i < path.Count-1; i++){
-				result+=Direction(path[i],path[i+1]);
-			}
+			if(path.Count==0) return new Vector2(0,0);
+			Vector2 result = Direction(path.First(), path.Last());
 			return result.Normalized();
 		}
 		
 		private static float CumulativeAverageDirection(List<HexagonTile> path){
 			float result = 0;
-			for(int i = 0; i < path.Count-1; i++){
-				result += Distance(AverageDirection(path.GetRange(0,i)),AverageDirection(path));
+			for(int i = 0; i < path.Count; i++){
+				result += Distance(AverageDirection(path.GetRange(0,i+1)),AverageDirection(path));
 			}
 			return result;
 		}
@@ -129,8 +125,6 @@ namespace Utilities{
 				return path;
 			}
 			if(!endTile.Tile.IsAvailable()) return null;
-			
-			
 			
 			path.Add(startTile);
 			visited.Add(startTile);
