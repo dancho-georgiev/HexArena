@@ -17,7 +17,7 @@ public partial class GameCharacter : Node2D
 	public HexagonTile CurrentTile { get; set; }
 	private bool _isMoving = false;
 	private HexagonTile _targetTile;
-	private List<HexagonTile> _hexPath = new List<HexagonTile>();
+	private Queue<HexagonTile> _hexPath = new Queue<HexagonTile>();
 	
 	public override void _Ready()
 	{
@@ -43,19 +43,19 @@ public partial class GameCharacter : Node2D
 	}
 	public void MoveVisualCharacter(HexagonTile target)
 	{
-		List<ITile> pathTiles = Utility.FindShortestPath(CurrentTile.Tile, target.Tile);
-		GD.Print(pathTiles.Count);
+		 _hexPath = new Queue<HexagonTile>(Utility.FindShortestPath2(CurrentTile, target));
 		
-		//foreach(ITile tile in pathTiles)
-		//{
-			//GD.Print($"{tile.Position.x},{tile.Position.y}");
-		//}
-		_targetTile = target;
-		_isMoving = true;
+		GD.Print(_hexPath.Count);
+		
+		nextTarget();
+		
 		//walk animation
 	}
 	
-	
+	private void nextTarget(){
+		_targetTile = _hexPath.Dequeue();
+		_isMoving = true;
+	}
 	
 	private void HandleMovement(float delta)
 	{
@@ -80,6 +80,8 @@ public partial class GameCharacter : Node2D
 		GlobalPosition = GetTargetPosition(); // Snap to exact position
 		Character.Tile = _targetTile.Tile;
 		CurrentTile = _targetTile;
+		if(_hexPath.Count>0) nextTarget();
+		
 		//can start an idle animiation kato imame
 	}
 	

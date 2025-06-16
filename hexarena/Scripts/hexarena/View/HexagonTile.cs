@@ -2,6 +2,8 @@ using Godot;
 using System;
 using Interfaces;
 using GameLogic;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace View
 {
@@ -9,6 +11,8 @@ namespace View
 	{
 		public ITile Tile;
 		public Hexagon Hexagon;
+		public List<HexagonTile> Neighbours;
+		
 		public Action<HexagonTile> TileClicked;
 		public Action<HexagonTile> MouseEntered;
 		public Action<HexagonTile> MouseExited;
@@ -26,7 +30,7 @@ namespace View
 		{
 			Hexagon = hexagon;
 			Tile = tile;
-			
+			Neighbours = new List<HexagonTile>();
 			AddChild(Hexagon);
 			
 			Hexagon.area2D.MouseEntered += MouseEnter;

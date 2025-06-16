@@ -58,7 +58,19 @@ namespace View
 					AddChild(hexTile);
 				}
 			}
+			SetupNeighbours();
 		} 
+		
+		private void SetupNeighbours(){
+			foreach(List<HexagonTile> list in Grid){
+				foreach(HexagonTile tile in list){
+					foreach(ITile neighbour in tile.Tile.Neighbours){
+						tile.Neighbours.Add(Grid[neighbour.Position.y][neighbour.Position.x]);
+					}
+				}
+			}
+		}
+		
 		private void MoveSelectedCharacter(HexagonTile tile)
 		{
 			
