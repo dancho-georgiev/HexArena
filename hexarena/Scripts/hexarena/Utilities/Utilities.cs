@@ -158,7 +158,7 @@ namespace Utilities{
 			Dictionary<HexagonTile, int> distances = new Dictionary<HexagonTile, int>();
 			int count = 0;
 			List<HexagonTile> result = FindShortestPath3_Helper(startTile, endTile, distances,new List<HexagonTile>(), 0, new List<HexagonTile>(),ref count);
-			GD.Print(count);
+			//GD.Print(count);
 			return result == null ? new List<HexagonTile>() : result;
 			
 		}
