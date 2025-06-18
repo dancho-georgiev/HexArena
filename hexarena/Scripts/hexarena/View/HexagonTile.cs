@@ -11,6 +11,7 @@ namespace View
 	{
 		private bool hovered;
 		private bool selected = false;
+		private bool validTarget = false;
 		public ITile Tile;
 		public Hexagon Hexagon;
 		public List<HexagonTile> Neighbours;
@@ -36,12 +37,30 @@ namespace View
 				}
 		}
 	}
+	
+	public bool ValidTarget {
+			get{ return validTarget;}
+			set{
+				validTarget = value;
+				if(validTarget){
+						Hexagon.polygon2D.Color = TargetableColor;
+						DefaultColor = TargetableColor;
+						HoverColor = TargetedColor;
+				}
+				else{
+					DefaultColor = new Color(1,1,1,1);
+					HoverColor = new Color(1, 0, 1, 1);;
+					ResetColor();} 	
+				}
+		}
 
 		[ExportGroup("Tile Colors")]
 		[Export] public Color DefaultColor { get; set; } = new Color(1,1,1,1); //ZAHSTO NE E BQLO AAAAAAAAAA
 		[Export] public Color SelectedColor { get; set; } = Colors.Blue;
 		[Export] public Color MovableColor { get; set; } = Colors.Green;
 		[Export] public Color HoverColor { get; set; } = new Color(1, 0, 1, 1); // Purple
+		[Export] public Color TargetableColor { get; set; } = new Color(1, 0.5f, 0.5f, 1); // light Red
+		[Export] public Color TargetedColor { get; set; } = new Color(1, 0f, 0f, 1); // Red
 		
 		
 
@@ -85,15 +104,15 @@ namespace View
 		
 		private void HandleInput(Node viewport, InputEvent @event, long shapeIdx)
 		{
-			if (@event is InputEventMouseButton mouseEvent && mouseEvent.Pressed
-				 && mouseEvent.ButtonIndex == MouseButton.Left)
+			if (@event is InputEventMouseButton mouseEvent)
 			{
-				OnTileClicked();
-			}
-			if (@event is InputEventKey eventKey && eventKey.Pressed && eventKey.Keycode == Key.Q)
-			{
-				GD.Print("Q");
-				OnTileClicked();
+				if(mouseEvent.Pressed && mouseEvent.ButtonIndex == MouseButton.Left){
+					OnTileClicked();
+				}
+				else if(!mouseEvent.Pressed){
+					selected = false;
+					MouseEnter();
+				}		
 			}
 		}
 		

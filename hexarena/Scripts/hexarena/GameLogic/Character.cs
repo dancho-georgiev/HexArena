@@ -3,18 +3,34 @@ using System;
 using Interfaces;
 using System.Collections.Generic;
 using Utilities;
+using System.Linq;
 
 namespace GameLogic
 {
 	
 	public abstract class Character : Targetable, ICharacter
 	{
+		private ITile tile;
 		public int Health { get;  set; }
 		public double StepEnergyCost { get;  set; }
 		public List<IStatusEffect> StatusEffects {get; set;}
 		public List<IActive> ActiveAbilities { get; set; }
 		public List<IPassive> PassiveAbilities { get; set; }
-		public ITile Tile { get; set; }
+		public ITile Tile { get{return tile;} 
+		set{
+				tile = value;
+				tile.CharacterOnTile = this;
+				if(ActiveAbilities == null || PassiveAbilities==null) return;
+				foreach(IRangeRestrictedTarget globalTarget in
+				 this.ActiveAbilities.Where(x=> x.Target is IRangeRestrictedTarget).Select(x=>x.Target)){
+					globalTarget.Position = tile;
+				}
+				foreach(IRangeRestrictedTarget globalTarget in
+				 this.PassiveAbilities.Where(x=> x.Target is IRangeRestrictedTarget).Select(x=>x.Target)){
+					globalTarget.Position = tile;
+				}
+			}
+		 }
 		
 		public Character(int health,double stepEnergyCost)
 		{

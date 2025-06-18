@@ -137,7 +137,10 @@ namespace View
 					{
 						battleField.SelectAbility(battleField.SelectedCharacter.ActiveAbilities[0]);
 						selectingTarget = true;
+						HighlightTargetableTiles();
 						GD.Print($"using ability");
+						
+						
 					}
 				}
 
@@ -170,31 +173,70 @@ namespace View
 			}
 		}
 		
+		private void HighlightTargetableTiles(){
+			if(battleField.SelectedAbility.Target is IRangeRestrictedTarget rangedAbility){
+				foreach(List<HexagonTile> list in Grid){
+					foreach(HexagonTile tile in list){
+						if(rangedAbility.TargetInRange(tile.Tile))tile.ValidTarget = true; 
+					}
+				}
+			}
+			else{
+				foreach(List<HexagonTile> list in Grid){
+					foreach(HexagonTile tile in list){
+						tile.ValidTarget = true; 
+					}
+				}
+			}
+		}
+		
+		private void RemoveTargetableTileHighlight(){
+			foreach(List<HexagonTile> list in Grid){
+					foreach(HexagonTile tile in list){
+						tile.ValidTarget = false; 
+					}
+				}
+		}
+		
 		public HexagonTile GetTile(ITile tile){
 			return Grid[tile.Position.y][tile.Position.x];
 		}
 		
-		
-		public void OnTileClicked(HexagonTile tile){
-			GD.Print($"Clicked tile at {tile.Tile.Position.x}, {tile.Tile.Position.y }");
-			if(!selectedCharacter){
-				if(tile.Tile.CharacterOnTile!=null && tile.Tile.CharacterOnTile is IPlayer){
+		private void SelectCharacterOnTile(HexagonTile tile){
+			if(tile.Tile.CharacterOnTile!=null && tile.Tile.CharacterOnTile is IPlayer){
 					battleField.SelectCharacter(tile.Tile.CharacterOnTile as IPlayer);
 					GD.Print($"selected character");
 					selectedCharacter = true;
 				}
+		}
+		
+		private void UseAbilityIfReady(HexagonTile tile){
+			if(battleField.SelectedAbilityTarget.IsReady()){
+				battleField.UseSelectedAbility();
+				if(tile.Tile.CharacterOnTile!=null){
+					GD.Print($"{tile.Tile.CharacterOnTile.Health}");
+				}
+				
+				selectingTarget = false;
+				selectedCharacter = false;
+				RemoveTargetableTileHighlight();
+			}
+		}
+		
+		public void OnTileClicked(HexagonTile tile){
+			GD.Print($"Clicked tile at {tile.Tile.Position.x}, {tile.Tile.Position.y }");
+			if(!selectedCharacter && !selectingTarget){
+				SelectCharacterOnTile(tile);
 			}
 			else if(selectingTarget){
-				if(tile.Tile.CharacterOnTile!=null){
-					battleField.AddTargetable(tile.Tile.CharacterOnTile);
+				if(battleField.SelectedAbility.Target.ValidTarget(tile.Tile)){
+					battleField.AddTargetable(tile.Tile);
 					if(battleField.SelectedAbilityTarget.TargetList.Count>0)GD.Print($"added target");
-					if(battleField.SelectedAbilityTarget.IsReady()){
-						battleField.UseSelectedAbility();
-						GD.Print($"{tile.Tile.CharacterOnTile.Health}");
-						selectingTarget = false;
-						selectedCharacter = false;
-					}
-					
+					UseAbilityIfReady(tile);
+				}
+				else{
+					selectingTarget = false;
+					RemoveTargetableTileHighlight();
 				}
 				
 			}
@@ -204,9 +246,6 @@ namespace View
 					ClearHexPath();
 					//PrintTilesWithCharacters();
 				}
-
-				
-			
 		}
 		
 		private void ClearHexPath(){
@@ -220,8 +259,10 @@ namespace View
 		
 		public void OnTileEntered(HexagonTile tile){
 			hoveredTile = tile;
-			
-			if(selectedCharacter){
+			if(selectingTarget){
+				
+			}
+			else if(selectedCharacter){
 				ClearHexPath();
 				hexPath = Utility.FindShortestPath3(GetTile(battleField.SelectedCharacter.Tile), tile);
 				foreach(HexagonTile t in hexPath){
