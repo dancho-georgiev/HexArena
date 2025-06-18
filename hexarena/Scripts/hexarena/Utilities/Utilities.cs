@@ -88,25 +88,21 @@ namespace Utilities{
 		}
 		
 		private static Vector2 AverageDirection(List<HexagonTile> path){
-			Vector2 result = new Vector2(0,0);
-			for(int i = 0; i < path.Count-1; i++){
-				result+=Direction(path[i],path[i+1]);
-			}
+			if(path.Count==0) return new Vector2(0,0);
+			Vector2 result = Direction(path.First(), path.Last());
 			return result.Normalized();
 		}
 		
 		private static Vector2 AverageDirection(List<ITile> path){
-			Vector2 result = new Vector2(0,0);
-			for(int i = 0; i < path.Count-1; i++){
-				result+=Direction(path[i],path[i+1]);
-			}
+			if(path.Count==0) return new Vector2(0,0);
+			Vector2 result = Direction(path.First(), path.Last());
 			return result.Normalized();
 		}
 		
 		private static float CumulativeAverageDirection(List<HexagonTile> path){
 			float result = 0;
-			for(int i = 0; i < path.Count-1; i++){
-				result += Distance(AverageDirection(path.GetRange(0,i)),AverageDirection(path));
+			for(int i = 0; i < path.Count; i++){
+				result += Distance(AverageDirection(path.GetRange(0,i+1)),AverageDirection(path));
 			}
 			return result;
 		}
@@ -120,17 +116,17 @@ namespace Utilities{
 		}
 		
 		private static List<HexagonTile> FindShortestPath3_Helper(HexagonTile startTile, HexagonTile endTile,
-		 Dictionary<HexagonTile, int> distances, List<HexagonTile> visited, int depth, List<HexagonTile> path){
+		 Dictionary<HexagonTile, int> distances, List<HexagonTile> visited, int depth, List<HexagonTile> path,
+		 ref int count){
 			if(!distances.Keys.Contains(startTile))distances.Add(startTile, int.MaxValue);
 			if(distances[startTile]<depth || visited.Contains(startTile)) return null;
 			if(startTile==endTile){
 				path.Add(endTile);
 				distances[endTile] = depth;
+				++count;
 				return path;
 			}
 			if(!endTile.Tile.IsAvailable()) return null;
-			
-			
 			
 			path.Add(startTile);
 			visited.Add(startTile);
@@ -138,8 +134,18 @@ namespace Utilities{
 			List<List<HexagonTile>> paths = new List<List<HexagonTile>>();
 			
 			foreach(HexagonTile neighbour in startTile.Neighbours){
+				if(!distances.Keys.Contains(neighbour)){
+					distances[neighbour] = depth + 1;
+				}
+				else if(distances[neighbour] > depth +1){
+					distances[neighbour] = depth+1;
+				}
+			}
+			
+			foreach(HexagonTile neighbour in startTile.Neighbours){
 				if(neighbour.Tile.IsAvailable()){
-					List<HexagonTile> result = FindShortestPath3_Helper(neighbour, endTile, distances, new List<HexagonTile>(visited), depth+1, new List<HexagonTile>(path));
+					List<HexagonTile> result = FindShortestPath3_Helper(neighbour, endTile,
+					 distances, new List<HexagonTile>(visited), depth+1, new List<HexagonTile>(path), ref count);
 					if(result!=null){
 						paths.Add(result);
 					}
@@ -150,7 +156,9 @@ namespace Utilities{
 		
 		public static List<HexagonTile> FindShortestPath3(HexagonTile startTile, HexagonTile endTile){
 			Dictionary<HexagonTile, int> distances = new Dictionary<HexagonTile, int>();
-			List<HexagonTile> result = FindShortestPath3_Helper(startTile, endTile, distances,new List<HexagonTile>(), 0, new List<HexagonTile>());
+			int count = 0;
+			List<HexagonTile> result = FindShortestPath3_Helper(startTile, endTile, distances,new List<HexagonTile>(), 0, new List<HexagonTile>(),ref count);
+			//GD.Print(count);
 			return result == null ? new List<HexagonTile>() : result;
 			
 		}
