@@ -11,6 +11,7 @@ namespace View
 	
 	public partial class GridView : Node
 	{
+		private CharacterFactory characterFactory;
 		public BattleField battleField;
 		[Export]
 		public int Width {get; set;}
@@ -40,7 +41,9 @@ namespace View
 			Grid = new List<List<HexagonTile>>();
 			Characters = new List<GameCharacter>();
 			eventManager = new EventManager();
+			
 			battleField = new BattleField(eventManager, Width, Length);
+			characterFactory = new CharacterFactory(eventManager, battleField);
 			hexPath = new List<HexagonTile>();
 			Hexagon = GD.Load<PackedScene>("res://Scenes/Hexagon.tscn");
 			
@@ -105,7 +108,7 @@ namespace View
 				{
 					GD.Print("visuals entered");
 					GameCharacter visualCharacter = Characters.First(x=>x.Character==battleField.SelectedCharacter);
-					visualCharacter.MoveVisualCharacter(path.Last());
+					visualCharacter.MoveVisualCharacter(path);
 				}
 			}
 				
@@ -121,15 +124,9 @@ namespace View
 					if(hoveredTile != null)
 					{
 						if(hoveredTile.Tile.CharacterOnTile == null){ // mnogo losho napraveno ne trqq da e taka
-							IPlayer peasant = new Peasant(eventManager); 
-							battleField.PlacePlayer(peasant, hoveredTile.Tile);
-							GameCharacter player = PlayerSprite.Instantiate<GameCharacter>();
-							player.GlobalPosition = hoveredTile.Hexagon.GlobalPosition;
-							player.ZIndex = 2;
-							player.Character = peasant;
-							player.CurrentTile = hoveredTile;
+							GameCharacter player =
+							characterFactory.SpawnCharacter(CharacterType.Peasant, hoveredTile);
 							Characters.Add(player);
-							hoveredTile.Hexagon.AddChild(player);
 						}
 					}
 				}
@@ -222,12 +219,11 @@ namespace View
 		}
 		
 		public void OnTileEntered(HexagonTile tile){
-			if(hoveredTile==tile) return; 
 			hoveredTile = tile;
 			
 			if(selectedCharacter){
 				ClearHexPath();
-				hexPath = Utility.FindShortestPath2(GetTile(battleField.SelectedCharacter.Tile), tile);
+				hexPath = Utility.FindShortestPath3(GetTile(battleField.SelectedCharacter.Tile), tile);
 				foreach(HexagonTile t in hexPath){
 						t.Hovered = true;
 				}

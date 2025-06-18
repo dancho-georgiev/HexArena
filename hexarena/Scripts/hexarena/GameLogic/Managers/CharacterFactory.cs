@@ -6,18 +6,37 @@ using View;
 
 namespace GameLogic
 {
-	public static class CharacterFactory
+	
+		public enum CharacterType 
+		{
+			Peasant,
+			PlaceholderEnemy,
+			NPC
+		}
+	
+	public class CharacterFactory
 	{
-		public static GameCharacter CreateCharacter(CharacterType type, HexagonTile spawnTile)
+		private EventManager eventManager;
+		private BattleField battleField;
+		
+		public CharacterFactory(EventManager eventManager, BattleField battleField){
+			this.eventManager = eventManager;
+			this.battleField = battleField;
+		}
+		
+		public GameCharacter SpawnCharacter(CharacterType type, HexagonTile spawnTile)
 		{
 			string scenePath;
+			GameCharacter character = new GameCharacter();
 			switch(type)
 			{
-				
-			 case CharacterType.Player:
-					scenePath = "res://Characters/Friendly/Warrior.tscn";
+			 	case CharacterType.Peasant:
+					PackedScene scene = GD.Load<PackedScene>("res://Scenes/Characters/Friendly/Peasant.tscn");
+				 	character = scene.Instantiate<PeasantView>();
+					character.Character = new Peasant(eventManager);
+					battleField.PlacePlayer(character.Character as IPlayer, spawnTile.Tile);
 					break;
-				 case CharacterType.Enemy:
+				 case CharacterType.PlaceholderEnemy:
 					scenePath = "res://Characters/Enemies/Goblin.tscn";
 					 break;
 				case CharacterType.NPC:
@@ -27,9 +46,10 @@ namespace GameLogic
 					throw new ArgumentOutOfRangeException();
 			}
 
-			var scene = GD.Load<PackedScene>($"res://Characters/{type}Character.tscn");
-			var character = scene.Instantiate<GameCharacter>();
+			character.ZIndex = 2;
 			character.CurrentTile = spawnTile;
+			character.GlobalPosition = spawnTile.Hexagon.GlobalPosition;
+			spawnTile.Hexagon.AddChild(character);
 			return character;
 		}
 	}
