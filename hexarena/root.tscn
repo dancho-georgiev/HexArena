@@ -9,6 +9,7 @@
 
 [node name="Camera2D" type="Camera2D" parent="."]
 offset = Vector2(250, 200)
+limit_left = -10500000
 
 [node name="BattleField" type="Node2D" parent="."]
 script = ExtResource("1_pyidc")

@@ -67,6 +67,7 @@ namespace View
 				}
 			}
 			SetupNeighbours();
+			//Utility.ThreeDfy(Grid);
 		} 
 		
 		private void SetupNeighbours(){
