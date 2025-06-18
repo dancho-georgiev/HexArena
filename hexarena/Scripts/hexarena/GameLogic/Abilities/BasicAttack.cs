@@ -15,9 +15,15 @@ namespace GameLogic{
 			Connect(_eventManager);
 			AddTarget(_targeting);
 		}
+		public override GetTargetType(SingleTarget _targeting){
+			AddTarget(_targeting);
+		}
 		
 		public override void Connect(EventManager eventManager){
 			eventManager.ActivateAbility1 += Use;
+		}
+		public override void Disconnect(EventManager eventManager){
+			eventManager.ActivateAbility1 -= Use;
 		}
 		public override void Use()
 		{
