@@ -81,7 +81,8 @@ namespace View
 		public void HighlightAsMovable() => Hexagon.polygon2D.Color = MovableColor;
 		public void ResetColor() => Hexagon.polygon2D.Color = DefaultColor;
 		
-
+		public override void _Process(double delta){
+		}
 		
 		public void MouseEnter()
 		{
