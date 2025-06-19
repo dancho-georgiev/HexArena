@@ -13,6 +13,7 @@ namespace Interfaces
 		public List<IStatusEffect> StatusEffects {get;  set;}
 		public ITile Tile { get; set; }
 		public void MoveCharacter(ITile target);
+		public void MoveCharacter(List<ITile> path);
 		
 		public List<IActive> ActiveAbilities { get; set; }
 		public List<IPassive> PassiveAbilities { get; set; }

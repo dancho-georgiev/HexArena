@@ -73,6 +73,11 @@ namespace GameLogic{
 			return position;
 		}
 		
+		public ITile MoveSelectedCharacter(List<ITile> path){
+			SelectedCharacter.MoveCharacter(path);
+			return SelectedCharacter.Tile;
+		}
+		
 		public void SelectCharacter(IPlayer selected){
 			if(Players.Contains(selected)){
 				SelectedCharacter = selected;
