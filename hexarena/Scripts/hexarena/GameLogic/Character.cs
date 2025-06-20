@@ -21,13 +21,13 @@ namespace GameLogic
 				tile = value;
 				tile.CharacterOnTile = this;
 				if(ActiveAbilities == null || PassiveAbilities==null) return;
-				foreach(IRangeRestrictedTarget globalTarget in
+				foreach(IRangeRestrictedTarget target in
 				 this.ActiveAbilities.Where(x=> x.Target is IRangeRestrictedTarget).Select(x=>x.Target)){
-					globalTarget.Position = tile;
+					target.Position = tile;
 				}
-				foreach(IRangeRestrictedTarget globalTarget in
+				foreach(IRangeRestrictedTarget target in
 				 this.PassiveAbilities.Where(x=> x.Target is IRangeRestrictedTarget).Select(x=>x.Target)){
-					globalTarget.Position = tile;
+					target.Position = tile;
 				}
 			}
 		 }
@@ -40,7 +40,7 @@ namespace GameLogic
 			Tile = new Tile(new Point(0,0), this);
 		}
 		
-		protected abstract void InitializeActives();
+		protected abstract void InitializeActives(EventManager _eventManager);
 		protected abstract void InitializePassives();
 		
 		//curently used for vulnerable

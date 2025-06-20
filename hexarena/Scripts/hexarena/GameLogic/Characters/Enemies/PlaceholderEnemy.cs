@@ -9,7 +9,7 @@ namespace GameLogic{
 		public PlaceholderEnemy(int health, int stepCost) : base(health, stepCost){
 			
 		}
-		protected override void InitializeActives()
+		protected override void InitializeActives(EventManager _eventManager)
 		{
 			
 		}

@@ -2,21 +2,24 @@ using Godot;
 using System;
 using Interfaces;
 
-//DOES WORk
 namespace GameLogic{
 	
-	//BasicAttack
-	public partial class BasicAttack : Active
+	//BasicAttack | should make it abstact later
+	public class BasicAttack : Active
 	{
 		public int Damage {get; protected set;}
 		
-		public BasicAttack(EventManager _eventManager, SingleTarget _targeting){ 
+		//public BasicAttack(EventManager _eventManager, SingleTarget _targeting){ 
+			//Damage = 2;
+			//Connect(_eventManager);
+			//AddTarget(_targeting);
+		//}
+		public BasicAttack(ITile position){
 			Damage = 2;
-			Connect(_eventManager);
-			AddTarget(_targeting);
+			Target = new SingleTarget(position, 1);
 		}
-		public override GetTargetType(SingleTarget _targeting){
-			AddTarget(_targeting);
+		public override SingleTarget GetTargetType(){
+			return Target as SingleTarget;
 		}
 		
 		public override void Connect(EventManager eventManager){
@@ -27,7 +30,11 @@ namespace GameLogic{
 		}
 		public override void Use()
 		{
-			Targets[0].TargetList[0].TakeDamage(Damage);
+			if(Target.IsReady()){
+			Target.TargetList[0].TakeDamage(Damage);
+			Target.Reset();
+			}
+			else throw new Exception("not ready");
 		}
 	}
 }

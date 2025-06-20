@@ -8,7 +8,8 @@ namespace GameLogic{
 	public abstract class Ability : IAbility
 	{
 		public string Name {get; set;} = "Unnamed Ability";
-		public string Description {get; set;} = "Description";
+		public string EffectDescription = "Does nothing";
+		public string FlavorDescription {get; set;} = "Feels nothing";
 		public ITarget Target { get; set; }
 		
 		public Ability()

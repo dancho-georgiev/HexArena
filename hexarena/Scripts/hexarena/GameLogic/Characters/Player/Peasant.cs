@@ -8,12 +8,14 @@ namespace GameLogic{
 	{	
 		public Peasant(EventManager _eventManager) : base (100, 1)
 		{
-			InitializePassives();
+			InitializePassives(_eventManager);
 			InitializeActives();
 		}
-		protected override void InitializePassives()
+		protected override void InitializePassives(EventManager _eventManager)
 		{
+			SelfTarget self = new SelfTarget(this);
 			PassiveAbilities = new List<IPassive>();
+			PassiveAbilities.Add(new HealthyLifestyle(_eventManager, self));
 		}
 		protected override void InitializeActives()
 		{

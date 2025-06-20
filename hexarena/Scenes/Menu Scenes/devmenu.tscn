@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://f73gtrvsafnc"]
+[gd_scene load_steps=3 format=3 uid="uid://f73gtrvsafnc"]
 
 [ext_resource type="Texture2D" uid="uid://haiorqccdq7k" path="res://Assets/Characters/Friendly/peasant.png" id="1_37h1o"]
+[ext_resource type="Texture2D" uid="uid://b3cf5nx37jq81" path="res://Assets/Characters/Enemy/badguy1.png" id="2_vjfs8"]
 
 [node name="DevUI" type="Control"]
 layout_mode = 3
@@ -30,7 +31,11 @@ alignment = 1
 icon_alignment = 2
 expand_icon = true
 selected = 0
-item_count = 1
+fit_to_longest_item = false
+item_count = 2
 popup/item_0/text = "Peasant"
 popup/item_0/icon = ExtResource("1_37h1o")
 popup/item_0/id = 0
+popup/item_1/text = "Enemy"
+popup/item_1/icon = ExtResource("2_vjfs8")
+popup/item_1/id = 1
