@@ -1,0 +1,3 @@
+[gd_scene format=3 uid="uid://bs43sehdic7x2"]
+
+[node name="AbilityBar" type="Node2D"]

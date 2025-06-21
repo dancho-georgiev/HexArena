@@ -8,7 +8,7 @@ namespace GameLogic{
 public class PitchforkPoke : Active
 {
 	public int Damage {get; protected set;}
-	
+	[Export] public Texture2D Icon { get; set; }
 	public PitchforkPoke(ITile position){ 
 		Damage = 1;
 		Target = new SingleTarget(position, 2);

@@ -6,6 +6,8 @@ namespace GameLogic{
 	public class SwordSweep : Active
 	{
 		public int Damage {get; protected set;}
+		[Export] public Texture2D Icon { get; set; }
+		
 		public SwordSweep(EventManager _eventManager, SweepFrontTarget _targeting) //Could be made to work with other forms of sweeping targeting
 		{
 			Damage = 2;

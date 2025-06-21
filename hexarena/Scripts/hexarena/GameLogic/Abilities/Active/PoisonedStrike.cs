@@ -10,7 +10,7 @@ namespace GameLogic
 		public int Damage {get; set;}
 		public int poisonDamage {get; set;}
 		public int poisonDuration {get; set;}
-		
+		[Export] public Texture2D Icon { get; set; }
 		// this currently works but it takes itargetable and aplies the
 		// poison effect to the itargetable but it is not saved because the itargetable
 		//doesnt have place to save status effects
