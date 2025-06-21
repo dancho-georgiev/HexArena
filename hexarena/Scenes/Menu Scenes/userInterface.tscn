@@ -23,3 +23,6 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
 script = ExtResource("1_0i48u")
+
+[node name="Button" type="Button" parent="MarginContainer/AbilitiesDisplay"]
+layout_mode = 2

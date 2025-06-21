@@ -20,7 +20,6 @@ namespace View{
 		// and only show it when needed. (Also create one for every possible summon). (pro)
 		
 		public EventManager eventManager;
-		private List<Button> abilityButtons;
 		public override void _Ready(){
 			
 		}
@@ -33,8 +32,10 @@ namespace View{
 		private void onCharacterSelect(IPlayer character){
 			foreach(IActive activeAbility in character.ActiveAbilities){
 				Button abilityButton = new AbilityButton(activeAbility);
-				abilityButton.custom_minimum_size = Vector2(20, 20);
-				abilityButton.Pressed += AbilityClicked();
+				abilityButton.CustomMinimumSize = new Vector2(20, 20);
+				abilityButton.ExpandIcon = true;
+				abilityButton.Icon = GD.Load<Texture2D>("res://Assets/AbilityIcons/PitchforkPoke.png");
+				abilityButton.Pressed += AbilityClicked;
 				
 				//In the future, also display the Name, EffectDescription and FlavorDescription of the Ability.
 				//Variant 1 add an on-hover event. The event should display a floating textbox with the description
