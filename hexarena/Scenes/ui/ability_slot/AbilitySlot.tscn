@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://qfsv0picr6bj"]
+
+[ext_resource type="Script" uid="uid://pwl07okdpdro" path="res://Scenes/ui/ability_slot/AbilitySlot.cs" id="1_nsnx0"]
+
+[node name="AbilitySlot" type="Node2D"]
+script = ExtResource("1_nsnx0")

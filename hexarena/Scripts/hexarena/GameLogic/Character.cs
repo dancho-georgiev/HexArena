@@ -106,5 +106,26 @@ namespace GameLogic
 
 			}
 		}
+		
+		public virtual void MoveCharacter(List<ITile> path)
+		{
+			if(path.Last().IsAvailable())
+			{
+				List<ITile> pathTiles = path;
+				ITile lastTile = pathTiles[0]; // this helps clearing the characters which we create* along the path
+				foreach(ITile i in pathTiles)
+				{
+					lastTile.CharacterOnTile = null;
+					//lastTile.IsAvailable = true;
+					this.Tile = i;
+					i.CharacterOnTile = this;
+					//i.IsAvailable = false;
+					lastTile = i;
+					GD.Print($"{this.Tile.Position.x}, {this.Tile.Position.y}");
+				}
+				GD.Print($"curent pos {this.Tile.Position.x}, {this.Tile.Position.y}");
+
+			}
+		}
 	}
 }

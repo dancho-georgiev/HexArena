@@ -6,6 +6,7 @@ namespace GameLogic{
 	public class SwordSpin : Active
 	{
 		public int Damage {get; protected set;}
+		
 		public SwordSpin(EventManager eventManager, SurroundSelfTarget targeting)
 		{
 			Damage = 2;

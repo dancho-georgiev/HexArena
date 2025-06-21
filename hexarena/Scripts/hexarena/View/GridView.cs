@@ -67,6 +67,7 @@ namespace View
 				}
 			}
 			SetupNeighbours();
+			//Utility.ThreeDfy(Grid);
 		} 
 		
 		private void SetupNeighbours(){
@@ -99,7 +100,7 @@ namespace View
 				return;
 			}
 			
-			battleField.MoveSelectedCharacter(path.Last().Tile);
+			battleField.MoveSelectedCharacter(path.Select(x=>x.Tile).ToList());
 			
 			if(battleField.SelectedCharacter.Tile == path.Last().Tile)
 			{
