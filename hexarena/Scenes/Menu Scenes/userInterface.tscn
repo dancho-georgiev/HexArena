@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://baafolgd00hbw"]
+[gd_scene load_steps=3 format=3 uid="uid://baafolgd00hbw"]
 
 [ext_resource type="Script" uid="uid://c0p0t5j6vkjwu" path="res://AbilitiesDisplay.cs" id="1_0i48u"]
+[ext_resource type="Texture2D" uid="uid://cn772w18dt2lh" path="res://Assets/AbilityIcons/PitchforkPoke.png" id="2_3oydw"]
 
 [node name="UserInterface" type="Control"]
 layout_mode = 3
@@ -25,4 +26,7 @@ size_flags_vertical = 8
 script = ExtResource("1_0i48u")
 
 [node name="Button" type="Button" parent="MarginContainer/AbilitiesDisplay"]
+custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
+icon = ExtResource("2_3oydw")
+expand_icon = true
