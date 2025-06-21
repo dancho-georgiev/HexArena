@@ -9,7 +9,7 @@ namespace Interfaces
 {
 	public struct Point
 		{
-			 public int x; public int y;
+			public int x; public int y;
 			public int X;  //vektorite iskat glavni bukvi womp womp
 			public int Y; 
 			public Point(int x, int y)

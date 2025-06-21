@@ -206,6 +206,7 @@ namespace View
 			if(tile.Tile.CharacterOnTile!=null && tile.Tile.CharacterOnTile is IPlayer){
 					battleField.SelectCharacter(tile.Tile.CharacterOnTile as IPlayer);
 					GD.Print($"selected character");
+					eventManager.EmitOnCharacterSelected(tile.Tile.CharacterOnTile as IPlayer);
 					selectedCharacter = true;
 				}
 		}

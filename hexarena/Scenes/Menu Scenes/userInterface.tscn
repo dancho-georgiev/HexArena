@@ -1,0 +1,25 @@
+[gd_scene load_steps=2 format=3 uid="uid://baafolgd00hbw"]
+
+[ext_resource type="Script" uid="uid://c0p0t5j6vkjwu" path="res://AbilitiesDisplay.cs" id="1_0i48u"]
+
+[node name="UserInterface" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="AbilitiesDisplay" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+script = ExtResource("1_0i48u")

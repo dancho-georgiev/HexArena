@@ -72,7 +72,7 @@ public partial class Node2d : Node2D
 	private void Test_EnemyConstructorTile(){
 		EventManager eventManager = new EventManager();
 		BattleField grid = new BattleField(eventManager);
-		PlaceholderEnemy enemy = new PlaceholderEnemy(100, 1);
+		PlaceholderEnemy enemy = new PlaceholderEnemy(100, 1, eventManager);
 		grid.PlaceEnemy(enemy, grid.GetTile(2,1));
 		int passed = passedTest;
 		Test(()=>{if(enemy.Health==100)passedTest++;}, "enemy.Health==100");
@@ -85,7 +85,7 @@ public partial class Node2d : Node2D
 		EventManager ev = new EventManager();
 		BattleField grid = new BattleField(ev);
 		int passed = passedTest;
-		PlaceholderEnemy enemy = new PlaceholderEnemy(100, 1);
+		PlaceholderEnemy enemy = new PlaceholderEnemy(100, 1, eventManager);
 		grid.PlaceEnemy(enemy, grid.GetTile(1,2));
 		Test(()=>{if(grid.Enemies.Count==1)passedTest++;}, "added enemy");
 		if(passed + 1 == passedTest) passedTest++;
@@ -94,8 +94,8 @@ public partial class Node2d : Node2D
 		int passed = passedTest;
 		EventManager eventManager = new EventManager();
 		BattleField grid = new BattleField(eventManager);
-		PlaceholderEnemy enemy1 = new PlaceholderEnemy(100, 1);
-		PlaceholderEnemy enemy2 = new PlaceholderEnemy(100, 1);
+		PlaceholderEnemy enemy1 = new PlaceholderEnemy(100, 1, eventManager);
+		PlaceholderEnemy enemy2 = new PlaceholderEnemy(100, 1, eventManager);
 		grid.PlaceEnemy(enemy1, grid.GetTile(1,2));
 		grid.PlaceEnemy(enemy2, grid.GetTile(2,1));
 		
@@ -328,6 +328,18 @@ public partial class Node2d : Node2D
 
 		if (passed + 4 == passedTest) passedTest++;
 	}
+	
+	private void Test_CharacterPassiveHealing()
+	{
+		EventManager eventManager = new EventManager();
+		Peasant character = new Peasant(eventManager);
+		character.Health -= 10;
+		int prevhp = character.Health;
+		eventManager.EmitOnEndTurn();
+		Test(() => { if(character.Health == prevhp+1 ) passedTest++;},"HealthyLifestyle character passive healing isnt healing (or value changed).");
+		eventManager.EmitOnEndTurn();
+		Test(() => { if(character.Health == prevhp+2 ) passedTest++;},"HealthyLifestyle character passive healing isnt healing (or value changed).");
+	}
 
 	private void Test_VulnerableEffect()
 	{
@@ -392,7 +404,7 @@ public partial class Node2d : Node2D
 		BattleField battleField = new BattleField(eventManager);
 		Peasant peasant = new Peasant(eventManager);
 		battleField.PlacePlayer(peasant, battleField.GetTile(1,1));
-		PlaceholderEnemy enemy= new PlaceholderEnemy(100,1);
+		PlaceholderEnemy enemy= new PlaceholderEnemy(100, 1, eventManager);
 		battleField.PlaceEnemy(enemy, battleField.GetTile(1,2));
 
 		battleField.SelectCharacter(peasant);

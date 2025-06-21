@@ -9,20 +9,19 @@ namespace GameLogic{
 		
 		public int Healing{get; protected set;}
 	
-		public HealthyLifestyle(EventManager eventManager, SelfTarget _target)
+		public HealthyLifestyle(SelfTarget _target)
 		{
 			Healing = 1;
 			Name = "Healthy Lifestyle";
 			EffectDescription = "+1 Health Regen at turn end.";  //Should probably rich text this up
 			FlavorDescription = null;
-			Connect(eventManager);
 			AddTarget(_target);
 		}
 		public override void Connect(EventManager eventManager){
-			eventManager.StartTurn += Use;
+			eventManager.EndTurn += Use;
 		}
 		public override void Disconnect(EventManager eventManager){
-			eventManager.StartTurn -= Use;
+			eventManager.EndTurn -= Use;
 		}
 		public override void AddTarget(ITarget target){ //kinda mi e sus tozi nachin na Use
 				Target = target;
@@ -31,7 +30,7 @@ namespace GameLogic{
 			return Target as SelfTarget;
 		}
 		public override void Use(){
-			Target[0].Health -= Healing;
+			(Target.TargetList[0] as ICharacter).Health += Healing;
 		}
 	}
 

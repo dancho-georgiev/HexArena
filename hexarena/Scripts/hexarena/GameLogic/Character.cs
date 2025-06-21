@@ -10,6 +10,8 @@ namespace GameLogic
 	
 	public abstract class Character : Targetable, ICharacter
 	{
+		public EventManager eventManager {get; protected set;}
+		
 		private ITile tile;
 		public int Health { get;  set; }
 		public double StepEnergyCost { get;  set; }
@@ -32,15 +34,16 @@ namespace GameLogic
 			}
 		 }
 		
-		public Character(int health,double stepEnergyCost)
+		public Character(int health,double stepEnergyCost, EventManager eventManager)
 		{
 			this.Health = health;
 			this.StepEnergyCost = stepEnergyCost;
 			StatusEffects = new List<IStatusEffect>();
 			Tile = new Tile(new Point(0,0), this);
+			this.eventManager = eventManager;
 		}
 		
-		protected abstract void InitializeActives(EventManager _eventManager);
+		protected abstract void InitializeActives();
 		protected abstract void InitializePassives();
 		
 		//curently used for vulnerable
