@@ -6,7 +6,6 @@ namespace GameLogic{
 	public class SwordSpin : Active
 	{
 		public int Damage {get; protected set;}
-		[Export] public Texture2D Icon { get; set; }
 		
 		public SwordSpin(EventManager eventManager, SurroundSelfTarget targeting)
 		{

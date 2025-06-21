@@ -10,11 +10,11 @@ namespace GameLogic
 		public int Damage {get; set;}
 		public int poisonDamage {get; set;}
 		public int poisonDuration {get; set;}
-		[Export] public Texture2D Icon { get; set; }
 		// this currently works but it takes itargetable and aplies the
 		// poison effect to the itargetable but it is not saved because the itargetable
 		//doesnt have place to save status effects
-		public PoisonedStrike(EventManager _eventManager, SingleTarget _targeting){ 
+		public PoisonedStrike(EventManager _eventManager, SingleTarget _targeting)
+		{ 
 			Damage = 2;
 			poisonDamage = 3;
 			poisonDuration = 2;
@@ -23,21 +23,25 @@ namespace GameLogic
 			AddTarget(_targeting);
 		}
 		
-		public PoisonedStrike(ITile position){ 
+		public PoisonedStrike(ITile position)
+		{ 
 			Damage = 2;
 			poisonDamage = 3;
 			poisonDuration = 2;
 			Target = new SingleTarget(position, 1);
 		}
 		
-		public override SingleTarget GetTargetType(){
+		public override SingleTarget GetTargetType()
+		{
 			return Target as SingleTarget;
 		}
 		
-		public override void Connect(EventManager eventManager){
+		public override void Connect(EventManager eventManager)
+		{
 			eventManager.ActivateAbility1 += Use;
 		}
-		public override void Disconnect(EventManager eventManager){
+		public override void Disconnect(EventManager eventManager)
+		{
 			eventManager.ActivateAbility1 -= Use;
 		}
 		public override void Use()
@@ -51,7 +55,5 @@ namespace GameLogic
 			}
 			else throw new Exception("not ready");
 		}
-	
 	}
-
 }

@@ -9,7 +9,6 @@ namespace GameLogic{
 	public partial class SwordSlash : Active
 	{
 		public int Damage {get; protected set;}
-		[Export] public Texture2D Icon { get; set; }
 		
 		public SwordSlash(EventManager _eventManager, SingleTarget _targeting){ 
 			Damage = 2;

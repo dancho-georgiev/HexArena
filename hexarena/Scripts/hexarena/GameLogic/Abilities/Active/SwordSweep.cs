@@ -6,7 +6,6 @@ namespace GameLogic{
 	public class SwordSweep : Active
 	{
 		public int Damage {get; protected set;}
-		[Export] public Texture2D Icon { get; set; }
 		
 		public SwordSweep(EventManager _eventManager, SweepFrontTarget _targeting) //Could be made to work with other forms of sweeping targeting
 		{
@@ -21,18 +20,22 @@ namespace GameLogic{
 			Target = new SweepFrontTarget(position);
 		}
 		
-		public override SweepFrontTarget GetTargetType(){
+		public override SweepFrontTarget GetTargetType()
+		{
 		return Target as SweepFrontTarget;
-	}
+		}
 		
-		public override void Connect(EventManager eventManager){
+		public override void Connect(EventManager eventManager)
+		{
 			eventManager.ActivateAbility1 += Use;
 		}
-		public override void Disconnect(EventManager eventManager){
+		public override void Disconnect(EventManager eventManager)
+		{
 			eventManager.ActivateAbility1 -= Use;
 		}
 		public override void Use(){
-			foreach(ITargetable target in Target.TargetList){
+			foreach(ITargetable target in Target.TargetList)
+			{
 				target.TakeDamage(Damage);
 			}
 		}
