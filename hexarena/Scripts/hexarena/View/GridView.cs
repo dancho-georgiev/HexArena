@@ -103,18 +103,6 @@ namespace View
 			}
 			
 			battleField.MoveSelectedCharacter(path.Select(x=>x.Tile).ToList());
-			
-			if(battleField.SelectedCharacter.Tile == path.Last().Tile)
-			{
-				//GD.Print("Logic character moved");
-				if (Characters.Any(x => x.Character == battleField.SelectedCharacter))
-				{
-					//GD.Print("visuals entered");
-					GameCharacter visualCharacter = Characters.First(x=>x.Character==battleField.SelectedCharacter);
-					visualCharacter.MoveVisualCharacter(path);
-				}
-			}
-				
 		}
 		
 		
@@ -141,14 +129,18 @@ namespace View
 						GD.Print($"using ability");
 					}
 				}
-				
 				if(key.Pressed && key.Keycode == Key.T)
 				{
 					++spawnType;
 					if((int)spawnType>=2) spawnType = 0;
 					GD.Print(spawnType);
 				}
-
+				
+				if(key.Pressed && key.Keycode == Key.G)
+				{
+					battleField.EndTurn();
+					battleField.StartTurn();
+				}
 			}
 			
 		}

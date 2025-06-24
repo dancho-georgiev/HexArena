@@ -15,9 +15,11 @@ namespace GameLogic
 		public int Initiative {get; set;}
 		public bool OnTurn {get; set;} = false;
 		public double StepEnergyCost { get;  set; }
+		public EventManager eventManager {get; set;}
 		public List<IStatusEffect> StatusEffects {get; set;}
 		public List<IActive> ActiveAbilities { get; set; }
 		public List<IPassive> PassiveAbilities { get; set; }
+		public Action<List<ITile>> HasMoved {get; set;}
 		public ITile Tile { get{return tile;} 
 		set{
 				tile = value;
@@ -34,13 +36,18 @@ namespace GameLogic
 			}
 		 }
 		
-		public Character(int health,double stepEnergyCost, int Initiative)
+		public Character(EventManager eventManager, int health,double stepEnergyCost, int Initiative)
 		{
 			this.Health = health;
 			this.StepEnergyCost = stepEnergyCost;
 			this.Initiative = Initiative;
 			StatusEffects = new List<IStatusEffect>();
+			this.eventManager = eventManager;
 			Tile = new Tile(new Point(0,0), this);
+			ActiveAbilities = new List<IActive>();
+			PassiveAbilities = new List<IPassive>();
+			InitializeActives();
+			InitializePassives();
 		}
 		
 		protected abstract void InitializeActives();
@@ -93,7 +100,9 @@ namespace GameLogic
 		{
 			if(TargetPosition.IsAvailable())
 			{
-				List<ITile> pathTiles = Utility.FindShortestPath(this.Tile, TargetPosition);
+				
+				List<ITile> pathTiles = Utility.FindShortestPath3(this.Tile, TargetPosition);
+				
 				ITile lastTile = pathTiles[0]; // this helps clearing the characters which we create* along the path
 				foreach(ITile i in pathTiles)
 				{
@@ -103,13 +112,14 @@ namespace GameLogic
 					lastTile = i;
 					//GD.Print($"{this.Tile.Position.x}, {this.Tile.Position.y}");
 				}
+				HasMoved?.Invoke(pathTiles);
 				//GD.Print($"curent pos {this.Tile.Position.x}, {this.Tile.Position.y}");
-
 			}
 		}
 		
 		public virtual void MoveCharacter(List<ITile> path)
 		{
+			
 			if(path.Last().IsAvailable())
 			{
 				List<ITile> pathTiles = path;
@@ -123,6 +133,7 @@ namespace GameLogic
 				}
 				//GD.Print($"curent pos {this.Tile.Position.x}, {this.Tile.Position.y}");
 			}
+			HasMoved?.Invoke(path);
 		}
 	}
 }

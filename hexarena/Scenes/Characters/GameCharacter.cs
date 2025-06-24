@@ -30,6 +30,7 @@ namespace View{
 			 };
 			_sprite.Scale = new Vector2(0.1f,0.1f);
 			AddChild(_sprite);
+			Character.HasMoved += MoveVisualCharacter;
 		}
 		
 		
@@ -41,19 +42,28 @@ namespace View{
 			}
 		}
 		
-		public virtual void MoveVisualCharacter(List<HexagonTile> path){
+		public virtual void MoveVisualCharacter(List<ITile> path){
 			if (CurrentTile == null || path == null) return;
+			List<ITile> pathTiles = path;
+			_hexPath = new List<HexagonTile>();
 			
-			_hexPath = path.ToList();
+			//convert logical tiles to visual hexagonTiles
+			foreach (ITile tile in pathTiles)
+			{
+				HexagonTile hexTile = Utility.FindHexagonTileByITile(tile, GetTree());
+				if (hexTile != null)
+				{
+					_hexPath.Add(hexTile);
+				}
+			}
 			
-			if (_hexPath.Count > 0){
+			if (_hexPath.Count > 0)
 				_currentPathIndex = 0; 
 				if (_currentPathIndex < _hexPath.Count)
 				{
 					_targetTile = _hexPath[_currentPathIndex];
 					_isMoving = true;
 				}
-			}
 		}
 		 
 		

@@ -40,7 +40,7 @@ namespace GameLogic
 				 case CharacterType.PlaceholderEnemy:
 					scene = GD.Load<PackedScene>("res://Scenes/Characters/Enemy/PlaceholderEnemy.tscn");
 				 	character = scene.Instantiate<EnemyCharacter>();
-					character.Character = new PlaceholderEnemy(100, 1, 1);
+					character.Character = new PlaceholderEnemy(eventManager, 100, 1, 1);
 					battleField.PlaceEnemy(character.Character as IEnemy, spawnTile.Tile);
 					 break;
 				case CharacterType.NPC:

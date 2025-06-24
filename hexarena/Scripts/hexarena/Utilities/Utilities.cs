@@ -163,6 +163,55 @@ namespace Utilities{
 			
 		}
 		
+		private static List<ITile> FindShortestPath3_Helper(ITile startTile, ITile endTile,
+		 Dictionary<ITile, int> distances, List<ITile> visited, int depth, List<ITile> path,
+		 ref int count){
+			if(!distances.Keys.Contains(startTile))distances.Add(startTile, int.MaxValue);
+			if(distances[startTile]<depth || visited.Contains(startTile)) return null;
+			if(startTile==endTile){
+				path.Add(endTile);
+				distances[endTile] = depth;
+				++count;
+				return path;
+			}
+			if(!endTile.IsAvailable()) return null;
+			
+			path.Add(startTile);
+			visited.Add(startTile);
+			distances[startTile] = depth;
+			List<List<ITile>> paths = new List<List<ITile>>();
+			
+			foreach(ITile neighbour in startTile.Neighbours){
+				if(!distances.Keys.Contains(neighbour)){
+					distances[neighbour] = depth + 1;
+				}
+				else if(distances[neighbour] > depth +1){
+					distances[neighbour] = depth+1;
+				}
+			}
+			
+			foreach(ITile neighbour in startTile.Neighbours){
+				if(neighbour.IsAvailable()){
+					List<ITile> result = FindShortestPath3_Helper(neighbour, endTile,
+					 distances, new List<ITile>(visited), depth+1, new List<ITile>(path), ref count);
+					if(result!=null){
+						paths.Add(result);
+					}
+				}
+			}
+			return paths.MinBy(path => path.Count + CumulativeAverageDirection(path));
+		}
+		
+		
+		public static List<ITile> FindShortestPath3(ITile startTile, ITile endTile){
+			Dictionary<ITile, int> distances = new Dictionary<ITile, int>();
+			int count = 0;
+			List<ITile> result = FindShortestPath3_Helper(startTile, endTile, distances,new List<ITile>(), 0, new List<ITile>(),ref count);
+			//GD.Print(count);
+			return result == null ? new List<ITile>() : result;
+			
+		}
+		
 		
 		public static List<ITile> FindShortestPath(ITile startTile, ITile endTile)
 		{

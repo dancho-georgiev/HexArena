@@ -73,7 +73,7 @@ public partial class Node2d : Node2D
 	private void Test_EnemyConstructorTile(){
 		EventManager eventManager = new EventManager();
 		BattleField grid = new BattleField(eventManager);
-		PlaceholderEnemy enemy = new PlaceholderEnemy(100, 1, 1);
+		PlaceholderEnemy enemy = new PlaceholderEnemy(eventManager,100, 1, 1);
 		grid.PlaceEnemy(enemy, grid.GetTile(2,1));
 		int passed = passedTest;
 		Test(()=>{if(enemy.Health==100)passedTest++;}, "enemy.Health==100");
@@ -86,7 +86,7 @@ public partial class Node2d : Node2D
 		EventManager ev = new EventManager();
 		BattleField grid = new BattleField(ev);
 		int passed = passedTest;
-		PlaceholderEnemy enemy = new PlaceholderEnemy(100, 1, 1);
+		PlaceholderEnemy enemy = new PlaceholderEnemy(eventManager,100, 1, 1);
 		grid.PlaceEnemy(enemy, grid.GetTile(1,2));
 		Test(()=>{if(grid.Enemies.Count==1)passedTest++;}, "added enemy");
 		if(passed + 1 == passedTest) passedTest++;
@@ -95,8 +95,8 @@ public partial class Node2d : Node2D
 		int passed = passedTest;
 		EventManager eventManager = new EventManager();
 		BattleField grid = new BattleField(eventManager);
-		PlaceholderEnemy enemy1 = new PlaceholderEnemy(100, 1, 1);
-		PlaceholderEnemy enemy2 = new PlaceholderEnemy(100, 1, 1);
+		PlaceholderEnemy enemy1 = new PlaceholderEnemy(eventManager,100, 1, 1);
+		PlaceholderEnemy enemy2 = new PlaceholderEnemy(eventManager,100, 1, 1);
 		grid.PlaceEnemy(enemy1, grid.GetTile(1,2));
 		grid.PlaceEnemy(enemy2, grid.GetTile(2,1));
 		
@@ -393,7 +393,7 @@ public partial class Node2d : Node2D
 		BattleField battleField = new BattleField(eventManager);
 		Peasant peasant = new Peasant(eventManager);
 		battleField.PlacePlayer(peasant, battleField.GetTile(1,1));
-		PlaceholderEnemy enemy= new PlaceholderEnemy(100,1, 1);
+		PlaceholderEnemy enemy= new PlaceholderEnemy(eventManager,100,1, 1);
 		battleField.PlaceEnemy(enemy, battleField.GetTile(1,2));
 
 		battleField.SelectCharacter(peasant);
@@ -449,8 +449,9 @@ public partial class Node2d : Node2D
 	private void Test_TurnOrderManager(){
 		int passed = passedTest;
 		List<ICharacter> characters = new List<ICharacter>();
-		characters.Add(new PlaceholderEnemy(100,1,1));
-		characters.Add(new PlaceholderEnemy(100,1,2));
+		EventManager eventManager = new EventManager();
+		characters.Add(new PlaceholderEnemy(eventManager, 100,1,1));
+		characters.Add(new PlaceholderEnemy(eventManager, 100,1,2));
 		TurnOrderManager turnOrderManager = new TurnOrderManager(characters);
 		Test(()=>{if(turnOrderManager.NextTurn().Initiative==2)passedTest++;}, "correct order");
 		Test(()=>{if(turnOrderManager.NextTurn().Initiative==1)passedTest++;}, "correct order");
@@ -458,12 +459,12 @@ public partial class Node2d : Node2D
 		Test(()=>{if(turnOrderManager.CharacterOnTurn.Initiative==2)passedTest++;}, "peek works");
 		Test(()=>{if(turnOrderManager.CharacterOnTurn.Initiative==2)passedTest++;}, "peek doenst go to next character");
 		
-		EventManager eventManager = new EventManager();
+		
 		BattleField battlefield = new BattleField(eventManager);
 		battlefield.PlacePlayer(new Peasant(eventManager), battlefield.GetTile(1,1));
 		
 		turnOrderManager = new TurnOrderManager(battlefield.Players, battlefield.Enemies);
-		battlefield.PlaceEnemy(new PlaceholderEnemy(100,1,2), battlefield.GetTile(1,2));
+		battlefield.PlaceEnemy(new PlaceholderEnemy(eventManager,100,1,2), battlefield.GetTile(1,2));
 		turnOrderManager.UpdateList();
 		Test(()=>{if(turnOrderManager.NextTurn().Initiative==2)passedTest++;}, "correct order2");
 		Test(()=>{if(turnOrderManager.NextTurn().Initiative==1)passedTest++;}, "correct order2");

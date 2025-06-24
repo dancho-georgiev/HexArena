@@ -113,6 +113,7 @@ namespace GameLogic{
 		
 		public void StartTurn(){
 			eventManager.EmitOnStartTurn();
+			if(SelectedCharacter is IEnemy enemy) enemy.PlayTurn();
 			SelectedAbility = null;
 		}
 		

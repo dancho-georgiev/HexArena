@@ -8,6 +8,8 @@ namespace Interfaces
 {
 	public interface IEnemy: ICharacter
 	{
-		// AIComponent 
+		// AIComponent
+		
+		void PlayTurn(); 
 	}
 }
