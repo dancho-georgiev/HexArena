@@ -1,1 +1,8 @@
-1 - Po nqkakva prichina preview putq ne e ednakuv s putq po koito minava geroq.
+1 - Po nqkakva prichina preview putq ne e ednakuv s putq po koito minava geroq.//done
+!!!!!!2 - !!!UI!!!
+6 - oshte abilityta 
+3 - Oshte geroi
+4 - Itemi
+5 - oshte enemyta
+7 - opravete mi testa
+8 - da se implementira TurnOrderManager v BattleField

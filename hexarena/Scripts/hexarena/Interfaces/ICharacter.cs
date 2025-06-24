@@ -9,6 +9,7 @@ namespace Interfaces
 	public interface ICharacter : ITargetable
 	{	
 		double StepEnergyCost { get;  set; }
+		int Initiative {get; set;}
 		public int Health { get; set; }
 		public List<IStatusEffect> StatusEffects {get;  set;}
 		public ITile Tile { get; set; }

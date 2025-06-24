@@ -12,6 +12,7 @@ namespace GameLogic
 	{
 		private ITile tile;
 		public int Health { get;  set; }
+		public int Initiative {get; set;}
 		public double StepEnergyCost { get;  set; }
 		public List<IStatusEffect> StatusEffects {get; set;}
 		public List<IActive> ActiveAbilities { get; set; }
@@ -32,10 +33,11 @@ namespace GameLogic
 			}
 		 }
 		
-		public Character(int health,double stepEnergyCost)
+		public Character(int health,double stepEnergyCost, int Initiative)
 		{
 			this.Health = health;
 			this.StepEnergyCost = stepEnergyCost;
+			this.Initiative = Initiative;
 			StatusEffects = new List<IStatusEffect>();
 			Tile = new Tile(new Point(0,0), this);
 		}
@@ -100,9 +102,9 @@ namespace GameLogic
 					i.CharacterOnTile = this;
 					//i.IsAvailable = false;
 					lastTile = i;
-					GD.Print($"{this.Tile.Position.x}, {this.Tile.Position.y}");
+					//GD.Print($"{this.Tile.Position.x}, {this.Tile.Position.y}");
 				}
-				GD.Print($"curent pos {this.Tile.Position.x}, {this.Tile.Position.y}");
+				//GD.Print($"curent pos {this.Tile.Position.x}, {this.Tile.Position.y}");
 
 			}
 		}
@@ -121,10 +123,9 @@ namespace GameLogic
 					i.CharacterOnTile = this;
 					//i.IsAvailable = false;
 					lastTile = i;
-					GD.Print($"{this.Tile.Position.x}, {this.Tile.Position.y}");
+					//GD.Print($"{this.Tile.Position.x}, {this.Tile.Position.y}");
 				}
-				GD.Print($"curent pos {this.Tile.Position.x}, {this.Tile.Position.y}");
-
+				//GD.Print($"curent pos {this.Tile.Position.x}, {this.Tile.Position.y}");
 			}
 		}
 	}

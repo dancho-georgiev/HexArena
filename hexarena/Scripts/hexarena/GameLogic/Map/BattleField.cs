@@ -17,7 +17,7 @@ namespace GameLogic{
 		private StatusEffectFactory statusEffectFactory;
 		private EventManager eventManager;
 		public bool PlayerTurn = true;
-		
+		public TurnOrderManager turnOrderManager {get; set;}
 		public IPlayer SelectedCharacter {get; set;}
 		public IAbility SelectedAbility{get; set;}
 		public ITarget SelectedAbilityTarget {get; set;}
@@ -29,6 +29,7 @@ namespace GameLogic{
 			Enemies = new List<IEnemy>();
 			Players = new List<IPlayer>();
 			statusEffectFactory = new StatusEffectFactory(eventManager);
+			turnOrderManager = new TurnOrderManager(Players, Enemies);
 		}
 		
 		public BattleField(EventManager eventManager, int width, int length){
@@ -37,6 +38,7 @@ namespace GameLogic{
 			Enemies = new List<IEnemy>();
 			Players = new List<IPlayer>();
 			statusEffectFactory = new StatusEffectFactory(eventManager);
+			turnOrderManager = new TurnOrderManager(Players, Enemies);
 		}
 		
 		public ITile GetTile(int x, int y){
@@ -58,14 +60,14 @@ namespace GameLogic{
 			Players.Add(character);
 			InitializeGlobalTargets(character);
 			character.Tile = tile;
-			
+			turnOrderManager.UpdateList();
 		}
 		
 		public void PlaceEnemy(IEnemy character, ITile tile){
 			Enemies.Add(character);
 			InitializeGlobalTargets(character);
 			character.Tile = tile;
-			
+			turnOrderManager.UpdateList();
 		}
 		
 		public ITile MoveSelectedCharacter(ITile position){
@@ -101,6 +103,17 @@ namespace GameLogic{
 			if(SelectedAbilityTarget.IsReady()) SelectedAbility.Use();
 		}
 		
+		public void StartTurn(){
+			eventManager.EmitOnStartTurn();
+			SelectedCharacter = null;
+			SelectedAbility  = null;
+		}
+		
+		public void EndTurn(){
+			eventManager.EmitOnEndTurn();
+			SelectedCharacter = null;
+			SelectedAbility  = null;
+		}
 		
 	}
 	

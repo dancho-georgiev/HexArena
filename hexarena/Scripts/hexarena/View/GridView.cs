@@ -104,10 +104,10 @@ namespace View
 			
 			if(battleField.SelectedCharacter.Tile == path.Last().Tile)
 			{
-				GD.Print("Logic character moved");
+				//GD.Print("Logic character moved");
 				if (Characters.Any(x => x.Character == battleField.SelectedCharacter))
 				{
-					GD.Print("visuals entered");
+					//GD.Print("visuals entered");
 					GameCharacter visualCharacter = Characters.First(x=>x.Character==battleField.SelectedCharacter);
 					visualCharacter.MoveVisualCharacter(path);
 				}
@@ -133,6 +133,17 @@ namespace View
 				}
 			
 				if(key.Pressed && key.Keycode == Key.E)
+				{
+					if(battleField.SelectedCharacter!=null)
+					{
+						battleField.SelectAbility(battleField.SelectedCharacter.ActiveAbilities[0]);
+						selectingTarget = true;
+						HighlightTargetableTiles();
+						GD.Print($"using ability");
+					}
+				}
+				
+				if(key.Pressed && key.Keycode == Key.T)
 				{
 					if(battleField.SelectedCharacter!=null)
 					{
@@ -205,11 +216,12 @@ namespace View
 		
 		private void SelectCharacterOnTile(HexagonTile tile){
 			if(tile.Tile.CharacterOnTile!=null && tile.Tile.CharacterOnTile is IPlayer){
-					battleField.SelectCharacter(tile.Tile.CharacterOnTile as IPlayer);
-					GD.Print($"selected character");
-					selectedCharacter = true;
-				}
+				battleField.SelectCharacter(tile.Tile.CharacterOnTile as IPlayer);
+				tile.Selected = true;
+				selectedCharacter = true;
+			}
 		}
+		
 		
 		private void UseAbilityIfReady(HexagonTile tile){
 			if(battleField.SelectedAbilityTarget.IsReady()){
@@ -217,7 +229,6 @@ namespace View
 				if(tile.Tile.CharacterOnTile!=null){
 					GD.Print($"{tile.Tile.CharacterOnTile.Health}");
 				}
-				
 				selectingTarget = false;
 				selectedCharacter = false;
 				RemoveTargetableTileHighlight();
@@ -244,6 +255,7 @@ namespace View
 			else if(selectedCharacter){
 					MoveSelectedCharacter(hexPath);
 					selectedCharacter = false;
+					hexPath.First().Selected = false;
 					ClearHexPath();
 					//PrintTilesWithCharacters();
 				}

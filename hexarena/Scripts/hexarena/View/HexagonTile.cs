@@ -53,7 +53,23 @@ namespace View
 					ResetColor();} 	
 				}
 		}
-
+	public bool Selected{
+		get{return selected;}
+		set{
+			selected = value;
+				if(selected){
+					Hexagon.polygon2D.Color = SelectedColor;
+					DefaultColor = SelectedColor;
+					HoverColor = SelectedColor;
+				}
+				else{
+					DefaultColor = new Color(1,1,1,1);
+					HoverColor = new Color(1, 0, 1, 1);
+					ResetColor();
+				} 	
+			}
+		}
+	
 		[ExportGroup("Tile Colors")]
 		[Export] public Color DefaultColor { get; set; } = new Color(1,1,1,1); //ZAHSTO NE E BQLO AAAAAAAAAA
 		[Export] public Color SelectedColor { get; set; } = Colors.Blue;
