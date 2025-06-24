@@ -30,4 +30,5 @@ SlotScene = ExtResource("5_l8v81")
 layout_mode = 2
 
 [node name="ScriptTesting" type="Node2D" parent="."]
+position = Vector2(458, -80)
 script = ExtResource("1_pq8q7")
