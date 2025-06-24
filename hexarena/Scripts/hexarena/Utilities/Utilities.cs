@@ -253,26 +253,27 @@ namespace Utilities{
 			return paths.MaxBy(path=>path.Count);
 		}
 		
-		public static Vector2 TransformBasis(Vector2 point, Vector2 basisX, Vector2 basisY){
-			return new Vector2(point.X*basisX.X + point.Y * basisY.X, point.X*basisX.Y + point.Y*basisY.Y);
+		public static Vector2 TransformBasis(Vector2 point, Vector2 basisX, Vector2 basisY, Vector2 offset){
+			return new Vector2(point.X*basisX.X + point.Y * basisY.X, point.X*basisX.Y + point.Y*basisY.Y) + offset;
 		}
 		
 		public static void ThreeDfy(List<List<HexagonTile>> grid){
 			Vector2 e1 = new Vector2(1,0.01f).Normalized();
-			Vector2 e2 = new Vector2(4,1).Normalized();
+			Vector2 e2 = new Vector2(3,1).Normalized();
+			Vector2 offset = new Vector2(-100,0);
 			//Vector2 offset = new Vector2(-170, 0);
 			foreach(List<HexagonTile> list in grid) {
 				foreach(HexagonTile tile in list){
 					List<Vector2> newPolygon = new List<Vector2>();
 					foreach(Vector2 point in tile.Hexagon.polygon2D.Polygon){
-						newPolygon.Add(TransformBasis(point, e1, e2));
+						newPolygon.Add(TransformBasis(point, e1, e2, offset));
 					}
-					tile.Hexagon.GlobalPosition = TransformBasis(tile.Hexagon.GlobalPosition,e1, e2); //+ offset;
+					tile.Hexagon.GlobalPosition = TransformBasis(tile.Hexagon.GlobalPosition,e1, e2, offset); //+ offset;
 					tile.Hexagon.polygon2D.SetPolygon(newPolygon.ToArray());
 					tile.Hexagon.collisionPolygon2D.SetPolygon(newPolygon.ToArray());
 					newPolygon.Clear();
 					foreach(Vector2 point in tile.Hexagon.innerPolygon2D.Polygon){
-						newPolygon.Add(TransformBasis(point, e1, e2));
+						newPolygon.Add(TransformBasis(point, e1, e2, offset));
 					}
 					tile.Hexagon.innerPolygon2D.SetPolygon(newPolygon.ToArray());
 				}
