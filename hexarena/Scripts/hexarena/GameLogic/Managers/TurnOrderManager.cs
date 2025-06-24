@@ -8,11 +8,14 @@ namespace GameLogic{
 	
 	public class TurnOrderManager
 	{
+		private ICharacter characterOnTurn;
 		private readonly List<IPlayer> players;
 		private readonly List<IEnemy> enemies;
 		
 		private List<ICharacter> turnOrder;
 		private List<ICharacter> havePlayed;
+		public ICharacter CharacterOnTurn {get{return characterOnTurn;} protected set{characterOnTurn = value;}}
+		
 		public TurnOrderManager(List<ICharacter> list){
 			turnOrder = list;
 			havePlayed = new List<ICharacter>();
@@ -37,22 +40,19 @@ namespace GameLogic{
 			turnOrder = turnOrder.OrderByDescending(x=>x.Initiative).ToList();
 		}
 		
-		public ICharacter Peek(){
-			return turnOrder.FirstOrDefault();
-		}
-		
 		public ICharacter NextTurn(){
-			ICharacter next = turnOrder.FirstOrDefault();
-			if(next != null){
-				havePlayed.Add(next);
-				turnOrder.Remove(next);
+			CharacterOnTurn = turnOrder.FirstOrDefault();
+			if(CharacterOnTurn != null){
+				havePlayed.Add(CharacterOnTurn);
+				turnOrder.Remove(CharacterOnTurn);
 			}
+			
 			if(turnOrder.Count==0 && havePlayed.Count > 0){
 				turnOrder = new List<ICharacter>(havePlayed);
 				UpdateOrder();
 				havePlayed.Clear();
 			}
-			return next;
+			return CharacterOnTurn;
 		}
 	}
 }

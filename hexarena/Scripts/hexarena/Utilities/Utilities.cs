@@ -280,6 +280,23 @@ namespace Utilities{
 			}
 		}
 		
+		public static HexagonTile FindHexagonTileByITile(ITile tile, SceneTree tree)
+		{	
+			// Search through all nodes in HexTiles group- Check HexTiles
+			//I dont know if its a good practice
+			
+			 foreach (Node node in tree.GetNodesInGroup("HexTiles"))
+			{
+				if (node is HexagonTile hexTile && hexTile.Tile == tile)
+				{
+					//GD.Print($"HexTile Tile {hexTile.Tile.Position.x},{hexTile.Tile.Position.y}" );	
+					return hexTile;
+				}
+			}
+			//GD.PrintErr($"FindHexagonTileByITile returns null");
+			return null;
+		}
+		
 	}
 	
 }

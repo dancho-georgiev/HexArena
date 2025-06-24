@@ -28,16 +28,20 @@ namespace GameLogic
 		{
 			string scenePath;
 			GameCharacter character = new GameCharacter();
+			PackedScene scene;
 			switch(type)
 			{
 			 	case CharacterType.Peasant:
-					PackedScene scene = GD.Load<PackedScene>("res://Scenes/Characters/Friendly/Peasant.tscn");
+					scene = GD.Load<PackedScene>("res://Scenes/Characters/Friendly/Peasant.tscn");
 				 	character = scene.Instantiate<PeasantView>();
 					character.Character = new Peasant(eventManager);
 					battleField.PlacePlayer(character.Character as IPlayer, spawnTile.Tile);
 					break;
 				 case CharacterType.PlaceholderEnemy:
-					scenePath = "res://Characters/Enemies/Goblin.tscn";
+					scene = GD.Load<PackedScene>("res://Scenes/Characters/Enemy/PlaceholderEnemy.tscn");
+				 	character = scene.Instantiate<EnemyCharacter>();
+					character.Character = new PlaceholderEnemy(100, 1, 1);
+					battleField.PlaceEnemy(character.Character as IEnemy, spawnTile.Tile);
 					 break;
 				case CharacterType.NPC:
 					scenePath = "res://Characters/NPCs/Villager.tscn";

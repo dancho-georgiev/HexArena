@@ -18,9 +18,7 @@ namespace View{
 		public HexagonTile CurrentTile { get; set; }
 		protected bool _isMoving = false;
 		protected HexagonTile _targetTile;
-	//<<<<<<< HEAD
-		//private Queue<HexagonTile> _hexPath = new Queue<HexagonTile>();
-	//=======
+
 		protected List<HexagonTile> _hexPath = new List<HexagonTile>();
 		protected int _currentPathIndex;
 		
@@ -43,44 +41,21 @@ namespace View{
 			}
 		}
 		
-		public void MoveVisualCharacter(List<HexagonTile> path){
-			 if (CurrentTile == null || path == null) return;
-			List<ITile> pathTiles = path.Select(x => x.Tile).ToList();
-			_hexPath = new List<HexagonTile>();
+		public virtual void MoveVisualCharacter(List<HexagonTile> path){
+			if (CurrentTile == null || path == null) return;
 			
-			//convert logical tiles to visual hexagonTiles
-			 foreach (ITile tile in pathTiles)
-			{
-				HexagonTile hexTile = FindHexagonTileByITile(tile);
-				if (hexTile != null)
-				{
-					_hexPath.Add(hexTile);
-				}
-			}
+			_hexPath = path.ToList();
 			
-			if (_hexPath.Count > 0)
+			if (_hexPath.Count > 0){
 				_currentPathIndex = 0; 
 				if (_currentPathIndex < _hexPath.Count)
 				{
 					_targetTile = _hexPath[_currentPathIndex];
 					_isMoving = true;
 				}
-		}
-		 private HexagonTile FindHexagonTileByITile(ITile tile)
-		{	
-			// Search through all nodes in HexTiles group- Check HexTiles
-			//I dont know if its a good practice
-			 foreach (Node node in GetTree().GetNodesInGroup("HexTiles"))
-			{
-				if (node is HexagonTile hexTile && hexTile.Tile == tile)
-				{
-					//GD.Print($"HexTile Tile {hexTile.Tile.Position.x},{hexTile.Tile.Position.y}" );	
-					return hexTile;
-				}
 			}
-			//GD.PrintErr($"FindHexagonTileByITile returns null");
-			return null;
 		}
+		 
 		
 		private void HandleMovement(float delta)
 		{
@@ -119,8 +94,6 @@ namespace View{
 			GlobalPosition = GetTargetPosition(); // Snap to exact position
 			Character.Tile = _targetTile.Tile;
 			CurrentTile = _targetTile;
-			//if(_hexPath.Count>0) nextTarget();
-			
 			//can start an idle animiation kato imame
 		}
 		

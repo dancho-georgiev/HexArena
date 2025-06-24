@@ -36,6 +36,8 @@ namespace View
 		public bool selectedCharacter {get; set;}
 		public EventManager eventManager {get; set;}
 		
+		public bool GameStarted {get{return battleField.GameStarted;} set{battleField.GameStarted = value;}}
+		public CharacterType spawnType {get; set;} = CharacterType.Peasant;
 		//veche grida e or hexagonTileove
 		public override void _Ready(){
 			Grid = new List<List<HexagonTile>>();
@@ -122,16 +124,13 @@ namespace View
 			{
 				if(key.Pressed && key.Keycode == Key.Q)
 				{
-					if(hoveredTile != null)
-					{
-						if(hoveredTile.Tile.CharacterOnTile == null){ // mnogo losho napraveno ne trqq da e taka
-							GameCharacter player =
-							characterFactory.SpawnCharacter(CharacterType.Peasant, hoveredTile);
-							Characters.Add(player);
-						}
+					if(hoveredTile != null && hoveredTile.Tile.CharacterOnTile == null)
+					{	
+						GameCharacter player =
+						characterFactory.SpawnCharacter(spawnType, hoveredTile);
+						Characters.Add(player);
 					}
 				}
-			
 				if(key.Pressed && key.Keycode == Key.E)
 				{
 					if(battleField.SelectedCharacter!=null)
@@ -145,15 +144,9 @@ namespace View
 				
 				if(key.Pressed && key.Keycode == Key.T)
 				{
-					if(battleField.SelectedCharacter!=null)
-					{
-						battleField.SelectAbility(battleField.SelectedCharacter.ActiveAbilities[0]);
-						selectingTarget = true;
-						HighlightTargetableTiles();
-						GD.Print($"using ability");
-						
-						
-					}
+					++spawnType;
+					if((int)spawnType>=2) spawnType = 0;
+					GD.Print(spawnType);
 				}
 
 			}
@@ -237,7 +230,7 @@ namespace View
 		
 		public void OnTileClicked(HexagonTile tile){
 			GD.Print($"Clicked tile at {tile.Tile.Position.x}, {tile.Tile.Position.y }");
-			if(!selectedCharacter && !selectingTarget){
+			if(!selectedCharacter && !selectingTarget && !GameStarted){
 				SelectCharacterOnTile(tile);
 			}
 			else if(selectingTarget){

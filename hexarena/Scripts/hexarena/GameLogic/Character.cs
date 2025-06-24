@@ -13,6 +13,7 @@ namespace GameLogic
 		private ITile tile;
 		public int Health { get;  set; }
 		public int Initiative {get; set;}
+		public bool OnTurn {get; set;} = false;
 		public double StepEnergyCost { get;  set; }
 		public List<IStatusEffect> StatusEffects {get; set;}
 		public List<IActive> ActiveAbilities { get; set; }
@@ -97,10 +98,8 @@ namespace GameLogic
 				foreach(ITile i in pathTiles)
 				{
 					lastTile.CharacterOnTile = null;
-					//lastTile.IsAvailable = true;
 					this.Tile = i;
 					i.CharacterOnTile = this;
-					//i.IsAvailable = false;
 					lastTile = i;
 					//GD.Print($"{this.Tile.Position.x}, {this.Tile.Position.y}");
 				}
@@ -118,12 +117,9 @@ namespace GameLogic
 				foreach(ITile i in pathTiles)
 				{
 					lastTile.CharacterOnTile = null;
-					//lastTile.IsAvailable = true;
 					this.Tile = i;
 					i.CharacterOnTile = this;
-					//i.IsAvailable = false;
 					lastTile = i;
-					//GD.Print($"{this.Tile.Position.x}, {this.Tile.Position.y}");
 				}
 				//GD.Print($"curent pos {this.Tile.Position.x}, {this.Tile.Position.y}");
 			}

@@ -18,10 +18,11 @@ namespace GameLogic{
 		private EventManager eventManager;
 		public bool PlayerTurn = true;
 		public TurnOrderManager turnOrderManager {get; set;}
-		public IPlayer SelectedCharacter {get; set;}
+		public ICharacter SelectedCharacter {get; set;}
 		public IAbility SelectedAbility{get; set;}
 		public ITarget SelectedAbilityTarget {get; set;}
 		
+		public bool GameStarted {get; set;} = false;
 		// TUK NE TRQBVA LI VSICHKO DA NE E I(NESHTA)
 		public BattleField(EventManager eventManager){
 			this.eventManager = eventManager;
@@ -54,6 +55,11 @@ namespace GameLogic{
 			 character.PassiveAbilities.Where(x=> x.Target is IGlobalTarget).Select(x=>x.Target)){
 				globalTarget.SetBattleField(this);
 			}
+		}
+		
+		public void StartGame(){
+			GameStarted = true;
+			SelectedCharacter = turnOrderManager.NextTurn();
 		}
 		
 		public void PlacePlayer(IPlayer character, ITile tile){
@@ -95,7 +101,9 @@ namespace GameLogic{
 		
 		//while targeta ne e ready se dobavqt targetable neshta
 		public void AddTargetable(ITargetable targetable){
-			SelectedAbilityTarget.AddTargetable(targetable);
+			if(SelectedAbility!=null){
+				SelectedAbilityTarget.AddTargetable(targetable);
+			}
 		}
 		
 		//kogato e ready se puska abilityto
@@ -105,13 +113,12 @@ namespace GameLogic{
 		
 		public void StartTurn(){
 			eventManager.EmitOnStartTurn();
-			SelectedCharacter = null;
-			SelectedAbility  = null;
+			SelectedAbility = null;
 		}
 		
 		public void EndTurn(){
 			eventManager.EmitOnEndTurn();
-			SelectedCharacter = null;
+			SelectedCharacter = turnOrderManager.NextTurn();
 			SelectedAbility  = null;
 		}
 		

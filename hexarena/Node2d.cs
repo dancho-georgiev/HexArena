@@ -455,8 +455,8 @@ public partial class Node2d : Node2D
 		Test(()=>{if(turnOrderManager.NextTurn().Initiative==2)passedTest++;}, "correct order");
 		Test(()=>{if(turnOrderManager.NextTurn().Initiative==1)passedTest++;}, "correct order");
 		Test(()=>{if(turnOrderManager.NextTurn().Initiative==2)passedTest++;}, "cycled order");
-		Test(()=>{if(turnOrderManager.Peek().Initiative==1)passedTest++;}, "peek works");
-		Test(()=>{if(turnOrderManager.Peek().Initiative==1)passedTest++;}, "peek doenst go to next character");
+		Test(()=>{if(turnOrderManager.CharacterOnTurn.Initiative==2)passedTest++;}, "peek works");
+		Test(()=>{if(turnOrderManager.CharacterOnTurn.Initiative==2)passedTest++;}, "peek doenst go to next character");
 		
 		EventManager eventManager = new EventManager();
 		BattleField battlefield = new BattleField(eventManager);
@@ -468,8 +468,8 @@ public partial class Node2d : Node2D
 		Test(()=>{if(turnOrderManager.NextTurn().Initiative==2)passedTest++;}, "correct order2");
 		Test(()=>{if(turnOrderManager.NextTurn().Initiative==1)passedTest++;}, "correct order2");
 		Test(()=>{if(turnOrderManager.NextTurn().Initiative==2)passedTest++;}, "cycled order2");
-		Test(()=>{if(turnOrderManager.Peek().Initiative==1)passedTest++;}, "peek works2");
-		Test(()=>{if(turnOrderManager.Peek().Initiative==1)passedTest++;}, "peek doenst go to next character2");
+		Test(()=>{if(turnOrderManager.CharacterOnTurn.Initiative==2)passedTest++;}, "peek works2");
+		Test(()=>{if(turnOrderManager.CharacterOnTurn.Initiative==2)passedTest++;}, "peek doenst go to next character2");
 		
 		if(passed+10 == passedTest)passedTest++;
 	}
