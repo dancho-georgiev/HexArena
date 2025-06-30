@@ -4,6 +4,7 @@ using Interfaces;
 using System.Collections.Generic;
 
 namespace GameLogic{
+	
 	public partial class PlaceholderEnemy : Enemy
 	{
 		public PlaceholderEnemy(EventManager eventManager, int health, int stepCost, int initiative) : base(eventManager, health, stepCost, initiative){

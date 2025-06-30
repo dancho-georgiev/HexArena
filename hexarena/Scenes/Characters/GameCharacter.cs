@@ -16,7 +16,7 @@ namespace View{
 		
 		private Sprite2D _sprite;
 		public HexagonTile CurrentTile { get; set; }
-		protected bool _isMoving = false;
+		public bool IsMoving = false;
 		protected HexagonTile _targetTile;
 
 		protected List<HexagonTile> _hexPath = new List<HexagonTile>();
@@ -36,7 +36,7 @@ namespace View{
 		
 		public override void _PhysicsProcess(double delta)
 		{
-			if (_isMoving)
+			if (IsMoving)
 			{
 				HandleMovement((float)delta);
 			}
@@ -62,7 +62,7 @@ namespace View{
 				if (_currentPathIndex < _hexPath.Count)
 				{
 					_targetTile = _hexPath[_currentPathIndex];
-					_isMoving = true;
+					IsMoving = true;
 				}
 		}
 		 
@@ -100,7 +100,7 @@ namespace View{
 		}
 		 private void FinishMovement()
 		{
-			_isMoving = false;
+			IsMoving = false;
 			GlobalPosition = GetTargetPosition(); // Snap to exact position
 			Character.Tile = _targetTile.Tile;
 			CurrentTile = _targetTile;

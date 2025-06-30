@@ -21,7 +21,8 @@ namespace View
 		public PackedScene Hexagon {get; set;}
 		[Export]
 		public PackedScene PlayerSprite {get; set;}
-		
+		[Export]
+		public AbilityBar AbilityBar {get; set;}
 
 		private float _hexSize;
 	
@@ -48,6 +49,7 @@ namespace View
 			characterFactory = new CharacterFactory(eventManager, battleField);
 			hexPath = new List<HexagonTile>();
 			Hexagon = GD.Load<PackedScene>("res://Scenes/Hexagon.tscn");
+			//AbilityBar = GetChild(0).GetChild<AbilityBar>(0);
 			
 			//gets hexagon size for TileToWorld
 			Hexagon sampleHex = Hexagon.Instantiate<Hexagon>();
@@ -108,6 +110,7 @@ namespace View
 		
 		public override void _Input(InputEvent @event)
 		{
+			if(Characters.Any(x=>x.IsMoving))return;
 			if(@event is InputEventKey key)
 			{
 				if(key.Pressed && key.Keycode == Key.Q)
@@ -220,7 +223,16 @@ namespace View
 			}
 		}
 		
+		private void MoveCharacter(HexagonTile tile){
+			MoveSelectedCharacter(hexPath);
+					selectedCharacter = false;
+					hexPath.First().Selected = false;
+					ClearHexPath();
+					//PrintTilesWithCharacters();
+		}
+		
 		public void OnTileClicked(HexagonTile tile){
+			if(Characters.Any(x=>x.IsMoving))return;
 			GD.Print($"Clicked tile at {tile.Tile.Position.x}, {tile.Tile.Position.y }");
 			if(!selectedCharacter && !selectingTarget && !GameStarted){
 				SelectCharacterOnTile(tile);
@@ -238,11 +250,7 @@ namespace View
 				
 			}
 			else if(selectedCharacter){
-					MoveSelectedCharacter(hexPath);
-					selectedCharacter = false;
-					hexPath.First().Selected = false;
-					ClearHexPath();
-					//PrintTilesWithCharacters();
+					MoveCharacter(tile);
 				}
 		}
 		
@@ -256,6 +264,7 @@ namespace View
 		}
 		
 		public void OnTileEntered(HexagonTile tile){
+			if(Characters.Any(x=>x.IsMoving))return;
 			hoveredTile = tile;
 			if(selectingTarget){
 				
