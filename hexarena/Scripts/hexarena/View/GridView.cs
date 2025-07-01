@@ -135,7 +135,7 @@ namespace View
 				if(key.Pressed && key.Keycode == Key.T)
 				{
 					++spawnType;
-					if((int)spawnType>=2) spawnType = 0;
+					if((int)spawnType>=3) spawnType = 0;
 					GD.Print(spawnType);
 				}
 				

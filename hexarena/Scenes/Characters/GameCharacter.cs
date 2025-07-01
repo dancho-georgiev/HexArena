@@ -14,7 +14,7 @@ namespace View{
 		[Export] public Texture2D CharacterSpriteTexture;
 		[Export] public float MoveSpeed = 100f;
 		
-		private Sprite2D _sprite;
+		protected Sprite2D _sprite;
 		public HexagonTile CurrentTile { get; set; }
 		public bool IsMoving = false;
 		protected HexagonTile _targetTile;

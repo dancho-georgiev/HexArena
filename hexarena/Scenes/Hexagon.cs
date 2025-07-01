@@ -17,12 +17,14 @@ public partial class Hexagon : Node2D
 	}
 	
 	public override void _Ready(){
+		Material.Set("outline_shader/rgb", new Vector3(0,0,0));
 		Vector2[] polygon = new Vector2[6];
 		Vector2[] innerPolygon = new Vector2[6];
 		for(int i = 0; i < 6; i++){
 			polygon[i] = pointy_hex_corner(new Vector2(Position.X,Position.Y),Size,i);
 			innerPolygon[i] = pointy_hex_corner(new Vector2(Position.X,Position.Y),Size-5,i);
 		}
+
 		polygon2D.SetPolygon(polygon);
 		innerPolygon2D.SetPolygon(innerPolygon);
 		innerPolygon2D.ZIndex = 1;
@@ -32,7 +34,7 @@ public partial class Hexagon : Node2D
 		AddChild(polygon2D);
 		AddChild(innerPolygon2D);
 		AddChild(area2D);
-
+		
 	} 
 			
 

@@ -11,6 +11,7 @@ namespace GameLogic
 		{
 			Peasant,
 			PlaceholderEnemy,
+			JadeCharacter,
 			NPC
 		}
 	
@@ -42,6 +43,12 @@ namespace GameLogic
 				 	character = scene.Instantiate<EnemyCharacter>();
 					character.Character = new PlaceholderEnemy(eventManager, 100, 1, 1);
 					battleField.PlaceEnemy(character.Character as IEnemy, spawnTile.Tile);
+					 break;
+				case CharacterType.JadeCharacter:
+					scene = GD.Load<PackedScene>("res://Scenes/Characters/Friendly/JadeCharacter.tscn");
+				 	character = scene.Instantiate<JadeCharacter>();
+					character.Character = new Peasant(eventManager);
+					battleField.PlacePlayer(character.Character as IPlayer, spawnTile.Tile);
 					 break;
 				case CharacterType.NPC:
 					scenePath = "res://Characters/NPCs/Villager.tscn";
