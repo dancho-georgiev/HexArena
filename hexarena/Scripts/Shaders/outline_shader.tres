@@ -4,5 +4,5 @@
 
 [resource]
 shader = ExtResource("1_javnd")
-shader_parameter/rgb = Vector3(0, 0, 0)
+shader_parameter/rgb = Vector3(0, 1, 0)
 shader_parameter/epsilon = 0.03
