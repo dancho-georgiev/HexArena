@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://f73gtrvsafnc"]
 
-[ext_resource type="Texture2D" uid="uid://haiorqccdq7k" path="res://Assets/Characters/Friendly/peasant.png" id="1_37h1o"]
+[ext_resource type="Texture2D" uid="uid://haiorqccdq7k" path="res://Assets/Characters/Friendly/peasant_old.png" id="1_37h1o"]
 
 [node name="DevUI" type="Control"]
 layout_mode = 3

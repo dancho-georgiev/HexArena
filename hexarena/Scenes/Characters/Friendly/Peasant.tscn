@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://eqneekewkp46"]
 
 [ext_resource type="Script" uid="uid://dllxjw4pfm7tx" path="res://Scenes/Characters/Friendly/PeasantView.cs" id="1_h08me"]
-[ext_resource type="Texture2D" uid="uid://haiorqccdq7k" path="res://Assets/Characters/Friendly/peasant.png" id="2_x2cpq"]
+[ext_resource type="Texture2D" uid="uid://haiorqccdq7k" path="res://Assets/Characters/Friendly/peasant_old.png" id="2_x2cpq"]
 
 [node name="Peasant" type="Node2D"]
 script = ExtResource("1_h08me")

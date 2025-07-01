@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://v3w3phaosr48"
-path="res://.godot/imported/peasant.png-cfab615e5e2a8aa3dd2da6afc15e741e.ctex"
+uid="uid://haiorqccdq7k"
+path="res://.godot/imported/peasant_old.png-55be79e1569e19437cc8438b57fcc8ef.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Characters/Friendly/peasant.png"
-dest_files=["res://.godot/imported/peasant.png-cfab615e5e2a8aa3dd2da6afc15e741e.ctex"]
+source_file="res://Assets/Characters/Friendly/peasant_old.png"
+dest_files=["res://.godot/imported/peasant_old.png-55be79e1569e19437cc8438b57fcc8ef.ctex"]
 
 [params]
 
