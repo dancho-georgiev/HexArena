@@ -20,7 +20,7 @@ namespace GameLogic
 		public List<IActive> ActiveAbilities { get; set; }
 		public List<IPassive> PassiveAbilities { get; set; }
 		public Action<List<ITile>> HasMoved {get; set;}
-		public Action<string, ITarget> ActivatedAbility {get; set;}
+		public Action<string, List<ITargetable>> ActivatedAbility {get; set;}
 		public IAbility SelectedAbility {get; set;}
 		public ITile Tile { get{return tile;} 
 		set{
@@ -59,7 +59,7 @@ namespace GameLogic
 		}
 		public virtual void UseSelectedAbility(){
 			if(SelectedAbility.Target.IsReady()){
-				ActivatedAbility?.Invoke(SelectedAbility.GetType().Name, SelectedAbility.Target);
+				ActivatedAbility?.Invoke(SelectedAbility.GetType().Name, SelectedAbility.Target.TargetList.ToList());
 				SelectedAbility.Use();
 			}
 			

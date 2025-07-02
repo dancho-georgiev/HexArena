@@ -21,7 +21,7 @@ namespace View{
 		public bool StartAnimation = false;
 		
 		private string abilityName;
-		private ITarget target;
+		private List<ITargetable> target;
 		
 		protected HexagonTile _targetTile;
 
@@ -52,12 +52,23 @@ namespace View{
 			}
 		}
 		
-		public void InstantiateAbilityAnimation(string abilityName, ITarget target){
+		public void InstantiateAbilityAnimation(string abilityName, List<ITargetable> target){
 			if(!IsMoving){
 				PackedScene scene = GD.Load<PackedScene>($"res://Assets/AbilityAnimations/{abilityName}Animation.tscn");
 				AnimatedSprite2D animation = scene.Instantiate<AnimatedSprite2D>();
+				//bachka samo za pitchfork poke ama posle she go opraim
+				Vector2 direction = Utility.Direction(Utility.FindHexagonTileByITile(Character.Tile, GetTree()), target[0] is ITile ?
+				 Utility.FindHexagonTileByITile(target[0] as ITile, GetTree()) :
+				 Utility.FindHexagonTileByITile((target[0] as ICharacter).Tile, GetTree())).Normalized();
+				float distance = Utility.Distance(Utility.FindHexagonTileByITile(Character.Tile, GetTree()), target[0] is ITile ?
+				 Utility.FindHexagonTileByITile(target[0] as ITile, GetTree()) :
+				 Utility.FindHexagonTileByITile((target[0] as ICharacter).Tile, GetTree()));
 				
+				animation.Position = direction*distance*2;
+				animation.Rotation += Mathf.Atan2(direction.Y, direction.X);
+				//animation.Position = Utility.Rotate(animation.Position,-direction, new Vector2(0f,0f));
 				AddChild(animation);
+				StartAnimation = false;
 			}
 			else{
 				StartAnimation = true;

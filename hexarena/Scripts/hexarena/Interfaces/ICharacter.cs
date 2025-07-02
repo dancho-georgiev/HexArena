@@ -23,7 +23,7 @@ namespace Interfaces
 		public List<IPassive> PassiveAbilities { get; set; }
 		public IAbility SelectedAbility {get; set;}
 		
-		public Action<string, ITarget> ActivatedAbility {get; set;}
+		public Action<string, List<ITargetable>> ActivatedAbility {get; set;}
 		public Action<List<ITile>> HasMoved {get; set;}
 	}
 }
