@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using Interfaces;
+using System.Threading.Tasks;
 
 namespace GameLogic{
 	public partial class Peasant : Character, IPlayer 
@@ -10,6 +11,7 @@ namespace GameLogic{
 		{
 			InitializePassives();
 			InitializeActives();
+			SelectedAbility = ActiveAbilities[0];
 		}
 		protected override void InitializePassives()
 		{
@@ -18,7 +20,7 @@ namespace GameLogic{
 		protected override void InitializeActives()
 		{
 			ActiveAbilities = new List<IActive>();
-			ActiveAbilities.Add(new PitchforkPoke(Tile));
+			ActiveAbilities.Add(new PitchforkPoke(Tile, eventManager));
 		}
 	}
 	

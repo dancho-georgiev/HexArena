@@ -1,0 +1,67 @@
+[gd_resource type="SpriteFrames" load_steps=10 format=3 uid="uid://ffml1frqnup8"]
+
+[ext_resource type="Texture2D" uid="uid://dwkynkf3uvqd6" path="res://Assets/AbilityAnimations/PitchforkPokeSpriteSheet.png" id="1_ux04j"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v4pco"]
+atlas = ExtResource("1_ux04j")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lsbc5"]
+atlas = ExtResource("1_ux04j")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3wb4f"]
+atlas = ExtResource("1_ux04j")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_orl8g"]
+atlas = ExtResource("1_ux04j")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mgq8q"]
+atlas = ExtResource("1_ux04j")
+region = Rect2(256, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oyy1f"]
+atlas = ExtResource("1_ux04j")
+region = Rect2(320, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uj0qj"]
+atlas = ExtResource("1_ux04j")
+region = Rect2(384, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xi2h3"]
+atlas = ExtResource("1_ux04j")
+region = Rect2(448, 0, 64, 64)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v4pco")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lsbc5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3wb4f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_orl8g")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mgq8q")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oyy1f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uj0qj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xi2h3")
+}],
+"loop": false,
+"name": &"default",
+"speed": 5.0
+}]

@@ -6,6 +6,7 @@ using GameLogic;
 using View;
 using Utilities;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace View{
 	public partial class GameCharacter : Node2D
@@ -17,6 +18,11 @@ namespace View{
 		protected Sprite2D _sprite;
 		public HexagonTile CurrentTile { get; set; }
 		public bool IsMoving = false;
+		public bool StartAnimation = false;
+		
+		private string abilityName;
+		private ITarget target;
+		
 		protected HexagonTile _targetTile;
 
 		protected List<HexagonTile> _hexPath = new List<HexagonTile>();
@@ -31,6 +37,7 @@ namespace View{
 			_sprite.Scale = new Vector2(0.1f,0.1f);
 			AddChild(_sprite);
 			Character.HasMoved += MoveVisualCharacter;
+			Character.ActivatedAbility += InstantiateAbilityAnimation;
 		}
 		
 		
@@ -39,6 +46,23 @@ namespace View{
 			if (IsMoving)
 			{
 				HandleMovement((float)delta);
+			}
+			else if(StartAnimation){
+				InstantiateAbilityAnimation(abilityName, target);
+			}
+		}
+		
+		public void InstantiateAbilityAnimation(string abilityName, ITarget target){
+			if(!IsMoving){
+				PackedScene scene = GD.Load<PackedScene>($"res://Assets/AbilityAnimations/{abilityName}Animation.tscn");
+				AnimatedSprite2D animation = scene.Instantiate<AnimatedSprite2D>();
+				
+				AddChild(animation);
+			}
+			else{
+				StartAnimation = true;
+				this.abilityName = abilityName;
+				this.target = target;
 			}
 		}
 		

@@ -2,7 +2,7 @@
 
 [ext_resource type="Material" uid="uid://pcb4mujdju7n" path="res://Scripts/Shaders/outline_shader.tres" id="1_0o0li"]
 [ext_resource type="Script" uid="uid://dwd0l3m0bw8sy" path="res://Scenes/Characters/Enemy/EnemyCharacter.cs" id="1_y4tie"]
-[ext_resource type="Texture2D" uid="uid://bqgre8o76wdtl" path="res://Assets/Characters/Enemy/badguy2.png" id="2_febio"]
+[ext_resource type="Texture2D" uid="uid://fs3pihbf6if" path="res://Assets/Characters/Enemy/badguy2.png" id="2_febio"]
 
 [node name="PlaceholderEnemy" type="Node2D"]
 material = ExtResource("1_0o0li")

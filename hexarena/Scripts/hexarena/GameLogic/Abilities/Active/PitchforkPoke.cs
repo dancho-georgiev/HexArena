@@ -7,10 +7,11 @@ namespace GameLogic{
 	public class PitchforkPoke : Active
 	{
 		public int Damage {get; protected set;}
-		public PitchforkPoke(ITile position)
+		public PitchforkPoke(ITile position, EventManager eventManager)
 		{ 
 			Damage = 1;
 			Target = new SingleTarget(position, 2);
+			
 		}
 		
 		public override SingleTarget GetTargetType()

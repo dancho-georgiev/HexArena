@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://c42bdxu3o1pri"]
+
+[ext_resource type="SpriteFrames" uid="uid://ffml1frqnup8" path="res://Assets/AbilityAnimations/PitchforkPokeFrames.tres" id="1_wqe4s"]
+[ext_resource type="Script" uid="uid://cg7n18kkp78l8" path="res://Scripts/hexarena/View/AbilityAnimation.cs" id="2_myx1v"]
+
+[node name="PitchforkPokeAnimation" type="AnimatedSprite2D"]
+sprite_frames = ExtResource("1_wqe4s")
+frame = 6
+frame_progress = 0.548763
+script = ExtResource("2_myx1v")

@@ -9,6 +9,7 @@ namespace GameLogic{
 	{
 		public PlaceholderEnemy(EventManager eventManager, int health, int stepCost, int initiative) : base(eventManager, health, stepCost, initiative){
 			InitializeActives();
+			SelectedAbility = ActiveAbilities[0];
 		}
 		private ITile FindClosestPlayer(){
 			HashSet<ITile> visited = new HashSet<ITile>();
@@ -54,13 +55,14 @@ namespace GameLogic{
 			if(target==null) return;
 			MoveCharacter(target);
 			IPlayer player = FindPlayerInRange();
-			ActiveAbilities[0].Target.AddTargetable(player);
-			ActiveAbilities[0].Use();
+			SelectedAbility = ActiveAbilities[0];
+			SelectedAbility.Target.AddTargetable(player);
+			UseSelectedAbility();
 		}
 		
 		protected override void InitializeActives()
 		{
-			ActiveAbilities.Add(new PitchforkPoke(Tile));
+			ActiveAbilities.Add(new PitchforkPoke(Tile, eventManager));
 		}
 		protected override void InitializePassives()
 		{

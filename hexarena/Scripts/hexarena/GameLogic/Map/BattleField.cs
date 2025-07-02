@@ -19,7 +19,8 @@ namespace GameLogic{
 		public bool PlayerTurn = true;
 		public TurnOrderManager turnOrderManager {get; set;}
 		public ICharacter SelectedCharacter {get; set;}
-		public IAbility SelectedAbility{get; set;}
+		public IAbility SelectedAbility{get{return SelectedCharacter.SelectedAbility;} 
+										set{SelectedCharacter.SelectedAbility = value;}}
 		public ITarget SelectedAbilityTarget {get; set;}
 		
 		public bool GameStarted {get; set;} = false;
@@ -108,19 +109,17 @@ namespace GameLogic{
 		
 		//kogato e ready se puska abilityto
 		public void UseSelectedAbility(){
-			if(SelectedAbilityTarget.IsReady()) SelectedAbility.Use();
+			SelectedCharacter.UseSelectedAbility();
 		}
 		
 		public void StartTurn(){
 			eventManager.EmitOnStartTurn();
 			if(SelectedCharacter is IEnemy enemy) enemy.PlayTurn();
-			SelectedAbility = null;
 		}
 		
 		public void EndTurn(){
 			eventManager.EmitOnEndTurn();
 			SelectedCharacter = turnOrderManager.NextTurn();
-			SelectedAbility  = null;
 		}
 		
 	}

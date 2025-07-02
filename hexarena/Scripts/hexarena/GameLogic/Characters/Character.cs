@@ -4,7 +4,7 @@ using Interfaces;
 using System.Collections.Generic;
 using Utilities;
 using System.Linq;
-
+using System.Threading.Tasks;
 namespace GameLogic
 {
 	
@@ -20,6 +20,8 @@ namespace GameLogic
 		public List<IActive> ActiveAbilities { get; set; }
 		public List<IPassive> PassiveAbilities { get; set; }
 		public Action<List<ITile>> HasMoved {get; set;}
+		public Action<string, ITarget> ActivatedAbility {get; set;}
+		public IAbility SelectedAbility {get; set;}
 		public ITile Tile { get{return tile;} 
 		set{
 				tile = value;
@@ -52,7 +54,16 @@ namespace GameLogic
 		
 		protected abstract void InitializeActives();
 		protected abstract void InitializePassives();
-		
+		public virtual void SelectAbility(int index){
+			SelectedAbility = ActiveAbilities[index];
+		}
+		public virtual void UseSelectedAbility(){
+			if(SelectedAbility.Target.IsReady()){
+				ActivatedAbility?.Invoke(SelectedAbility.GetType().Name, SelectedAbility.Target);
+				SelectedAbility.Use();
+			}
+			
+		}
 		//curently used for vulnerable
 		//promenq podaden damage spored status efectite na Charactera
 		//returns modified damage

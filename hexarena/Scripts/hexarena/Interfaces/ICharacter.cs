@@ -16,10 +16,14 @@ namespace Interfaces
 		public ITile Tile { get; set; }
 		public void MoveCharacter(ITile target);
 		public void MoveCharacter(List<ITile> path);
+		public void SelectAbility(int index);
+		public void UseSelectedAbility();
 		public EventManager eventManager {get; set;}
 		public List<IActive> ActiveAbilities { get; set; }
 		public List<IPassive> PassiveAbilities { get; set; }
+		public IAbility SelectedAbility {get; set;}
 		
+		public Action<string, ITarget> ActivatedAbility {get; set;}
 		public Action<List<ITile>> HasMoved {get; set;}
 	}
 }
