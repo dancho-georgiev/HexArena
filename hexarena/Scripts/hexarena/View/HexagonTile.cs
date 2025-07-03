@@ -89,7 +89,7 @@ namespace View
 			AddToGroup("HexTiles");
 			Hexagon.area2D.MouseEntered += MouseEnter;
 			Hexagon.area2D.MouseExited += MouseExit;
-			Hexagon.area2D.InputEvent += HandleInput; 
+			Hexagon.area2D.InputEvent += HandleInput;
 			ResetColor();
 		}
 		

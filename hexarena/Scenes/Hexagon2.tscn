@@ -1,33 +1,25 @@
-[gd_scene load_steps=6 format=3 uid="uid://dmu6ctyiugnih"]
+[gd_scene load_steps=3 format=3 uid="uid://dmu6ctyiugnih"]
 
-[ext_resource type="Material" uid="uid://c34imbki70y5p" path="res://Assets/Shaders/jade_shader.tres" id="1_nyp85"]
 [ext_resource type="Script" uid="uid://bjrjwhdqxhg1m" path="res://Scenes/Hexagon.cs" id="2_3bw6b"]
-[ext_resource type="Shader" uid="uid://biqhkuow5o8sp" path="res://Scripts/Shaders/jade_shader.gdshader" id="3_3bw6b"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_fxaca"]
-shader = ExtResource("3_3bw6b")
-shader_parameter/epsilon = 2.0
-shader_parameter/frequency = 2.9
-shader_parameter/amplitude = 1.0
-shader_parameter/rotation = 0.54
-shader_parameter/center = Vector2(0.5, 0.5)
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_nyp85"]
 
-[node name="Hexagon2" type="Node2D"]
-material = ExtResource("1_nyp85")
+[node name="Hexagon2" type="Node2D" node_paths=PackedStringArray("polygon2D", "innerPolygon2D", "collisionPolygon2D", "area2D")]
 script = ExtResource("2_3bw6b")
+polygon2D = NodePath("polygon")
+innerPolygon2D = NodePath("innerPolygon")
+collisionPolygon2D = NodePath("Area2D/CollisionPolygon2D")
+area2D = NodePath("Area2D")
 
 [node name="polygon" type="Polygon2D" parent="."]
 polygon = PackedVector2Array(25.9808, -15, 25.9808, 15, -1.31134e-06, 30, -25.9808, 15, -25.9808, -15, 3.57746e-07, -30)
 
 [node name="innerPolygon" type="Polygon2D" parent="."]
 z_index = 1
-material = SubResource("ShaderMaterial_fxaca")
 texture = SubResource("CanvasTexture_nyp85")
 polygon = PackedVector2Array(21.6506, -12.5, 21.6506, 12.5, -1.09278e-06, 25, -21.6506, 12.5, -21.6506, -12.5, 2.98122e-07, -25)
 
 [node name="Area2D" type="Area2D" parent="."]
 
-[node name="_CollisionPolygon2D_2" type="CollisionPolygon2D" parent="Area2D"]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Area2D"]
 polygon = PackedVector2Array(25.9808, -15, 25.9808, 15, -1.31134e-06, 30, -25.9808, 15, -25.9808, -15, 3.57746e-07, -30)

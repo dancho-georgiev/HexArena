@@ -1,3 +1,10 @@
-[gd_scene format=3 uid="uid://dcqhght751dg5"]
+[gd_scene load_steps=3 format=3 uid="uid://dcqhght751dg5"]
+
+[ext_resource type="SpriteFrames" uid="uid://bn7ves3uownbw" path="res://Assets/AbilityAnimations/SpriteFrames/ImpaleSpriteFrames.tres" id="1_yob0l"]
+[ext_resource type="Script" uid="uid://cg7n18kkp78l8" path="res://Scripts/hexarena/View/AbilityAnimation.cs" id="2_xltmf"]
 
 [node name="ImpaleAnimation" type="AnimatedSprite2D"]
+sprite_frames = ExtResource("1_yob0l")
+frame = 15
+frame_progress = 1.0
+script = ExtResource("2_xltmf")

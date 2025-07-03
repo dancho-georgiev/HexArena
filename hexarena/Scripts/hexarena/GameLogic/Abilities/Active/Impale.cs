@@ -12,6 +12,7 @@ namespace GameLogic{
 		{ 
 			Damage = 3;
 			Target = new SingleTarget(position, 1);	
+			this.eventManager = eventManager;
 		}
 		
 		public override SingleTarget GetTargetType()
@@ -31,8 +32,14 @@ namespace GameLogic{
 		{
 			if(Target.IsReady()){
 				Target.TargetList[0].TakeDamage(Damage);
-				if(Target.TargetList[0] is ITile) Target.TargetList[0] = new JadeTile(Target.TargetList[0] as ITile);
-				else (Target.TargetList[0] as ICharacter).Tile = new JadeTile((Target.TargetList[0] as ICharacter).Tile);
+				ITile tile;
+				
+				if(Target.TargetList[0] is ITile) tile = Target.TargetList[0] as ITile;
+				else tile = (Target.TargetList[0] as ICharacter).Tile;
+				if(!(tile is JadeTile)){
+					tile = new JadeTile(tile);
+					eventManager.EmitOnChangedTile(tile);
+				}
 				Target.Reset();
 			}
 			else throw new Exception("not ready");

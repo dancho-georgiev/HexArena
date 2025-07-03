@@ -27,7 +27,9 @@ namespace GameLogic{
 		public Tile(ITile other){
 			this.Position = other.Position;
 			this.CharacterOnTile = other.CharacterOnTile;
-			CharacterOnTile.Tile = this;
+			if(CharacterOnTile!=null){
+				CharacterOnTile.Tile = this;
+			}
 			this.Neighbours = other.Neighbours;
 		}
 		

@@ -8,13 +8,15 @@ namespace GameLogic{
 	{
 		public JadeCharacter(EventManager eventManager) : base (eventManager,100, 1, 1)
 		{
-			InitializePassives();
-			InitializeActives();
+			//InitializePassives();
+			//InitializeActives();
 			SelectedAbility = ActiveAbilities[0];
+			
 		}
 		protected override void InitializePassives()
 		{
 			PassiveAbilities = new List<IPassive>();
+			PassiveAbilities.Add(new JadeTileFollowUp(eventManager));
 		}
 		protected override void InitializeActives()
 		{

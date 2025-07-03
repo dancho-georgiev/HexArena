@@ -2,7 +2,7 @@ shader_type canvas_item;
 
 uniform float epsilon = 0.05;
 uniform float frequency : hint_range(0.0, 100.0, 0.1);
-uniform float amplitude : hint_range(0.0, 1.0, 0.01);
+uniform float amplitude : hint_range(0.0, 5.0, 0.1);
 uniform float rotation : hint_range(0.0,6.28,0.01);
 uniform vec2 center =vec2(0.5,0.5);
 

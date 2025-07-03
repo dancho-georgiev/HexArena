@@ -8,7 +8,7 @@ namespace GameLogic{
 	public abstract class Ability : IAbility
 	{
 		public ITarget Target { get; set; }
-		
+		protected EventManager eventManager;
 		public Ability()
 		{
 			

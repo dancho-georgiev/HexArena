@@ -48,7 +48,7 @@ namespace View
 			battleField = new BattleField(eventManager, Width, Length);
 			characterFactory = new CharacterFactory(eventManager, battleField);
 			hexPath = new List<HexagonTile>();
-			Hexagon = GD.Load<PackedScene>("res://Scenes/Hexagon.tscn");
+			Hexagon = GD.Load<PackedScene>("res://Scenes/Hexagon2.tscn");
 			//AbilityBar = GetChild(0).GetChild<AbilityBar>(0);
 			
 			//gets hexagon size for TileToWorld
@@ -61,11 +61,12 @@ namespace View
 				Grid.Add(new List<HexagonTile>());
 				for(int j = 0; j < Length; j++){
 					Hexagon inst = Hexagon.Instantiate<Hexagon>();
-					inst.GlobalPosition = new Vector2(i * inst.Size + (j % 2 == 0 ? inst.Size/2 : 1), j * inst.Size);
+					inst.GlobalPosition = new Vector2(i * inst.Size + (j % 2 == 0 ? inst.Size/2 : 1), j * inst.Size)*2;
 					HexagonTile hexTile = new HexagonTile(inst, battleField.GetTile(i, j));
 					hexTile.TileClicked += OnTileClicked;
 					hexTile.MouseEntered += OnTileEntered;
 					hexTile.MouseExited += OnTileExited;
+					eventManager.ChangedTile += OnChangedTile;
 					Grid[i].Add(hexTile);
 					AddChild(hexTile);
 				}
@@ -201,6 +202,19 @@ namespace View
 		public HexagonTile GetTile(ITile tile){
 			return Grid[tile.Position.y][tile.Position.x];
 		}
+		
+		public void OnChangedTile(ITile tile){
+			HexagonTile hexTile = GetTile(tile);
+			if(tile is JadeTile){
+				hexTile.Tile = tile;
+				hexTile.Hexagon.innerPolygon2D.Material = GD.Load("res://Assets/Shaders/jade_shader.tres").Duplicate(true) as ShaderMaterial;
+			}
+			//else if(...)
+			else{
+				hexTile.Hexagon.innerPolygon2D.Material = null;
+			}
+		}
+		
 		
 		private void SelectCharacterOnTile(HexagonTile tile){
 			if(tile.Tile.CharacterOnTile!=null && tile.Tile.CharacterOnTile is IPlayer){

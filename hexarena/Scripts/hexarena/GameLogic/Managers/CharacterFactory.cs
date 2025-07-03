@@ -59,7 +59,7 @@ namespace GameLogic
 
 			character.ZIndex = 2;
 			character.CurrentTile = spawnTile;
-			character.GlobalPosition = spawnTile.Hexagon.GlobalPosition;
+			//character.GlobalPosition = spawnTile.Hexagon.GlobalPosition;
 			spawnTile.Hexagon.AddChild(character);
 			return character;
 		}

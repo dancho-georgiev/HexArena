@@ -22,13 +22,17 @@ namespace GameLogic
 		public delegate void ActivateAbility1EventHandler(); //moje sushto da ima argument ama ne sum siguren tochno
 															 //kvo iskame taka che za sq da sedi taka kogato stignem do tam she go opraim
 		public Action<ICharacter,List<ITargetable>, string> ActivatedAbility;
+		public Action<ITile> ChangedTile;
+		
 		public void EmitOnStartTurn() => EmitSignal(SignalName.StartTurn);
 		public void EmitOnEndTurn() => EmitSignal(SignalName.EndTurn);
 		public void EmitOnHit() => EmitSignal(SignalName.Hit);
 		public void EmitOnTakeDamage() => EmitSignal(SignalName.TakeDamage);
 		public void EmitOnActivateAbility1() => EmitSignal(SignalName.ActivateAbility1);
+		
 		public void EmitOnActivatedAbility(ICharacter sender, List<ITargetable> reciever, string abilityName)
-		 => ActivatedAbility?.Invoke(sender,reciever.ToList(), abilityName);
+		 => ActivatedAbility?.Invoke(sender, reciever.ToList(), abilityName);
+		public void EmitOnChangedTile(ITile tile) => ChangedTile?.Invoke(tile);
 		
 	}
 }

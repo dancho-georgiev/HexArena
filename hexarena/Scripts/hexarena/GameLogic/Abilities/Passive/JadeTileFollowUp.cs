@@ -1,5 +1,7 @@
 using Godot;
 using System;
+using Interfaces;
+using System.Collections.Generic;
 
 namespace GameLogic{
 	
@@ -11,16 +13,10 @@ namespace GameLogic{
 			return Target as AllEnemiesTarget;
 		}
 		
-		public JadeTileFollowUp(EventManager eventManager, AllEnemiesTarget target){
-			damage = 10;
-			Connect(eventManager);
-			AddTarget(target);
-		}
-		
 		public JadeTileFollowUp(EventManager eventManager){
 			damage = 10;
-			Connect(eventManager);
-			Target = new AllEnemiesTarget();
+			this.eventManager = eventManager;
+			eventManager.ActivatedAbility += Use;
 		}
 		public override void Connect(EventManager eventManager){
 			eventManager.StartTurn += Use;
@@ -29,12 +25,41 @@ namespace GameLogic{
 			eventManager.StartTurn -= Use;
 		}
 		
-		public override void Use(){
-			Target.PopulateFromGrid();
-			foreach(Enemy enemy in Target.TargetList){
-				enemy.TakeDamage(damage);
+		private void UseOnTile(ITile tile){
+			if(tile is JadeTile && tile.CharacterOnTile!=null){
+				if(tile.CharacterOnTile is IEnemy){
+					tile.TakeDamage(damage);
+				}
+				else{
+					//gain shield
+				}
 			}
-			Target.Reset();
+		}
+		
+		private void UseOnCharacter(ICharacter character){
+			if(character.Tile is JadeTile){
+				if(character is IEnemy){
+					character.TakeDamage(damage);
+				}
+				else{
+					//gain shield
+				}
+			}
+		}
+		
+		public void Use(ICharacter sender, List<ITargetable> targets, string abilityName){
+			foreach(ITargetable targetable in targets){
+				if(targetable is ITile t){
+					UseOnTile(t);
+				}
+				else if(targetable is ICharacter c){
+					UseOnCharacter(c);
+				}
+			}
+		}
+		
+		public override void Use(){
+			
 		}
 	}
 }

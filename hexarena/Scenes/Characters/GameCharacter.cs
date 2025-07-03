@@ -65,7 +65,7 @@ namespace View{
 				 Utility.FindHexagonTileByITile(target[0] as ITile, GetTree()) :
 				 Utility.FindHexagonTileByITile((target[0] as ICharacter).Tile, GetTree()));
 				
-				animation.Position = direction*distance*2;
+				animation.Position = direction*distance;
 				animation.Rotation += Mathf.Atan2(direction.Y, direction.X);
 				//animation.Position = Utility.Rotate(animation.Position,-direction, new Vector2(0f,0f));
 				AddChild(animation);
@@ -147,7 +147,7 @@ namespace View{
 		{
 			if (_targetTile.Hexagon is Node2D)
 			{
-				return _targetTile.Hexagon.GlobalPosition*2;
+				return _targetTile.Hexagon.GlobalPosition;
 			}
 			return GlobalPosition;
 		}
