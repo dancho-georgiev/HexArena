@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dwkynkf3uvqd6"
-path="res://.godot/imported/PitchforkPokeSpriteSheet.png-08f39f43fb3105402b8f5786d176aa4a.ctex"
+path="res://.godot/imported/PitchforkPokeSpriteSheet.png-4b42ced673a77316f862af8eaddb196f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/AbilityAnimations/PitchforkPokeSpriteSheet.png"
-dest_files=["res://.godot/imported/PitchforkPokeSpriteSheet.png-08f39f43fb3105402b8f5786d176aa4a.ctex"]
+source_file="res://Assets/AbilityAnimations/SpriteFrames/PitchforkPokeSpriteSheet.png"
+dest_files=["res://.godot/imported/PitchforkPokeSpriteSheet.png-4b42ced673a77316f862af8eaddb196f.ctex"]
 
 [params]
 

@@ -27,7 +27,7 @@ namespace View
 		private float _hexSize;
 	
 		public List<List<HexagonTile>> Grid {get; set;}
-		public List<GameCharacter> Characters{get; set;}
+		public Dictionary<ICharacter, GameCharacter> Characters{get; set;}
 		
 		public HexagonTile hoveredTile {get; set;}
 		
@@ -42,7 +42,7 @@ namespace View
 		//veche grida e or hexagonTileove
 		public override void _Ready(){
 			Grid = new List<List<HexagonTile>>();
-			Characters = new List<GameCharacter>();
+			Characters = new Dictionary<ICharacter, GameCharacter>();
 			eventManager = new EventManager();
 			
 			battleField = new BattleField(eventManager, Width, Length);
@@ -110,7 +110,7 @@ namespace View
 		
 		public override void _Input(InputEvent @event)
 		{
-			if(Characters.Any(x=>x.IsMoving))return;
+			if(Characters.Values.Any(x=>x.IsMoving))return;
 			if(@event is InputEventKey key)
 			{
 				if(key.Pressed && key.Keycode == Key.Q)
@@ -119,7 +119,7 @@ namespace View
 					{	
 						GameCharacter player =
 						characterFactory.SpawnCharacter(spawnType, hoveredTile);
-						Characters.Add(player);
+						Characters.Add(player.Character,player);
 					}
 				}
 				if(key.Pressed && key.Keycode == Key.E)
@@ -232,7 +232,7 @@ namespace View
 		}
 		
 		public void OnTileClicked(HexagonTile tile){
-			if(Characters.Any(x=>x.IsMoving))return;
+			if(Characters.Values.Any(x=>x.IsMoving))return;
 			GD.Print($"Clicked tile at {tile.Tile.Position.x}, {tile.Tile.Position.y }");
 			if(!selectedCharacter && !selectingTarget && !GameStarted){
 				SelectCharacterOnTile(tile);
@@ -264,7 +264,7 @@ namespace View
 		}
 		
 		public void OnTileEntered(HexagonTile tile){
-			if(Characters.Any(x=>x.IsMoving))return;
+			if(Characters.Values.Any(x=>x.IsMoving))return;
 			hoveredTile = tile;
 			if(selectingTarget){
 				

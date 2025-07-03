@@ -3,7 +3,7 @@ using System;
 
 namespace View{
 	
-public partial class JadeCharacter : GameCharacter
+public partial class JadeCharacterView : GameCharacter
 {
 	public override void _Ready(){
 		base._Ready();

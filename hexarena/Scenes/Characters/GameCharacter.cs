@@ -14,7 +14,7 @@ namespace View{
 		public ICharacter Character {get; set;}
 		[Export] public Texture2D CharacterSpriteTexture;
 		[Export] public float MoveSpeed = 100f;
-		
+		public EventManager eventManager {get {return Character.eventManager;}}
 		protected Sprite2D _sprite;
 		public HexagonTile CurrentTile { get; set; }
 		public bool IsMoving = false;
@@ -37,7 +37,7 @@ namespace View{
 			_sprite.Scale = new Vector2(0.1f,0.1f);
 			AddChild(_sprite);
 			Character.HasMoved += MoveVisualCharacter;
-			Character.ActivatedAbility += InstantiateAbilityAnimation;
+			eventManager.ActivatedAbility += InstantiateAbilityAnimation;
 		}
 		
 		
@@ -48,11 +48,12 @@ namespace View{
 				HandleMovement((float)delta);
 			}
 			else if(StartAnimation){
-				InstantiateAbilityAnimation(abilityName, target);
+				InstantiateAbilityAnimation(Character,target,abilityName);
 			}
 		}
 		
-		public void InstantiateAbilityAnimation(string abilityName, List<ITargetable> target){
+		public void InstantiateAbilityAnimation(ICharacter sender,List<ITargetable> target, string abilityName){
+			if(sender!=Character)return;
 			if(!IsMoving){
 				PackedScene scene = GD.Load<PackedScene>($"res://Assets/AbilityAnimations/{abilityName}Animation.tscn");
 				AnimatedSprite2D animation = scene.Instantiate<AnimatedSprite2D>();

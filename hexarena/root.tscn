@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://ko5n1wxrr7jl" path="res://Node2d.cs" id="1_pq8q7"]
 [ext_resource type="Script" uid="uid://6fomfkptmmro" path="res://Scripts/hexarena/View/GridView.cs" id="1_pyidc"]
-[ext_resource type="PackedScene" uid="uid://botcm4t4n4d02" path="res://Scenes/Hexagon.tscn" id="2_vvh5c"]
+[ext_resource type="PackedScene" uid="uid://cj8wisha8x5hk" path="res://Scenes/Hexagon.tscn" id="2_vvh5c"]
 [ext_resource type="Script" uid="uid://dtxewwau2lmsw" path="res://AbilityBar.cs" id="4_jnlp7"]
 [ext_resource type="PackedScene" uid="uid://qfsv0picr6bj" path="res://Scenes/ui/ability_slot/AbilitySlot.tscn" id="5_l8v81"]
 

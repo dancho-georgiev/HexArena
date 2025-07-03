@@ -46,8 +46,8 @@ namespace GameLogic
 					 break;
 				case CharacterType.JadeCharacter:
 					scene = GD.Load<PackedScene>("res://Scenes/Characters/Friendly/JadeCharacter.tscn");
-				 	character = scene.Instantiate<JadeCharacter>();
-					character.Character = new Peasant(eventManager);
+				 	character = scene.Instantiate<JadeCharacterView>();
+					character.Character = new JadeCharacter(eventManager);
 					battleField.PlacePlayer(character.Character as IPlayer, spawnTile.Tile);
 					 break;
 				case CharacterType.NPC:

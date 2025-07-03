@@ -34,7 +34,6 @@ public partial class Hexagon : Node2D
 		AddChild(polygon2D);
 		AddChild(innerPolygon2D);
 		AddChild(area2D);
-		
 	} 
 			
 

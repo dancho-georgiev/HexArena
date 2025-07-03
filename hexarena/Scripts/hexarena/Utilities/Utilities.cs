@@ -306,14 +306,14 @@ namespace Utilities{
 			return new Vector2(point.X*basisX.X + point.Y * basisY.X, point.X*basisX.Y + point.Y*basisY.Y) + offset;
 		}
 		
-		public static Vector2 Rotate(Vector2 point, Vector2 direction, Vector2 center){
-			float cos = new Vector2(1f,0f).Dot(direction.Normalized());
-			float sin = new Vector2(1f,0f).Cross(direction.Normalized());
-			Vector2 basisX = new Vector2(cos, sin);
-			Vector2 basisY = new Vector2(-sin, cos);
-			return TransformBasis(point, basisX, basisY, new Vector2(0f,0f));
-			
-		}
+		//public static Vector2 Rotate(Vector2 point, Vector2 direction, Vector2 center){
+			//float cos = new Vector2(1f,0f).Dot(direction.Normalized());
+			//float sin = new Vector2(1f,0f).Cross(direction.Normalized());
+			//Vector2 basisX = new Vector2(cos, sin);
+			//Vector2 basisY = new Vector2(-sin, cos);
+			//return TransformBasis(point, basisX, basisY, new Vector2(0f,0f));
+			//
+		//}
 		
 		public static void ThreeDfy(List<List<HexagonTile>> grid){
 			Vector2 e1 = new Vector2(1,0.01f).Normalized();

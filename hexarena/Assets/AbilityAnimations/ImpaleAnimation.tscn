@@ -1,0 +1,3 @@
+[gd_scene format=3 uid="uid://dcqhght751dg5"]
+
+[node name="ImpaleAnimation" type="AnimatedSprite2D"]
