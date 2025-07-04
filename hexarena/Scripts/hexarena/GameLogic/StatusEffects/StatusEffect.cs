@@ -7,6 +7,7 @@ namespace GameLogic
 {
 	public abstract class StatusEffect : IStatusEffect
 	{
+		public Action<List<ITargetable>, string> ActivatedPassiveEffect {get; set;}
 		public abstract bool IsExpired();
 		public abstract void Disconnect(EventManager eventManager);
 		public ITarget Target { get; set; }

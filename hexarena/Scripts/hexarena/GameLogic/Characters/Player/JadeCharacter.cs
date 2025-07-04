@@ -17,6 +17,9 @@ namespace GameLogic{
 		{
 			PassiveAbilities = new List<IPassive>();
 			PassiveAbilities.Add(new JadeTileFollowUp(eventManager));
+			foreach(IPassive passive in PassiveAbilities){
+				passive.ActivatedPassiveEffect += (List<ITargetable> t, string s)=>{eventManager.EmitOnActivatedAbility(this,t,s);};
+			}
 		}
 		protected override void InitializeActives()
 		{

@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://ioi243uhlwkx"]
+
+[ext_resource type="SpriteFrames" uid="uid://bn7ves3uownbw" path="res://Assets/AbilityAnimations/SpriteFrames/ImpaleSpriteFrames.tres" id="1_8iw0a"]
+[ext_resource type="Script" uid="uid://cg7n18kkp78l8" path="res://Scripts/hexarena/View/AbilityAnimation.cs" id="2_qoc1y"]
+
+[node name="JadeTileFollowUpAnimation" type="AnimatedSprite2D"]
+rotation = 1.5708
+skew = 0.836013
+sprite_frames = ExtResource("1_8iw0a")
+script = ExtResource("2_qoc1y")
