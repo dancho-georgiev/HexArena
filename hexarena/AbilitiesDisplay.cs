@@ -20,27 +20,29 @@ namespace View
 		//Variant 3: At the start of the stage create a hidden UI for each character
 		// and only show it when needed. (Also create one for every possible summon). (pro)
 		
-		public EventManager eventManager;
-		private Node ButtonsContainer;
+		public EventManager eventManager {get; set;}
+		private Control ButtonsContainer;
 		private List<AbilityButton> DisplayedButtons = new List<AbilityButton>();
 		
 		public override void _Ready(){
-			
+			GD.Print("UserInterface is ready");
 		}
 		public void Connect(EventManager _eventManager){
 			eventManager.OnCharacterSelected += onCharacterSelect;
+			GD.Print("onCharacterSelect in the UI is connected");
 		}
 		public void Disconnect(EventManager _eventManager){
 			eventManager.OnCharacterSelected -= onCharacterSelect;
 		}
 		private void onCharacterSelect(IPlayer character){
 			
+			GD.Print("recognised CharacterSelect event");
 			ButtonsContainer.Free();
-			ButtonsContainer = new Node();
+			ButtonsContainer = new Control();
 			
 				foreach(IActive activeAbility in character.ActiveAbilities){
 					Button abilityButton = new AbilityButton(activeAbility);
-					abilityButton.CustomMinimumSize = new Vector2(100, 100);
+					abilityButton.CustomMinimumSize = new Vector2(1000, 1000);
 					abilityButton.ExpandIcon = true;
 					abilityButton.Icon = GD.Load<Texture2D>("res://Assets/AbilityIcons/PitchforkPoke.png");
 					abilityButton.Pressed += AbilityClicked;

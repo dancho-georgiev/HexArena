@@ -3,13 +3,15 @@
 [ext_resource type="Script" uid="uid://ko5n1wxrr7jl" path="res://Node2d.cs" id="1_pq8q7"]
 [ext_resource type="Script" uid="uid://6fomfkptmmro" path="res://Scripts/hexarena/View/GridView.cs" id="1_pyidc"]
 [ext_resource type="Script" uid="uid://bbgque55ihoi4" path="res://Root.cs" id="1_vyht1"]
-[ext_resource type="PackedScene" uid="uid://botcm4t4n4d02" path="res://Scenes/Hexagon.tscn" id="2_vvh5c"]
+[ext_resource type="PackedScene" uid="uid://cj8wisha8x5hk" path="res://Scenes/Hexagon.tscn" id="2_vvh5c"]
 [ext_resource type="PackedScene" uid="uid://cabqo5wl4xa1e" path="res://Scenes/Characters/GameCharacter.tscn" id="3_28aoi"]
 [ext_resource type="PackedScene" uid="uid://f73gtrvsafnc" path="res://Scenes/Menu Scenes/devmenu.tscn" id="5_jnlp7"]
 [ext_resource type="PackedScene" uid="uid://baafolgd00hbw" path="res://Scenes/Menu Scenes/userInterface.tscn" id="6_bf3um"]
 
-[node name="Root" type="Node2D"]
+[node name="Root" type="Node2D" node_paths=PackedStringArray("UserInterface", "BattleField")]
 script = ExtResource("1_vyht1")
+UserInterface = NodePath("UserInterface")
+BattleField = NodePath("BattleField")
 
 [node name="BattleField" type="Node2D" parent="."]
 script = ExtResource("1_pyidc")
@@ -19,16 +21,21 @@ Hexagon = ExtResource("2_vvh5c")
 PlayerSprite = ExtResource("3_28aoi")
 
 [node name="Camera2D" type="Camera2D" parent="BattleField"]
-position = Vector2(299, 166)
-
-[node name="DevUI" parent="BattleField/Camera2D" instance=ExtResource("5_jnlp7")]
-offset_left = -459.0
-offset_top = -193.0
-offset_right = -459.0
-offset_bottom = -193.0
-
-[node name="UserInterface" parent="BattleField/Camera2D" instance=ExtResource("6_bf3um")]
+position = Vector2(299, 198)
 
 [node name="ScriptTesting" type="Node2D" parent="BattleField"]
 position = Vector2(458, -80)
 script = ExtResource("1_pq8q7")
+
+[node name="DevUI" parent="." instance=ExtResource("5_jnlp7")]
+offset_left = -160.0
+offset_top = -27.0
+offset_right = -160.0
+offset_bottom = -27.0
+
+[node name="UserInterface" parent="." instance=ExtResource("6_bf3um")]
+offset_left = 300.0
+offset_top = 480.0
+offset_right = 300.0
+offset_bottom = 480.0
+metadata/_edit_use_anchors_ = true

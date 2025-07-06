@@ -21,8 +21,6 @@ namespace View
 		public PackedScene Hexagon {get; set;}
 		[Export]
 		public PackedScene PlayerSprite {get; set;}
-		[Export]
-		public AbilityBar AbilityBar {get; set;}
 
 		private float _hexSize;
 	
@@ -220,13 +218,11 @@ namespace View
 		private void SelectCharacterOnTile(HexagonTile tile){
 			if(tile.Tile.CharacterOnTile!=null && tile.Tile.CharacterOnTile is IPlayer){
 				battleField.SelectCharacter(tile.Tile.CharacterOnTile as IPlayer);
+				eventManager.EmitOnCharacterSelected(tile.Tile.CharacterOnTile as IPlayer);
 				//SelectedGameCharacter = Characters.FirstOrDefault( x => x.Character.Tile.Position == battleField.SelectedCharacter.Tile.Position);
 				tile.Selected = true;
 				selectedCharacter = true;
-				
-				
-				
-				AbilityBar.CurrentCharacter = battleField.SelectedCharacter;			
+							
 				
 			}
 		}

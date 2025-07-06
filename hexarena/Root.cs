@@ -7,14 +7,17 @@ namespace View
 	public partial class Root : Node2D
 	{
 		EventManager eventManager = new EventManager();
-		[Export] Node UserInterface;
+		[Export] Control UserInterface;
 		[Export] Node BattleField;
 		public override void _Ready(){
-			if(UserInterface is AbilitiesDisplay abilityDisplay)
-			abilityDisplay.eventManager = this.eventManager;
 			
-			if(BattleField is GridView battlefield)
-			battlefield.eventManager = this.eventManager;
+			HBoxContainer abilitiesDisplay = GetNode<HBoxContainer>("UserInterface/MarginContainer/AbilitiesDisplay");
+			if (abilitiesDisplay is AbilitiesDisplay scriptInstance)
+			{
+				GD.Print("Root tried to give its event manager to UserInterface");
+				scriptInstance.eventManager = this.eventManager;
+				scriptInstance.Connect(eventManager);
+			}
 		}
 	}
 }
