@@ -28,7 +28,9 @@ namespace View
 			GD.Print("UserInterface is ready");
 		}
 		public void Connect(EventManager _eventManager){
+			eventManager.OnCharacterSelected -= onCharacterSelect;
 			eventManager.OnCharacterSelected += onCharacterSelect;
+			eventManager.EmitOnCharacterSelected(new Peasant(eventManager));  
 			GD.Print("onCharacterSelect in the UI is connected");
 		}
 		public void Disconnect(EventManager _eventManager){
@@ -36,7 +38,7 @@ namespace View
 		}
 		private void onCharacterSelect(IPlayer character){
 			
-			GD.Print("recognised CharacterSelect event");
+			GD.Print("onCharacterSelect function actualy fuckign runs");
 			ButtonsContainer.Free();
 			ButtonsContainer = new Control();
 			

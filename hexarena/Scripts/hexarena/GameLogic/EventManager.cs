@@ -34,6 +34,9 @@ namespace GameLogic
 		public void EmitOnActivatedAbility(ICharacter sender, List<ITargetable> reciever, string abilityName)
 		 => ActivatedAbility?.Invoke(sender, reciever.ToList(), abilityName);
 		public void EmitOnChangedTile(ITile tile) => ChangedTile?.Invoke(tile);
-		public void EmitOnCharacterSelected(IPlayer selectedCharacter) => OnCharacterSelected?.Invoke(selectedCharacter);
+		public void EmitOnCharacterSelected(IPlayer selectedCharacter) {
+			OnCharacterSelected?.Invoke(selectedCharacter);
+			GD.Print("EmitONCharacterSelected has emitted");
+		} 
 	}
 }
