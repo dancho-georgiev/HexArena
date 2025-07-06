@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://f73gtrvsafnc"]
 
-[ext_resource type="Texture2D" uid="uid://haiorqccdq7k" path="res://Assets/Characters/Friendly/peasant.png" id="1_37h1o"]
-[ext_resource type="Texture2D" uid="uid://b3cf5nx37jq81" path="res://Assets/Characters/Enemy/badguy1.png" id="2_vjfs8"]
+[ext_resource type="Texture2D" uid="uid://v3w3phaosr48" path="res://Assets/Characters/Friendly/peasant.png" id="1_37h1o"]
+[ext_resource type="Texture2D" uid="uid://c40t6jv7rdiho" path="res://Assets/Characters/Enemy/badguy1.png" id="2_vjfs8"]
 
 [node name="DevUI" type="Control"]
 layout_mode = 3

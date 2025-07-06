@@ -11,6 +11,7 @@ namespace GameLogic
 		{
 			Peasant,
 			PlaceholderEnemy,
+			JadeCharacter,
 			NPC
 		}
 	
@@ -28,16 +29,26 @@ namespace GameLogic
 		{
 			string scenePath;
 			GameCharacter character = new GameCharacter();
+			PackedScene scene;
 			switch(type)
 			{
 			 	case CharacterType.Peasant:
-					PackedScene scene = GD.Load<PackedScene>("res://Scenes/Characters/Friendly/Peasant.tscn");
+					scene = GD.Load<PackedScene>("res://Scenes/Characters/Friendly/Peasant.tscn");
 				 	character = scene.Instantiate<PeasantView>();
 					character.Character = new Peasant(eventManager);
 					battleField.PlacePlayer(character.Character as IPlayer, spawnTile.Tile);
 					break;
 				 case CharacterType.PlaceholderEnemy:
-					scenePath = "res://Characters/Enemies/Goblin.tscn";
+					scene = GD.Load<PackedScene>("res://Scenes/Characters/Enemy/PlaceholderEnemy.tscn");
+				 	character = scene.Instantiate<EnemyCharacter>();
+					character.Character = new PlaceholderEnemy(eventManager, 100, 1, 1);
+					battleField.PlaceEnemy(character.Character as IEnemy, spawnTile.Tile);
+					 break;
+				case CharacterType.JadeCharacter:
+					scene = GD.Load<PackedScene>("res://Scenes/Characters/Friendly/JadeCharacter.tscn");
+				 	character = scene.Instantiate<JadeCharacterView>();
+					character.Character = new JadeCharacter(eventManager);
+					battleField.PlacePlayer(character.Character as IPlayer, spawnTile.Tile);
 					 break;
 				case CharacterType.NPC:
 					scenePath = "res://Characters/NPCs/Villager.tscn";
@@ -48,7 +59,7 @@ namespace GameLogic
 
 			character.ZIndex = 2;
 			character.CurrentTile = spawnTile;
-			character.GlobalPosition = spawnTile.Hexagon.GlobalPosition;
+			//character.GlobalPosition = spawnTile.Hexagon.GlobalPosition;
 			spawnTile.Hexagon.AddChild(character);
 			return character;
 		}

@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=3 uid="uid://dmu6ctyiugnih"]
+
+[ext_resource type="Script" uid="uid://bjrjwhdqxhg1m" path="res://Scenes/Hexagon.cs" id="2_3bw6b"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_nyp85"]
+
+[node name="Hexagon2" type="Node2D" node_paths=PackedStringArray("polygon2D", "innerPolygon2D", "collisionPolygon2D", "area2D")]
+script = ExtResource("2_3bw6b")
+polygon2D = NodePath("polygon")
+innerPolygon2D = NodePath("innerPolygon")
+collisionPolygon2D = NodePath("Area2D/CollisionPolygon2D")
+area2D = NodePath("Area2D")
+
+[node name="polygon" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(25.9808, -15, 25.9808, 15, -1.31134e-06, 30, -25.9808, 15, -25.9808, -15, 3.57746e-07, -30)
+
+[node name="innerPolygon" type="Polygon2D" parent="."]
+z_index = 1
+texture = SubResource("CanvasTexture_nyp85")
+polygon = PackedVector2Array(21.6506, -12.5, 21.6506, 12.5, -1.09278e-06, 25, -21.6506, 12.5, -21.6506, -12.5, 2.98122e-07, -25)
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Area2D"]
+polygon = PackedVector2Array(25.9808, -15, 25.9808, 15, -1.31134e-06, 30, -25.9808, 15, -25.9808, -15, 3.57746e-07, -30)

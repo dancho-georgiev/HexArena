@@ -17,11 +17,13 @@ namespace GameLogic{
 		private StatusEffectFactory statusEffectFactory;
 		private EventManager eventManager;
 		public bool PlayerTurn = true;
-		
-		public IPlayer SelectedCharacter {get; set;}
-		public IAbility SelectedAbility{get; set;}
+		public TurnOrderManager turnOrderManager {get; set;}
+		public ICharacter SelectedCharacter {get; set;}
+		public IAbility SelectedAbility{get{return SelectedCharacter.SelectedAbility;} 
+										set{SelectedCharacter.SelectedAbility = value;}}
 		public ITarget SelectedAbilityTarget {get; set;}
 		
+		public bool GameStarted {get; set;} = false;
 		// TUK NE TRQBVA LI VSICHKO DA NE E I(NESHTA)
 		public BattleField(EventManager eventManager){
 			this.eventManager = eventManager;
@@ -29,6 +31,7 @@ namespace GameLogic{
 			Enemies = new List<IEnemy>();
 			Players = new List<IPlayer>();
 			statusEffectFactory = new StatusEffectFactory(eventManager);
+			turnOrderManager = new TurnOrderManager(Players, Enemies);
 		}
 		
 		public BattleField(EventManager eventManager, int width, int length){
@@ -37,6 +40,7 @@ namespace GameLogic{
 			Enemies = new List<IEnemy>();
 			Players = new List<IPlayer>();
 			statusEffectFactory = new StatusEffectFactory(eventManager);
+			turnOrderManager = new TurnOrderManager(Players, Enemies);
 		}
 		
 		public ITile GetTile(int x, int y){
@@ -54,23 +58,33 @@ namespace GameLogic{
 			}
 		}
 		
+		public void StartGame(){
+			GameStarted = true;
+			SelectedCharacter = turnOrderManager.NextTurn();
+		}
+		
 		public void PlacePlayer(IPlayer character, ITile tile){
 			Players.Add(character);
 			InitializeGlobalTargets(character);
 			character.Tile = tile;
-			
+			turnOrderManager.UpdateList();
 		}
 		
 		public void PlaceEnemy(IEnemy character, ITile tile){
 			Enemies.Add(character);
 			InitializeGlobalTargets(character);
 			character.Tile = tile;
-			
+			turnOrderManager.UpdateList();
 		}
 		
 		public ITile MoveSelectedCharacter(ITile position){
 			SelectedCharacter.MoveCharacter(position);
 			return position;
+		}
+		
+		public ITile MoveSelectedCharacter(List<ITile> path){
+			SelectedCharacter.MoveCharacter(path);
+			return SelectedCharacter.Tile;
 		}
 		
 		public void SelectCharacter(IPlayer selected){
@@ -88,14 +102,25 @@ namespace GameLogic{
 		
 		//while targeta ne e ready se dobavqt targetable neshta
 		public void AddTargetable(ITargetable targetable){
-			SelectedAbilityTarget.AddTargetable(targetable);
+			if(SelectedAbility!=null){
+				SelectedAbilityTarget.AddTargetable(targetable);
+			}
 		}
 		
 		//kogato e ready se puska abilityto
 		public void UseSelectedAbility(){
-			if(SelectedAbilityTarget.IsReady()) SelectedAbility.Use();
+			SelectedCharacter.UseSelectedAbility();
 		}
 		
+		public void StartTurn(){
+			eventManager.EmitOnStartTurn();
+			if(SelectedCharacter is IEnemy enemy) enemy.PlayTurn();
+		}
+		
+		public void EndTurn(){
+			eventManager.EmitOnEndTurn();
+			SelectedCharacter = turnOrderManager.NextTurn();
+		}
 		
 	}
 	

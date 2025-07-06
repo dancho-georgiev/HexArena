@@ -8,6 +8,6 @@ namespace Interfaces
 {
 	public interface IPassive : IAbility
 	{
-
+		Action<List<ITargetable>, string> ActivatedPassiveEffect {get; set;}
 	}
 }

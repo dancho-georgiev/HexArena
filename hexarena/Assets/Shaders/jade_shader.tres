@@ -1,0 +1,11 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://c34imbki70y5p"]
+
+[ext_resource type="Shader" uid="uid://biqhkuow5o8sp" path="res://Scripts/Shaders/jade_shader.gdshader" id="1_ld3ov"]
+
+[resource]
+shader = ExtResource("1_ld3ov")
+shader_parameter/epsilon = 2.0
+shader_parameter/frequency = 2.9
+shader_parameter/amplitude = 1.0
+shader_parameter/rotation = 0.54
+shader_parameter/center = Vector2(0.5, 0.5)

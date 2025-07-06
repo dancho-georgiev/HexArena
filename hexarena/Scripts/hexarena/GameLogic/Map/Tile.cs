@@ -8,9 +8,9 @@ namespace GameLogic{
 	public class Tile : Targetable, ITile
 	{
 		
-			public Point Position { get;set;}
-			public List<ITile> Neighbours { get; set;}
-			public ICharacter CharacterOnTile { get; set;}
+		public Point Position { get;set;}
+		public List<ITile> Neighbours { get; set;}
+		public ICharacter CharacterOnTile { get; set;}
 			
 		public virtual bool IsAvailable ()
 		{
@@ -24,15 +24,27 @@ namespace GameLogic{
 			Neighbours = new List<ITile>();
 		}
 		
+		public Tile(ITile other){
+			this.Position = other.Position;
+			this.CharacterOnTile = other.CharacterOnTile;
+			if(CharacterOnTile!=null){
+				CharacterOnTile.Tile = this;
+			}
+			this.Neighbours = other.Neighbours;
+		}
+		
 		public override void TakeDamage(int damage){
 			if(CharacterOnTile == null){return;}
 			else{
-				CharacterOnTile.Health -= damage;
+				CharacterOnTile.TakeDamage(damage);
 			}
 		}
 		
 		public override void TakeStatusEffect(IStatusEffect statusEffect){
-			
+			if(CharacterOnTile == null){return;}
+			else{
+				CharacterOnTile.TakeStatusEffect(statusEffect);
+			}
 		}
 	}
 }

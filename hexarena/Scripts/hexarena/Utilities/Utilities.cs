@@ -163,6 +163,55 @@ namespace Utilities{
 			
 		}
 		
+		private static List<ITile> FindShortestPath3_Helper(ITile startTile, ITile endTile,
+		 Dictionary<ITile, int> distances, List<ITile> visited, int depth, List<ITile> path,
+		 ref int count){
+			if(!distances.Keys.Contains(startTile))distances.Add(startTile, int.MaxValue);
+			if(distances[startTile]<depth || visited.Contains(startTile)) return null;
+			if(startTile==endTile){
+				path.Add(endTile);
+				distances[endTile] = depth;
+				++count;
+				return path;
+			}
+			if(!endTile.IsAvailable()) return null;
+			
+			path.Add(startTile);
+			visited.Add(startTile);
+			distances[startTile] = depth;
+			List<List<ITile>> paths = new List<List<ITile>>();
+			
+			foreach(ITile neighbour in startTile.Neighbours){
+				if(!distances.Keys.Contains(neighbour)){
+					distances[neighbour] = depth + 1;
+				}
+				else if(distances[neighbour] > depth +1){
+					distances[neighbour] = depth+1;
+				}
+			}
+			
+			foreach(ITile neighbour in startTile.Neighbours){
+				if(neighbour.IsAvailable()){
+					List<ITile> result = FindShortestPath3_Helper(neighbour, endTile,
+					 distances, new List<ITile>(visited), depth+1, new List<ITile>(path), ref count);
+					if(result!=null){
+						paths.Add(result);
+					}
+				}
+			}
+			return paths.MinBy(path => path.Count + CumulativeAverageDirection(path));
+		}
+		
+		
+		public static List<ITile> FindShortestPath3(ITile startTile, ITile endTile){
+			Dictionary<ITile, int> distances = new Dictionary<ITile, int>();
+			int count = 0;
+			List<ITile> result = FindShortestPath3_Helper(startTile, endTile, distances,new List<ITile>(), 0, new List<ITile>(),ref count);
+			//GD.Print(count);
+			return result == null ? new List<ITile>() : result;
+			
+		}
+		
 		
 		public static List<ITile> FindShortestPath(ITile startTile, ITile endTile)
 		{
@@ -252,6 +301,60 @@ namespace Utilities{
 			//return paths.MinBy(path=>CumulativeAverageDirection(path).Average());
 			return paths.MaxBy(path=>path.Count);
 		}
+		
+		public static Vector2 TransformBasis(Vector2 point, Vector2 basisX, Vector2 basisY, Vector2 offset){
+			return new Vector2(point.X*basisX.X + point.Y * basisY.X, point.X*basisX.Y + point.Y*basisY.Y) + offset;
+		}
+		
+		//public static Vector2 Rotate(Vector2 point, Vector2 direction, Vector2 center){
+			//float cos = new Vector2(1f,0f).Dot(direction.Normalized());
+			//float sin = new Vector2(1f,0f).Cross(direction.Normalized());
+			//Vector2 basisX = new Vector2(cos, sin);
+			//Vector2 basisY = new Vector2(-sin, cos);
+			//return TransformBasis(point, basisX, basisY, new Vector2(0f,0f));
+			//
+		//}
+		
+		public static void ThreeDfy(List<List<HexagonTile>> grid){
+			Vector2 e1 = new Vector2(1,0.01f).Normalized();
+			Vector2 e2 = new Vector2(3,1).Normalized();
+			Vector2 offset = new Vector2(-100,0);
+			//Vector2 offset = new Vector2(-170, 0);
+			foreach(List<HexagonTile> list in grid) {
+				foreach(HexagonTile tile in list){
+					List<Vector2> newPolygon = new List<Vector2>();
+					foreach(Vector2 point in tile.Hexagon.polygon2D.Polygon){
+						newPolygon.Add(TransformBasis(point, e1, e2, offset));
+					}
+					tile.Hexagon.GlobalPosition = TransformBasis(tile.Hexagon.GlobalPosition,e1, e2, offset); //+ offset;
+					tile.Hexagon.polygon2D.SetPolygon(newPolygon.ToArray());
+					tile.Hexagon.collisionPolygon2D.SetPolygon(newPolygon.ToArray());
+					newPolygon.Clear();
+					foreach(Vector2 point in tile.Hexagon.innerPolygon2D.Polygon){
+						newPolygon.Add(TransformBasis(point, e1, e2, offset));
+					}
+					tile.Hexagon.innerPolygon2D.SetPolygon(newPolygon.ToArray());
+				}
+			}
+		}
+		
+		public static HexagonTile FindHexagonTileByITile(ITile tile, SceneTree tree)
+		{	
+			// Search through all nodes in HexTiles group- Check HexTiles
+			//I dont know if its a good practice
+			
+			 foreach (Node node in tree.GetNodesInGroup("HexTiles"))
+			{
+				if (node is HexagonTile hexTile && hexTile.Tile == tile)
+				{
+					//GD.Print($"HexTile Tile {hexTile.Tile.Position.x},{hexTile.Tile.Position.y}" );	
+					return hexTile;
+				}
+			}
+			//GD.PrintErr($"FindHexagonTileByITile returns null");
+			return null;
+		}
+		
 	}
 	
 }

@@ -53,7 +53,23 @@ namespace View
 					ResetColor();} 	
 				}
 		}
-
+	public bool Selected{
+		get{return selected;}
+		set{
+			selected = value;
+				if(selected){
+					Hexagon.polygon2D.Color = SelectedColor;
+					DefaultColor = SelectedColor;
+					HoverColor = SelectedColor;
+				}
+				else{
+					DefaultColor = new Color(1,1,1,1);
+					HoverColor = new Color(1, 0, 1, 1);
+					ResetColor();
+				} 	
+			}
+		}
+	
 		[ExportGroup("Tile Colors")]
 		[Export] public Color DefaultColor { get; set; } = new Color(1,1,1,1); //ZAHSTO NE E BQLO AAAAAAAAAA
 		[Export] public Color SelectedColor { get; set; } = Colors.Blue;
@@ -73,7 +89,7 @@ namespace View
 			AddToGroup("HexTiles");
 			Hexagon.area2D.MouseEntered += MouseEnter;
 			Hexagon.area2D.MouseExited += MouseExit;
-			Hexagon.area2D.InputEvent += HandleInput; 
+			Hexagon.area2D.InputEvent += HandleInput;
 			ResetColor();
 		}
 		
@@ -81,7 +97,8 @@ namespace View
 		public void HighlightAsMovable() => Hexagon.polygon2D.Color = MovableColor;
 		public void ResetColor() => Hexagon.polygon2D.Color = DefaultColor;
 		
-
+		public override void _Process(double delta){
+		}
 		
 		public void MouseEnter()
 		{

@@ -11,7 +11,7 @@ namespace GameLogic{
 		public string EffectDescription = "Does nothing";
 		public string FlavorDescription {get; set;} = "Feels nothing";
 		public ITarget Target { get; set; }
-		
+		protected EventManager eventManager;
 		public Ability()
 		{
 			

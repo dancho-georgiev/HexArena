@@ -4,20 +4,23 @@ using Interfaces;
 using System.Collections.Generic;
 using Utilities;
 using System.Linq;
-
+using System.Threading.Tasks;
 namespace GameLogic
 {
 	
 	public abstract class Character : Targetable, ICharacter
 	{
-		public EventManager eventManager {get; protected set;}
-		
 		private ITile tile;
 		public int Health { get;  set; }
+		public int Initiative {get; set;}
+		public bool OnTurn {get; set;} = false;
 		public double StepEnergyCost { get;  set; }
+		public EventManager eventManager {get; set;}
 		public List<IStatusEffect> StatusEffects {get; set;}
 		public List<IActive> ActiveAbilities { get; set; }
 		public List<IPassive> PassiveAbilities { get; set; }
+		public Action<List<ITile>> HasMoved {get; set;}
+		public IAbility SelectedAbility {get; set;}
 		public ITile Tile { get{return tile;} 
 		set{
 				tile = value;
@@ -34,18 +37,32 @@ namespace GameLogic
 			}
 		 }
 		
-		public Character(int health,double stepEnergyCost, EventManager eventManager)
+		public Character(EventManager eventManager, int health,double stepEnergyCost, int Initiative)
 		{
 			this.Health = health;
 			this.StepEnergyCost = stepEnergyCost;
+			this.Initiative = Initiative;
 			StatusEffects = new List<IStatusEffect>();
-			Tile = new Tile(new Point(0,0), this);
 			this.eventManager = eventManager;
+			Tile = new Tile(new Point(0,0), this);
+			ActiveAbilities = new List<IActive>();
+			PassiveAbilities = new List<IPassive>();
+			InitializeActives();
+			InitializePassives();
 		}
 		
 		protected abstract void InitializeActives();
 		protected abstract void InitializePassives();
-		
+		public virtual void SelectAbility(int index){
+			SelectedAbility = ActiveAbilities[index];
+		}
+		public virtual void UseSelectedAbility(){
+			if(SelectedAbility.Target.IsReady()){
+				eventManager.EmitOnActivatedAbility(this,SelectedAbility.Target.TargetList,SelectedAbility.GetType().Name);
+				SelectedAbility.Use();
+			}
+			
+		}
 		//curently used for vulnerable
 		//promenq podaden damage spored status efectite na Charactera
 		//returns modified damage
@@ -93,21 +110,40 @@ namespace GameLogic
 		{
 			if(TargetPosition.IsAvailable())
 			{
-				List<ITile> pathTiles = Utility.FindShortestPath(this.Tile, TargetPosition);
+				
+				List<ITile> pathTiles = Utility.FindShortestPath3(this.Tile, TargetPosition);
+				
 				ITile lastTile = pathTiles[0]; // this helps clearing the characters which we create* along the path
 				foreach(ITile i in pathTiles)
 				{
 					lastTile.CharacterOnTile = null;
-					//lastTile.IsAvailable = true;
 					this.Tile = i;
 					i.CharacterOnTile = this;
-					//i.IsAvailable = false;
 					lastTile = i;
-					GD.Print($"{this.Tile.Position.x}, {this.Tile.Position.y}");
+					//GD.Print($"{this.Tile.Position.x}, {this.Tile.Position.y}");
 				}
-				GD.Print($"curent pos {this.Tile.Position.x}, {this.Tile.Position.y}");
-
+				HasMoved?.Invoke(pathTiles);
+				//GD.Print($"curent pos {this.Tile.Position.x}, {this.Tile.Position.y}");
 			}
+		}
+		
+		public virtual void MoveCharacter(List<ITile> path)
+		{
+			
+			if(path.Last().IsAvailable())
+			{
+				List<ITile> pathTiles = path;
+				ITile lastTile = pathTiles[0]; // this helps clearing the characters which we create* along the path
+				foreach(ITile i in pathTiles)
+				{
+					lastTile.CharacterOnTile = null;
+					this.Tile = i;
+					i.CharacterOnTile = this;
+					lastTile = i;
+				}
+				//GD.Print($"curent pos {this.Tile.Position.x}, {this.Tile.Position.y}");
+			}
+			HasMoved?.Invoke(path);
 		}
 	}
 }

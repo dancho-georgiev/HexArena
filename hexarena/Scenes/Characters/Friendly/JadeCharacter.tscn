@@ -1,0 +1,10 @@
+[gd_scene load_steps=4 format=3 uid="uid://ciindir07psta"]
+
+[ext_resource type="Script" uid="uid://cg0ghspp13qc3" path="res://Scenes/Characters/Friendly/JadeCharacterView.cs" id="1_ghyu2"]
+[ext_resource type="Material" uid="uid://pcb4mujdju7n" path="res://Assets/Shaders/outline_shader.tres" id="1_n2bht"]
+[ext_resource type="Texture2D" uid="uid://dunpoirqqsl38" path="res://Assets/Characters/Friendly/jade_geroi_1.png" id="2_3v6xs"]
+
+[node name="JadeCharacter" type="Node2D"]
+material = ExtResource("1_n2bht")
+script = ExtResource("1_ghyu2")
+CharacterSpriteTexture = ExtResource("2_3v6xs")

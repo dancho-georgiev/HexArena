@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://botcm4t4n4d02"]
+[gd_scene load_steps=3 format=3 uid="uid://cj8wisha8x5hk"]
 
+[ext_resource type="Material" uid="uid://pcb4mujdju7n" path="res://Assets/Shaders/outline_shader.tres" id="1_g3fas"]
 [ext_resource type="Script" uid="uid://bjrjwhdqxhg1m" path="res://Scenes/Hexagon.cs" id="1_ym8bo"]
 
 [node name="Hexagon" type="Node2D"]
+material = ExtResource("1_g3fas")
 script = ExtResource("1_ym8bo")

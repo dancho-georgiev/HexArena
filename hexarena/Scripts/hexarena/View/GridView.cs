@@ -21,31 +21,36 @@ namespace View
 		public PackedScene Hexagon {get; set;}
 		[Export]
 		public PackedScene PlayerSprite {get; set;}
-		
+		[Export]
+		public AbilityBar AbilityBar {get; set;}
 
 		private float _hexSize;
 	
 		public List<List<HexagonTile>> Grid {get; set;}
-		public List<GameCharacter> Characters{get; set;}
+		public Dictionary<ICharacter, GameCharacter> Characters{get; set;}
 		
 		public HexagonTile hoveredTile {get; set;}
 		
 		public List<HexagonTile> hexPath {get; set;}
 		
+		public GameCharacter SelectedGameCharacter {get;set;}
 		public bool selectingTarget {get; set;}
 		public bool selectedCharacter {get; set;}
 		public EventManager eventManager {get; set;}
 		
+		public bool GameStarted {get{return battleField.GameStarted;} set{battleField.GameStarted = value;}}
+		public CharacterType spawnType {get; set;} = CharacterType.Peasant;
 		//veche grida e or hexagonTileove
 		public override void _Ready(){
 			Grid = new List<List<HexagonTile>>();
-			Characters = new List<GameCharacter>();
+			Characters = new Dictionary<ICharacter, GameCharacter>();
 			eventManager = new EventManager();
 			
 			battleField = new BattleField(eventManager, Width, Length);
 			characterFactory = new CharacterFactory(eventManager, battleField);
 			hexPath = new List<HexagonTile>();
-			Hexagon = GD.Load<PackedScene>("res://Scenes/Hexagon.tscn");
+			Hexagon = GD.Load<PackedScene>("res://Scenes/Hexagon2.tscn");
+			//AbilityBar = GetChild(0).GetChild<AbilityBar>(0);
 			
 			//gets hexagon size for TileToWorld
 			Hexagon sampleHex = Hexagon.Instantiate<Hexagon>();
@@ -57,16 +62,18 @@ namespace View
 				Grid.Add(new List<HexagonTile>());
 				for(int j = 0; j < Length; j++){
 					Hexagon inst = Hexagon.Instantiate<Hexagon>();
-					inst.GlobalPosition = new Vector2(i * inst.Size + (j % 2 == 0 ? inst.Size/2 : 1), j * inst.Size);
+					inst.GlobalPosition = new Vector2(i * inst.Size + (j % 2 == 0 ? inst.Size/2 : 1), j * inst.Size)*2;
 					HexagonTile hexTile = new HexagonTile(inst, battleField.GetTile(i, j));
 					hexTile.TileClicked += OnTileClicked;
 					hexTile.MouseEntered += OnTileEntered;
 					hexTile.MouseExited += OnTileExited;
+					eventManager.ChangedTile += OnChangedTile;
 					Grid[i].Add(hexTile);
 					AddChild(hexTile);
 				}
 			}
 			SetupNeighbours();
+			//Utility.ThreeDfy(Grid);
 		} 
 		
 		private void SetupNeighbours(){
@@ -99,38 +106,24 @@ namespace View
 				return;
 			}
 			
-			battleField.MoveSelectedCharacter(path.Last().Tile);
-			
-			if(battleField.SelectedCharacter.Tile == path.Last().Tile)
-			{
-				GD.Print("Logic character moved");
-				if (Characters.Any(x => x.Character == battleField.SelectedCharacter))
-				{
-					GD.Print("visuals entered");
-					GameCharacter visualCharacter = Characters.First(x=>x.Character==battleField.SelectedCharacter);
-					visualCharacter.MoveVisualCharacter(path);
-				}
-			}
-				
+			battleField.MoveSelectedCharacter(path.Select(x=>x.Tile).ToList());
 		}
 		
 		
 		public override void _Input(InputEvent @event)
 		{
+			if(Characters.Values.Any(x=>x.IsMoving))return;
 			if(@event is InputEventKey key)
 			{
 				if(key.Pressed && key.Keycode == Key.Q)
 				{
-					if(hoveredTile != null)
-					{
-						if(hoveredTile.Tile.CharacterOnTile == null){ // mnogo losho napraveno ne trqq da e taka
-							GameCharacter player =
-							characterFactory.SpawnCharacter(CharacterType.Peasant, hoveredTile);
-							Characters.Add(player);
-						}
+					if(hoveredTile != null && hoveredTile.Tile.CharacterOnTile == null)
+					{	
+						GameCharacter player =
+						characterFactory.SpawnCharacter(spawnType, hoveredTile);
+						Characters.Add(player.Character,player);
 					}
 				}
-			
 				if(key.Pressed && key.Keycode == Key.E)
 				{
 					if(battleField.SelectedCharacter!=null)
@@ -139,11 +132,20 @@ namespace View
 						selectingTarget = true;
 						HighlightTargetableTiles();
 						GD.Print($"using ability");
-						
-						
 					}
 				}
-
+				if(key.Pressed && key.Keycode == Key.T)
+				{
+					++spawnType;
+					if((int)spawnType>=3) spawnType = 0;
+					GD.Print(spawnType);
+				}
+				
+				if(key.Pressed && key.Keycode == Key.G)
+				{
+					battleField.EndTurn();
+					battleField.StartTurn();
+				}
 			}
 			
 		}
@@ -202,14 +204,33 @@ namespace View
 			return Grid[tile.Position.y][tile.Position.x];
 		}
 		
+		public void OnChangedTile(ITile tile){
+			HexagonTile hexTile = GetTile(tile);
+			if(tile is JadeTile){
+				hexTile.Tile = tile;
+				hexTile.Hexagon.innerPolygon2D.Material = GD.Load("res://Assets/Shaders/jade_shader.tres").Duplicate(true) as ShaderMaterial;
+			}
+			//else if(...)
+			else{
+				hexTile.Hexagon.innerPolygon2D.Material = null;
+			}
+		}
+		
+		
 		private void SelectCharacterOnTile(HexagonTile tile){
 			if(tile.Tile.CharacterOnTile!=null && tile.Tile.CharacterOnTile is IPlayer){
-					battleField.SelectCharacter(tile.Tile.CharacterOnTile as IPlayer);
-					GD.Print($"selected character");
-					eventManager.EmitOnCharacterSelected(tile.Tile.CharacterOnTile as IPlayer);
-					selectedCharacter = true;
-				}
+				battleField.SelectCharacter(tile.Tile.CharacterOnTile as IPlayer);
+				//SelectedGameCharacter = Characters.FirstOrDefault( x => x.Character.Tile.Position == battleField.SelectedCharacter.Tile.Position);
+				tile.Selected = true;
+				selectedCharacter = true;
+				
+				
+				
+				AbilityBar.CurrentCharacter = battleField.SelectedCharacter;			
+				
+			}
 		}
+		
 		
 		private void UseAbilityIfReady(HexagonTile tile){
 			if(battleField.SelectedAbilityTarget.IsReady()){
@@ -217,16 +238,24 @@ namespace View
 				if(tile.Tile.CharacterOnTile!=null){
 					GD.Print($"{tile.Tile.CharacterOnTile.Health}");
 				}
-				
 				selectingTarget = false;
 				selectedCharacter = false;
 				RemoveTargetableTileHighlight();
 			}
 		}
 		
+		private void MoveCharacter(HexagonTile tile){
+			MoveSelectedCharacter(hexPath);
+					selectedCharacter = false;
+					hexPath.First().Selected = false;
+					ClearHexPath();
+					//PrintTilesWithCharacters();
+		}
+		
 		public void OnTileClicked(HexagonTile tile){
+			if(Characters.Values.Any(x=>x.IsMoving))return;
 			GD.Print($"Clicked tile at {tile.Tile.Position.x}, {tile.Tile.Position.y }");
-			if(!selectedCharacter && !selectingTarget){
+			if(!selectedCharacter && !selectingTarget && !GameStarted){
 				SelectCharacterOnTile(tile);
 			}
 			else if(selectingTarget){
@@ -242,10 +271,7 @@ namespace View
 				
 			}
 			else if(selectedCharacter){
-					MoveSelectedCharacter(hexPath);
-					selectedCharacter = false;
-					ClearHexPath();
-					//PrintTilesWithCharacters();
+					MoveCharacter(tile);
 				}
 		}
 		
@@ -259,6 +285,7 @@ namespace View
 		}
 		
 		public void OnTileEntered(HexagonTile tile){
+			if(Characters.Values.Any(x=>x.IsMoving))return;
 			hoveredTile = tile;
 			if(selectingTarget){
 				

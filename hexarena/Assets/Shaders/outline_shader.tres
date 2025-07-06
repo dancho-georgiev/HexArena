@@ -1,0 +1,8 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://pcb4mujdju7n"]
+
+[ext_resource type="Shader" uid="uid://bnihw7dg6tf6a" path="res://Scripts/Shaders/outline_shader.gdshader" id="1_javnd"]
+
+[resource]
+shader = ExtResource("1_javnd")
+shader_parameter/rgb = Vector3(0, 1, 0)
+shader_parameter/epsilon = 0.03
