@@ -12,7 +12,7 @@ public partial class AbilitySlot : Button
 	public void Initialize(UIActiveAbility  uiAbility)
 	{
 		 _currentAbility = uiAbility.Ability;
-		Icon.Texture = uiAbility.Icon;
+		Icon.Texture = GD.Load<Texture2D>("res://Assets/Characters/Friendly/peasant_old.png");
 		//here add ability description for example
 	}
 }

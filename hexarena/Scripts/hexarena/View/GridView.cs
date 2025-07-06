@@ -33,6 +33,7 @@ namespace View
 		
 		public List<HexagonTile> hexPath {get; set;}
 		
+		public GameCharacter SelectedGameCharacter {get;set;}
 		public bool selectingTarget {get; set;}
 		public bool selectedCharacter {get; set;}
 		public EventManager eventManager {get; set;}
@@ -219,8 +220,14 @@ namespace View
 		private void SelectCharacterOnTile(HexagonTile tile){
 			if(tile.Tile.CharacterOnTile!=null && tile.Tile.CharacterOnTile is IPlayer){
 				battleField.SelectCharacter(tile.Tile.CharacterOnTile as IPlayer);
+				//SelectedGameCharacter = Characters.FirstOrDefault( x => x.Character.Tile.Position == battleField.SelectedCharacter.Tile.Position);
 				tile.Selected = true;
 				selectedCharacter = true;
+				
+				
+				
+				AbilityBar.CurrentCharacter = battleField.SelectedCharacter;			
+				
 			}
 		}
 		

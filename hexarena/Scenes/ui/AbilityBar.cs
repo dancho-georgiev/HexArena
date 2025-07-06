@@ -8,9 +8,9 @@ namespace View{
 	
 	public partial class AbilityBar : MarginContainer
 	{
-		private ICharacter currentCharacter;
+		private ICharacter currentCharacter; //GameCharacter
 		[Export] public PackedScene SlotScene { get; set; }
-		[Export] public int MaxSlots { get; set; } = 8; // Safety limit
+		[Export] public int MaxSlots { get; set; } = 5; // Safety limit
 		private HBoxContainer _abilitiesContainer;
 		//private List<AbilitySlot> _abilitySlots = new List<AbilitySlot>();
 		public ICharacter CurrentCharacter {
@@ -46,7 +46,7 @@ namespace View{
 				AbilitySlot slot = SlotScene.Instantiate<AbilitySlot>();
 				_abilitiesContainer.AddChild(slot);
 				
-				slot.Initialize(uiAbility);
+				slot.Initialize(uiAbility); //Morimens
 				slot.Pressed += () => ability.Use();
 			}
 		}
