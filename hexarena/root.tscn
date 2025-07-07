@@ -2,13 +2,8 @@
 
 [ext_resource type="Script" uid="uid://ko5n1wxrr7jl" path="res://Node2d.cs" id="1_pq8q7"]
 [ext_resource type="Script" uid="uid://6fomfkptmmro" path="res://Scripts/hexarena/View/GridView.cs" id="1_pyidc"]
-<<<<<<< Updated upstream
 [ext_resource type="PackedScene" uid="uid://cj8wisha8x5hk" path="res://Scenes/Hexagon.tscn" id="2_vvh5c"]
 [ext_resource type="Script" uid="uid://dtxewwau2lmsw" path="res://AbilityBar.cs" id="4_jnlp7"]
-=======
-[ext_resource type="PackedScene" uid="uid://botcm4t4n4d02" path="res://Scenes/Hexagon.tscn" id="2_vvh5c"]
-[ext_resource type="Script" uid="uid://dtxewwau2lmsw" path="res://Scenes/ui/AbilityBar.cs" id="4_jnlp7"]
->>>>>>> Stashed changes
 [ext_resource type="PackedScene" uid="uid://qfsv0picr6bj" path="res://Scenes/ui/ability_slot/AbilitySlot.tscn" id="5_l8v81"]
 
 [node name="Root" type="Node2D"]
@@ -25,24 +20,13 @@ Hexagon = ExtResource("2_vvh5c")
 
 [node name="BattleUI" type="CanvasLayer" parent="BattleField"]
 
-[node name="MarginContainer" type="MarginContainer" parent="BattleField/BattleUI"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="AbilityBar" type="MarginContainer" parent="BattleField/BattleUI/MarginContainer"]
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 8
+[node name="AbilityBar" type="MarginContainer" parent="BattleField/BattleUI"]
+offset_right = 40.0
+offset_bottom = 40.0
 script = ExtResource("4_jnlp7")
 SlotScene = ExtResource("5_l8v81")
 
-[node name="AbilitiesContainer" type="HBoxContainer" parent="BattleField/BattleUI/MarginContainer/AbilityBar"]
-layout_mode = 2
-
-[node name="Button" type="Button" parent="BattleField/BattleUI/MarginContainer/AbilityBar/AbilitiesContainer"]
+[node name="AbilitiesContainer" type="HBoxContainer" parent="BattleField/BattleUI/AbilityBar"]
 layout_mode = 2
 
 [node name="ScriptTesting" type="Node2D" parent="."]
