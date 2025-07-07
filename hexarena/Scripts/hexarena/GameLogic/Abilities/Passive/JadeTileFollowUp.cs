@@ -16,57 +16,83 @@ namespace GameLogic{
 		public JadeTileFollowUp(EventManager eventManager){
 			damage = 10;
 			this.eventManager = eventManager;
-			eventManager.ActivatedAbility += Use;
+			eventManager.ActivatedAbility.Connect(SetTargets);
 			Target = new TargetBase();
 		}
 		public override void Connect(EventManager eventManager){
-			eventManager.StartTurn += Use;
+			//eventManager.StartTurn += Use;
 		}
 		public override void Disconnect(EventManager eventManager){
-			eventManager.StartTurn -= Use;
+			//eventManager.StartTurn -= Use;
 		}
 		
-		private void UseOnTile(ITile tile){
+		private void AddTile(ITile tile){
 			if(tile is JadeTile && tile.CharacterOnTile!=null){
-				if(tile.CharacterOnTile is IEnemy){
-					tile.TakeDamage(damage);
-				}
-				else{
-					//gain shield
-				}
+				
 				Target.AddTargetable(tile);
 			}
 		}
 		
+		private void UseOnTile(ITile tile){
+			if(tile.CharacterOnTile is IEnemy){
+					tile.TakeDamage(damage);
+			}
+			else{
+				//gain shield
+			}
+		}
+		
 		private void UseOnCharacter(ICharacter character){
+			if(character is IEnemy){
+				character.TakeDamage(damage);
+			}
+			else{
+				//gain shield
+			}
+		}
+		
+		private void AddCharacter(ICharacter character){
 			if(character.Tile is JadeTile){
-				if(character is IEnemy){
-					character.TakeDamage(damage);
-				}
-				else{
-					//gain shield
-				}
+				
 				Target.AddTargetable(character);
 			}
 		}
 		
-		public void Use(ICharacter sender, List<ITargetable> targets, string abilityName){
-			if(abilityName!="JadeTileFollowUp"){
+		private void SetTargets(EventElement<ActivatedAbilityEventArgs> Event, ActivatedAbilityEventArgs args){
+			ICharacter sender = args.Sender;
+			List<ITargetable> targets = args.Targets;
+			string abilityName = args.AbilityName;
+			if(abilityName != "JadeTileFollowUp"){
 				foreach(ITargetable targetable in targets){
 					if(targetable is ITile t){
-						UseOnTile(t);
+						AddTile(t);
 					}
 					else if(targetable is ICharacter c){
-						UseOnCharacter(c);
+						AddCharacter(c);
 					}
 				}
-				ActivatedPassiveEffect?.Invoke(Target.TargetList, "JadeTileFollowUp");
-				Target.Reset();
+				if(Target.TargetList.Count>0){
+					eventManager.ActivatedAbility.Disconnect(SetTargets);
+					Use();
+					eventManager.ActivatedAbility.Connect(SetTargets);
+				}
 			}
-			
+			Event.FinishTask();
 		}
 		
 		public override void Use(){
+			foreach(ITargetable targetable in Target.TargetList){
+				if(targetable is ITile t){
+					UseOnTile(t);
+				}
+				else if(targetable is ICharacter c){
+					UseOnCharacter(c);
+				}
+			}
+			List<ITargetable> target = new List<ITargetable>(Target.TargetList);
+			Target.Reset();
+			GD.Print("Activated Passive");
+			ActivatedPassiveEffect?.Invoke(target, "JadeTileFollowUp");
 			
 		}
 	}

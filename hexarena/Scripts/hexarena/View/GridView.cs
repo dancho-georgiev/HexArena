@@ -56,6 +56,7 @@ namespace View
 			_hexSize = sampleHex.Size;
 			sampleHex.QueueFree();
 			
+			eventManager.ChangedTile.Connect(OnChangedTile);
 			
 			for(int i = 0; i < Width; i++){
 				Grid.Add(new List<HexagonTile>());
@@ -66,7 +67,6 @@ namespace View
 					hexTile.TileClicked += OnTileClicked;
 					hexTile.MouseEntered += OnTileEntered;
 					hexTile.MouseExited += OnTileExited;
-					eventManager.ChangedTile += OnChangedTile;
 					Grid[i].Add(hexTile);
 					AddChild(hexTile);
 				}
@@ -203,7 +203,9 @@ namespace View
 			return Grid[tile.Position.y][tile.Position.x];
 		}
 		
-		public void OnChangedTile(ITile tile){
+		public void OnChangedTile(IEventElement Event, ChangedTileEventArgs args){
+			Event.FinishTask();
+			ITile tile = args.Tile;
 			HexagonTile hexTile = GetTile(tile);
 			if(tile is JadeTile){
 				hexTile.Tile = tile;
@@ -213,6 +215,7 @@ namespace View
 			else{
 				hexTile.Hexagon.innerPolygon2D.Material = null;
 			}
+			
 		}
 		
 		

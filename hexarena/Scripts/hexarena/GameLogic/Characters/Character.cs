@@ -102,6 +102,15 @@ namespace GameLogic
 			}
 		}
 	
+	public virtual void MoveOneTile(ITile targetPosition){
+		if(!Tile.Neighbours.Contains(targetPosition) || !targetPosition.IsAvailable()) return;
+		
+		ITile oldTile = Tile;
+		oldTile.CharacterOnTile = null;
+		this.Tile = targetPosition;
+		eventManager.EmitOnHasMoved(this, new List<ITile>(){oldTile, Tile});
+	}
+	
 	//Grisho:tva trqq da vleze samo na characterite koito she nqma da sa playable(na enemytata)
 	// po nqkoe vreme go premesti
 	// Dancho: Ne tova shte vleze na vseki 
@@ -116,14 +125,12 @@ namespace GameLogic
 				ITile lastTile = pathTiles[0]; // this helps clearing the characters which we create* along the path
 				foreach(ITile i in pathTiles)
 				{
-					lastTile.CharacterOnTile = null;
-					this.Tile = i;
-					i.CharacterOnTile = this;
-					lastTile = i;
+					MoveOneTile(i);
 					//GD.Print($"{this.Tile.Position.x}, {this.Tile.Position.y}");
 				}
-				HasMoved?.Invoke(pathTiles);
 				//GD.Print($"curent pos {this.Tile.Position.x}, {this.Tile.Position.y}");
+				//eventManager.EmitOnHasMoved(this, pathTiles);
+				//HasMoved?.Invoke(pathTiles);
 			}
 		}
 		
@@ -136,14 +143,12 @@ namespace GameLogic
 				ITile lastTile = pathTiles[0]; // this helps clearing the characters which we create* along the path
 				foreach(ITile i in pathTiles)
 				{
-					lastTile.CharacterOnTile = null;
-					this.Tile = i;
-					i.CharacterOnTile = this;
-					lastTile = i;
+					MoveOneTile(i);
 				}
 				//GD.Print($"curent pos {this.Tile.Position.x}, {this.Tile.Position.y}");
+				//eventManager.EmitOnHasMoved(this, pathTiles);
+				//HasMoved?.Invoke(pathTiles);
 			}
-			HasMoved?.Invoke(path);
 		}
 	}
 }

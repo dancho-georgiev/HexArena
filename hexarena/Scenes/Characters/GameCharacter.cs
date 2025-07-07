@@ -26,6 +26,7 @@ namespace View{
 		protected HexagonTile _targetTile;
 
 		protected List<HexagonTile> _hexPath = new List<HexagonTile>();
+		protected IEventElement currentEvent;
 		protected int _currentPathIndex;
 		
 		public override void _Ready()
@@ -36,8 +37,8 @@ namespace View{
 			 };
 			_sprite.Scale = new Vector2(0.1f,0.1f);
 			AddChild(_sprite);
-			Character.HasMoved += MoveVisualCharacter;
-			eventManager.ActivatedAbility += InstantiateAbilityAnimation;
+			eventManager.HasMoved.Connect(MoveVisualCharacter);
+			eventManager.ActivatedAbility.Connect(InstantiateAbilityAnimation);
 		}
 		
 		
@@ -48,18 +49,27 @@ namespace View{
 				HandleMovement((float)delta);
 			}
 			else if(StartAnimation){
-				InstantiateAbilityAnimation(Character,target,abilityName);
+				//InstantiateAbilityAnimation(Character,target,abilityName);
 			}
 		}
 		
-		public void InstantiateAbilityAnimation(ICharacter sender,List<ITargetable> target, string abilityName){
-			if(sender!=Character)return;
-			if(!IsMoving){
+		public void InstantiateAbilityAnimation(IEventElement Event, ActivatedAbilityEventArgs args){
+			currentEvent = Event;
+			ICharacter sender = args.Sender;
+			List<ITargetable> target = args.Targets;
+			string abilityName = args.AbilityName;
+			if(sender!=Character){
+				Event.FinishTask();
+				return;
+			}
+			//if(!IsMoving){
 				PackedScene scene = GD.Load<PackedScene>($"res://Assets/AbilityAnimations/{abilityName}Animation.tscn");
 				
 				//bachka samo za pitchfork poke ama posle she go opraim
+				AnimatedSprite2D animation = scene.Instantiate<AnimatedSprite2D>();
 				foreach(ITargetable targetable in target){
-					AnimatedSprite2D animation = scene.Instantiate<AnimatedSprite2D>();
+					
+					
 					Vector2 direction = Utility.Direction(Utility.FindHexagonTileByITile(Character.Tile, GetTree()), targetable is ITile ?
 					 Utility.FindHexagonTileByITile(targetable as ITile, GetTree()) :
 					 Utility.FindHexagonTileByITile((targetable as ICharacter).Tile, GetTree())).Normalized();
@@ -72,14 +82,39 @@ namespace View{
 					//animation.Position = Utility.Rotate(animation.Position,-direction, new Vector2(0f,0f));
 					AddChild(animation);
 				}
-				
 				StartAnimation = false;
+				//｝
+			animation.AnimationFinished += currentEvent.FinishTask;
+		}
+		
+		public virtual void MoveVisualCharacter(EventElement<HasMovedEventArgs> sender, HasMovedEventArgs args){
+			if(args.Character != this.Character){
+				sender.FinishTask();
+				return;
 			}
-			else{
-				StartAnimation = true;
-				this.abilityName = abilityName;
-				this.target = target;
+			currentEvent = sender;
+			List<ITile> path = args.Path;
+			if (CurrentTile == null || path == null) return;
+			List<ITile> pathTiles = path;
+			_hexPath = new List<HexagonTile>();
+			
+			//convert logical tiles to visual hexagonTiles
+			foreach (ITile tile in pathTiles)
+			{
+				HexagonTile hexTile = Utility.FindHexagonTileByITile(tile, GetTree());
+				if (hexTile != null)
+				{
+					_hexPath.Add(hexTile);
+				}
 			}
+			
+			if (_hexPath.Count > 0)
+				_currentPathIndex = 0; 
+				if (_currentPathIndex < _hexPath.Count)
+				{
+					_targetTile = _hexPath[_currentPathIndex];
+					IsMoving = true;
+				}
 		}
 		
 		public virtual void MoveVisualCharacter(List<ITile> path){
@@ -135,6 +170,7 @@ namespace View{
 				else
 				{
 					FinishMovement();
+					currentEvent.FinishTask();
 				}
 			}
 		}
@@ -142,7 +178,6 @@ namespace View{
 		{
 			IsMoving = false;
 			GlobalPosition = GetTargetPosition(); // Snap to exact position
-			Character.Tile = _targetTile.Tile;
 			CurrentTile = _targetTile;
 			//can start an idle animiation kato imame
 		}

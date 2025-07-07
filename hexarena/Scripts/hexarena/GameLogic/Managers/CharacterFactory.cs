@@ -27,7 +27,6 @@ namespace GameLogic
 		
 		public GameCharacter SpawnCharacter(CharacterType type, HexagonTile spawnTile)
 		{
-			string scenePath;
 			GameCharacter character = new GameCharacter();
 			PackedScene scene;
 			switch(type)
@@ -51,7 +50,6 @@ namespace GameLogic
 					battleField.PlacePlayer(character.Character as IPlayer, spawnTile.Tile);
 					 break;
 				case CharacterType.NPC:
-					scenePath = "res://Characters/NPCs/Villager.tscn";
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();

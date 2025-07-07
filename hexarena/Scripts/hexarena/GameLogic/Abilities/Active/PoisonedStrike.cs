@@ -6,7 +6,6 @@ namespace GameLogic
 {
 	public class PoisonedStrike : Active
 	{
-		private EventManager eventManager;
 		public int Damage {get; set;}
 		public int poisonDamage {get; set;}
 		public int poisonDuration {get; set;}
