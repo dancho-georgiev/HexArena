@@ -20,10 +20,10 @@ namespace GameLogic
 		}
 		private void AddToQueue(IEventElement Event, EventArgs args){
 			eventQueue.Add((Event, args));
-			if(!eventQueue[0].Item1.Running){
-				currentEvent = eventQueue[0].Item1;
+			if(eventQueue.Count==1){
+				currentEvent = eventQueue.First().Item1;
 				currentEvent.HasFinished += NextEvent;
-				currentEvent.Emit(eventQueue[0].Item2);
+				currentEvent.Emit(eventQueue.First().Item2);
 			}
 		}
 		private void NextEvent(){
@@ -32,9 +32,9 @@ namespace GameLogic
 				//GD.Print(currentEvent.GetType());
 				eventQueue.RemoveAt(0);
 				if(eventQueue.Count>0){
-					currentEvent = eventQueue[0].Item1;
+					currentEvent = eventQueue.First().Item1;
 					currentEvent.HasFinished += NextEvent;
-					currentEvent.Emit(eventQueue[0].Item2);
+					currentEvent.Emit(eventQueue.First().Item2);
 				}
 				//GD.Print(eventQueue.Count);
 			}
@@ -62,6 +62,7 @@ namespace GameLogic
 		
 		public void EmitOnActivatedAbility(ICharacter sender, List<ITargetable> reciever, string abilityName){
 			AddToQueue(ActivatedAbility, new ActivatedAbilityEventArgs(sender, reciever.ToList(), abilityName));
+			GD.Print($"Added {abilityName}");
 		}
 		public void EmitOnChangedTile(ITile tile){
 			AddToQueue(ChangedTile, new ChangedTileEventArgs(tile));

@@ -67,9 +67,8 @@ namespace View{
 				
 				//bachka samo za pitchfork poke ama posle she go opraim
 				AnimatedSprite2D animation = scene.Instantiate<AnimatedSprite2D>();
+				animation.AnimationFinished += Event.FinishTask;
 				foreach(ITargetable targetable in target){
-					
-					
 					Vector2 direction = Utility.Direction(Utility.FindHexagonTileByITile(Character.Tile, GetTree()), targetable is ITile ?
 					 Utility.FindHexagonTileByITile(targetable as ITile, GetTree()) :
 					 Utility.FindHexagonTileByITile((targetable as ICharacter).Tile, GetTree())).Normalized();
@@ -84,7 +83,7 @@ namespace View{
 				}
 				StartAnimation = false;
 				//｝
-			animation.AnimationFinished += currentEvent.FinishTask;
+			
 		}
 		
 		public virtual void MoveVisualCharacter(EventElement<HasMovedEventArgs> sender, HasMovedEventArgs args){

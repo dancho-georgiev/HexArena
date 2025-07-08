@@ -58,7 +58,8 @@ namespace GameLogic
 		}
 		public virtual void UseSelectedAbility(){
 			if(SelectedAbility.Target.IsReady()){
-				eventManager.EmitOnActivatedAbility(this,SelectedAbility.Target.TargetList,SelectedAbility.GetType().Name);
+				List<ITargetable> targets = new List<ITargetable>(SelectedAbility.Target.TargetList);
+				eventManager.EmitOnActivatedAbility(this,targets,SelectedAbility.GetType().Name);
 				SelectedAbility.Use();
 			}
 			

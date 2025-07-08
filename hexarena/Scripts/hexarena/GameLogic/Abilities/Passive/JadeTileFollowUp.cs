@@ -53,7 +53,6 @@ namespace GameLogic{
 		
 		private void AddCharacter(ICharacter character){
 			if(character.Tile is JadeTile){
-				
 				Target.AddTargetable(character);
 			}
 		}
@@ -72,9 +71,7 @@ namespace GameLogic{
 					}
 				}
 				if(Target.TargetList.Count>0){
-					eventManager.ActivatedAbility.Disconnect(SetTargets);
 					Use();
-					eventManager.ActivatedAbility.Connect(SetTargets);
 				}
 			}
 			Event.FinishTask();
@@ -93,7 +90,6 @@ namespace GameLogic{
 			Target.Reset();
 			GD.Print("Activated Passive");
 			ActivatedPassiveEffect?.Invoke(target, "JadeTileFollowUp");
-			
 		}
 	}
 }
