@@ -204,7 +204,7 @@ namespace View
 		}
 		
 		public void OnChangedTile(IEventElement Event, ChangedTileEventArgs args){
-			Event.FinishTask();
+			
 			ITile tile = args.Tile;
 			HexagonTile hexTile = GetTile(tile);
 			if(tile is JadeTile){
@@ -215,7 +215,7 @@ namespace View
 			else{
 				hexTile.Hexagon.innerPolygon2D.Material = null;
 			}
-			
+			Event.FinishTask();
 		}
 		
 		

@@ -32,6 +32,7 @@ namespace GameLogic{
 			Players = new List<IPlayer>();
 			statusEffectFactory = new StatusEffectFactory(eventManager);
 			turnOrderManager = new TurnOrderManager(Players, Enemies);
+			eventManager.ChangedTile.Connect(OnChangedTile);
 		}
 		
 		public BattleField(EventManager eventManager, int width, int length){
@@ -41,10 +42,20 @@ namespace GameLogic{
 			Players = new List<IPlayer>();
 			statusEffectFactory = new StatusEffectFactory(eventManager);
 			turnOrderManager = new TurnOrderManager(Players, Enemies);
+			eventManager.ChangedTile.Connect(OnChangedTile);
 		}
 		
-		public ITile GetTile(int x, int y){
-			return grid.TileGrid[x][y];
+		public ITile GetTile(int row, int col){
+			return grid.TileGrid[row][col];
+		}
+		
+		public void OnChangedTile(IEventElement Event, ChangedTileEventArgs args){
+			ITile tile = args.Tile;
+			foreach(ITile t in tile.Neighbours){
+				t.Neighbours.Remove(tile);
+				t.Neighbours.Add(tile);
+			}
+			Event.FinishTask();
 		}
 		
 		public void InitializeGlobalTargets(ICharacter character){

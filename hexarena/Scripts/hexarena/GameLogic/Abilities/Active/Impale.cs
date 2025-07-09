@@ -33,7 +33,6 @@ namespace GameLogic{
 			if(Target.IsReady()){
 				Target.TargetList[0].TakeDamage(Damage);
 				ITile tile;
-				
 				if(Target.TargetList[0] is ITile) tile = Target.TargetList[0] as ITile;
 				else tile = (Target.TargetList[0] as ICharacter).Tile;
 				if(!(tile is JadeTile)){

@@ -136,7 +136,7 @@ namespace View{
 				if (_currentPathIndex < _hexPath.Count)
 				{
 					_targetTile = _hexPath[_currentPathIndex];
-					IsMoving = true;
+					if(_targetTile != null) IsMoving = true;
 				}
 		}
 		 

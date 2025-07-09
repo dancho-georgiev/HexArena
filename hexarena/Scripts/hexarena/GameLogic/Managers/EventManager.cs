@@ -62,7 +62,7 @@ namespace GameLogic
 		
 		public void EmitOnActivatedAbility(ICharacter sender, List<ITargetable> reciever, string abilityName){
 			AddToQueue(ActivatedAbility, new ActivatedAbilityEventArgs(sender, reciever.ToList(), abilityName));
-			GD.Print($"Added {abilityName}");
+			//GD.Print($"Added {abilityName}");
 		}
 		public void EmitOnChangedTile(ITile tile){
 			AddToQueue(ChangedTile, new ChangedTileEventArgs(tile));
