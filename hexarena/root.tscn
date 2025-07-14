@@ -1,12 +1,12 @@
-[gd_scene load_steps=6 format=3 uid="uid://b23sc6tmijrrd"]
+[gd_scene load_steps=5 format=3 uid="uid://b23sc6tmijrrd"]
 
+[ext_resource type="Script" uid="uid://dnf8dnf86sbs1" path="res://Root.cs" id="1_28aoi"]
 [ext_resource type="Script" uid="uid://ko5n1wxrr7jl" path="res://Node2d.cs" id="1_pq8q7"]
 [ext_resource type="Script" uid="uid://6fomfkptmmro" path="res://Scripts/hexarena/View/GridView.cs" id="1_pyidc"]
 [ext_resource type="PackedScene" uid="uid://cj8wisha8x5hk" path="res://Scenes/Hexagon.tscn" id="2_vvh5c"]
-[ext_resource type="Script" uid="uid://dtxewwau2lmsw" path="res://AbilityBar.cs" id="4_jnlp7"]
-[ext_resource type="PackedScene" uid="uid://qfsv0picr6bj" path="res://Scenes/ui/ability_slot/AbilitySlot.tscn" id="5_l8v81"]
 
 [node name="Root" type="Node2D"]
+script = ExtResource("1_28aoi")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 offset = Vector2(250, 200)
@@ -17,17 +17,6 @@ script = ExtResource("1_pyidc")
 Width = 10
 Length = 8
 Hexagon = ExtResource("2_vvh5c")
-
-[node name="BattleUI" type="CanvasLayer" parent="BattleField"]
-
-[node name="AbilityBar" type="MarginContainer" parent="BattleField/BattleUI"]
-offset_right = 40.0
-offset_bottom = 40.0
-script = ExtResource("4_jnlp7")
-SlotScene = ExtResource("5_l8v81")
-
-[node name="AbilitiesContainer" type="HBoxContainer" parent="BattleField/BattleUI/AbilityBar"]
-layout_mode = 2
 
 [node name="ScriptTesting" type="Node2D" parent="."]
 position = Vector2(458, -80)

@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://qfsv0picr6bj"]
+[gd_scene load_steps=3 format=3 uid="uid://qfsv0picr6bj"]
 
 [ext_resource type="Script" uid="uid://pwl07okdpdro" path="res://Scenes/ui/ability_slot/AbilitySlot.cs" id="1_nsnx0"]
+[ext_resource type="Texture2D" uid="uid://csi3pbjbg47dm" path="res://Assets/icon.svg" id="2_t76ex"]
 
 [node name="AbilitySlot" type="Node2D"]
 script = ExtResource("1_nsnx0")
+ButtonIcon = ExtResource("2_t76ex")

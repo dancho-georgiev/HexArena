@@ -46,7 +46,7 @@ namespace View{
 				AbilitySlot slot = SlotScene.Instantiate<AbilitySlot>();
 				_abilitiesContainer.AddChild(slot);
 				
-				slot.Initialize(uiAbility);
+				slot.Initialize();
 				slot.Pressed += () => ability.Use();
 			}
 		}
