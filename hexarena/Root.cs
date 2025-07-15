@@ -26,6 +26,12 @@ namespace View{
 				AddChild(button);
 				Buttons.Add(button);
 			}
+			Button endTurnButton = new Button();
+			endTurnButton.Position += new Vector2(700f,300f);
+			endTurnButton.Text = $"End Turn";
+			//subscribe to end turn event
+			AddChild(endTurnButton);
+			Buttons.Add(endTurnButton);
 		}
 	}
 	
