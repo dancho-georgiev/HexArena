@@ -57,6 +57,7 @@ namespace View
 			sampleHex.QueueFree();
 			
 			eventManager.ChangedTile.Connect(OnChangedTile);
+			eventManager.SelectedAbility += SelectAbility;
 			
 			for(int i = 0; i < Width; i++){
 				Grid.Add(new List<HexagonTile>());
@@ -108,6 +109,15 @@ namespace View
 			battleField.MoveSelectedCharacter(path.Select(x=>x.Tile).ToList());
 		}
 		
+		public void SelectAbility(int index){
+			if(battleField.SelectedCharacter!=null){
+				GD.Print(index);
+				battleField.SelectAbility(battleField.SelectedCharacter.ActiveAbilities[index]);
+				selectingTarget = true;
+				HighlightTargetableTiles();
+				GD.Print($"using ability");
+			}
+		}
 		
 		public override void _Input(InputEvent @event)
 		{
@@ -125,13 +135,7 @@ namespace View
 				}
 				if(key.Pressed && key.Keycode == Key.E)
 				{
-					if(battleField.SelectedCharacter!=null)
-					{
-						battleField.SelectAbility(battleField.SelectedCharacter.ActiveAbilities[0]);
-						selectingTarget = true;
-						HighlightTargetableTiles();
-						GD.Print($"using ability");
-					}
+					SelectAbility(0);
 				}
 				if(key.Pressed && key.Keycode == Key.T)
 				{

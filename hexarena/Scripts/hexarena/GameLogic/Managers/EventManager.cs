@@ -53,6 +53,7 @@ namespace GameLogic
 		public EventElement<ActivatedAbilityEventArgs> ActivatedAbility;
 		public EventElement<ChangedTileEventArgs> ChangedTile;
 		public EventElement<HasMovedEventArgs> HasMoved;
+		public Action<int> SelectedAbility;
 		
 		public void EmitOnStartTurn() => EmitSignal(SignalName.StartTurn);
 		public void EmitOnEndTurn() => EmitSignal(SignalName.EndTurn);
@@ -70,5 +71,6 @@ namespace GameLogic
 		public void EmitOnHasMoved(ICharacter character, List<ITile> path){
 			AddToQueue(HasMoved, new HasMovedEventArgs(character, path));
 		}
+		public void EmitOnSelectedAbility(int index) => SelectedAbility?.Invoke(index);
 	}
 }
