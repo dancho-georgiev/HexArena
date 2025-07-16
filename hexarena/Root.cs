@@ -29,7 +29,7 @@ namespace View{
 			Button endTurnButton = new Button();
 			endTurnButton.Position += new Vector2(700f,300f);
 			endTurnButton.Text = $"End Turn";
-			//subscribe to end turn event
+			endTurnButton.Pressed += eventManager.EmitOnEndTurn;
 			AddChild(endTurnButton);
 			Buttons.Add(endTurnButton);
 		}
