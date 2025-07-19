@@ -41,8 +41,9 @@ namespace GameLogic
 		}
 		[Signal]
 		public delegate void StartTurnEventHandler();
-		[Signal]
-		public delegate void EndTurnEventHandler();
+		
+		public Action EndTurn;
+		
 		[Signal]
 		public delegate void HitEventHandler(); //trqq da sa slojat argumenti koi e kogo s kvo ili nqkvi podrobnosti
 		[Signal]
@@ -56,7 +57,7 @@ namespace GameLogic
 		public Action<int> SelectedAbility;
 		
 		public void EmitOnStartTurn() => EmitSignal(SignalName.StartTurn);
-		public void EmitOnEndTurn() => EmitSignal(SignalName.EndTurn);
+		public void EmitOnEndTurn() => EndTurn?.Invoke();
 		public void EmitOnHit() => EmitSignal(SignalName.Hit);
 		public void EmitOnTakeDamage() => EmitSignal(SignalName.TakeDamage);
 		public void EmitOnActivateAbility1() => EmitSignal(SignalName.ActivateAbility1);

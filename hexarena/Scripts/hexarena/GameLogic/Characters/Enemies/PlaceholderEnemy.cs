@@ -10,6 +10,7 @@ namespace GameLogic{
 		public PlaceholderEnemy(EventManager eventManager, int health, int stepCost, int initiative) : base(eventManager, health, stepCost, initiative){
 			InitializeActives();
 			SelectedAbility = ActiveAbilities[0];
+			this.eventManager = eventManager;
 		}
 		private ITile FindClosestPlayer(){
 			HashSet<ITile> visited = new HashSet<ITile>();
@@ -58,6 +59,7 @@ namespace GameLogic{
 			SelectedAbility = ActiveAbilities[0];
 			SelectedAbility.Target.AddTargetable(player);
 			UseSelectedAbility();
+			eventManager.EmitOnEndTurn();
 		}
 		
 		protected override void InitializeActives()

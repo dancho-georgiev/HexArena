@@ -33,6 +33,7 @@ namespace GameLogic{
 			statusEffectFactory = new StatusEffectFactory(eventManager);
 			turnOrderManager = new TurnOrderManager(Players, Enemies);
 			eventManager.ChangedTile.Connect(OnChangedTile);
+			eventManager.EndTurn += NextTurn;
 		}
 		
 		public BattleField(EventManager eventManager, int width, int length){
@@ -43,6 +44,7 @@ namespace GameLogic{
 			statusEffectFactory = new StatusEffectFactory(eventManager);
 			turnOrderManager = new TurnOrderManager(Players, Enemies);
 			eventManager.ChangedTile.Connect(OnChangedTile);
+			eventManager.EndTurn += NextTurn;
 		}
 		
 		public ITile GetTile(int row, int col){
@@ -123,13 +125,18 @@ namespace GameLogic{
 			SelectedCharacter.UseSelectedAbility();
 		}
 		
+		public void NextTurn(){
+			EndTurn();
+			//...
+			StartTurn();
+		}
+		
 		public void StartTurn(){
 			eventManager.EmitOnStartTurn();
 			if(SelectedCharacter is IEnemy enemy) enemy.PlayTurn();
 		}
 		
 		public void EndTurn(){
-			eventManager.EmitOnEndTurn();
 			SelectedCharacter = turnOrderManager.NextTurn();
 		}
 		
